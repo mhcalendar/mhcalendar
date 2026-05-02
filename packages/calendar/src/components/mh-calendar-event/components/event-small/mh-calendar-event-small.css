@@ -1,0 +1,13 @@
+.mhCalendarEventSmall {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.mhCalendarEventSmall__title {
+  font-weight: bold;
+}
+
+.mhCalendarEventSmall__time {
+  font-size: 9px;
+}

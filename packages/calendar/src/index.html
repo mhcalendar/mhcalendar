@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MH Calendar – dev</title>
+    <script type="module" src="/build/mhcalendar.esm.js"></script>
+    <script nomodule src="/build/mhcalendar.js"></script>
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { height: 100%; }
+      body { font-family: sans-serif; padding: 16px; height: 100vh; display: flex; flex-direction: column; }
+      mh-calendar { display: block; flex: 1; min-height: 0; }
+    </style>
+  </head>
+  <body>
+    <mh-calendar id="cal"></mh-calendar>
+
+    <script type="module">
+      const today = new Date();
+      const at = (h, m = 0) => {
+        const d = new Date(today);
+        d.setHours(h, m, 0, 0);
+        return d;
+      };
+
+      const cal = document.getElementById('cal');
+
+      cal.config = { viewType: 'WEEK' };
+
+      cal.events = [
+        {
+          id: '1',
+          title: 'Team standup',
+          startDate: at(9),
+          endDate: at(9, 30),
+          color: '#4A90E2',
+        },
+        {
+          id: '2',
+          title: 'Lunch',
+          startDate: at(12),
+          endDate: at(13),
+          color: '#7ED321',
+        },
+      ];
+    </script>
+  </body>
+</html>

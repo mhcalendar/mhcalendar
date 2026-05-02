@@ -1,0 +1,23 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "build:calendar": "lerna run build --scope=@mhcalendar/calendar",
+    "build:react": "lerna run build --scope=@mhcalendar/react",
+    "dev": "lerna run dev --scope=@mhcalendar/calendar",
+    "test": "lerna run test",
+    "lint": "lerna run lint",
+    "format": "lerna run format",
+    "clean": "lerna run clean --parallel"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "lerna": "^9.0.7",
+    "typescript": "^5.5.4",
+    "workbox-build": "^4.3.1"
+  }
+}

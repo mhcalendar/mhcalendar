@@ -1,0 +1,147 @@
+* {
+  box-sizing: border-box;
+}
+
+.mhCalendarNavigation__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'system-ui';
+  height: 100%;
+}
+
+.mhCalendarNavigation {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  background-color: #f3f4f6;
+  color: #1a1a1a;
+  border-radius: 10px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  margin: 20px 10px;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.mhCalendarNavigation__arrowBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  color: #4b5563;
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.mhCalendarNavigation__arrowBtn:hover {
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+.mhCalendarNavigation__arrowBtn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mhCalendarNavigation__dateLabel {
+  min-width: 180px;
+  text-align: center;
+  padding: 0 4px;
+  white-space: nowrap;
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 14px;
+  user-select: none;
+}
+
+.mhCalendarNavigation__todayBtn {
+  flex-shrink: 0;
+  color: #4b5563;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  white-space: nowrap;
+}
+
+.mhCalendarNavigation__todayBtn:hover {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.mhCalendarNavigation__viewSwitcher {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background-color: #f3f4f6;
+  border-radius: 10px;
+}
+
+.view-switch-btn {
+  color: #4b5563;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  background: transparent;
+  white-space: nowrap;
+}
+
+.view-switch-btn:hover {
+  color: #1a1a1a;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.view-switch-btn.active {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.view-switch-btn.active:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+@media (max-width: 600px) {
+  .mhCalendarNavigation__container {
+    flex-direction: column;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .mhCalendarNavigation,
+  .mhCalendarNavigation__viewSwitcher {
+    scale: 0.8;
+  }
+
+  .mhCalendarNavigation {
+    margin: 0;
+  }
+}

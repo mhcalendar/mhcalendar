@@ -1,0 +1,15 @@
+node_modules/
+dist/
+loader/
+www/
+.stencil/
+
+*.log
+*.lock
+*.tmp
+*.tmp.*
+*.tgz
+
+.DS_Store
+Thumbs.db
+.env

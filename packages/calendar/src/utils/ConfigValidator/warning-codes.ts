@@ -1,0 +1,3 @@
+export enum WarningCodes {
+  TIMEZONE_LIMIT_EXCEEDED = 'TIMEZONE_LIMIT_EXCEEDED',
+}

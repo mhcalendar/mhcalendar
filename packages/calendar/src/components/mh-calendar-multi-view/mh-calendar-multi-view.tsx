@@ -14,7 +14,6 @@ export class MHCalendarMultiView {
 
   updateCSSProperties() {
     const daysInView = store.daysInRange;
-
     this.MHCalendarMultiViewEl?.style.setProperty('--days-in-view', `${daysInView}`);
   }
 

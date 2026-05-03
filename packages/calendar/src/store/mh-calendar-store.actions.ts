@@ -8,12 +8,12 @@ import { BusinessHoursUtils } from '../utils/BusinessHoursUtils';
 import {
   IEventDropPayload,
   IEventResizePayload,
-  IMHCalendarEvent,
   IMHCalendarState,
   IMHCalendarViewType,
   IModalPosition,
 } from './mh-calendar-store.types';
 import { MHCalendarStoreUtils } from './mh-calendar-store.utils';
+import { IMHCalendarEvent } from '../types';
 
 export class MHCalendarActions extends MHCalendarStoreUtils {
   protected _setConfig(state: IMHCalendarState, payload: Record<string, any>): IMHCalendarState {
@@ -184,8 +184,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       const startHour = state.showTimeFrom ?? 0;
       const endHour = state.showTimeTo ?? 24;
       const dayString = dayjs(date).format('YYYY-MM-DD');
-      const mainTimezone =
-        state.timezones?.[0] || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const mainTimezone = state.timezones?.[0] || Intl.DateTimeFormat().resolvedOptions().timeZone;
 
       let startDate: Date;
       let endDate: Date;

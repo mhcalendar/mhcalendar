@@ -5,14 +5,12 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { IMHCalendarEvent as IMHCalendarEvent1, IMHCalendarFullOptions, UserApi } from "./types";
-import { IMHCalendarEvent, IMHCalendarViewType } from "./store/mh-calendar-store.types";
+import { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from "./types";
 import { DragDropState } from "./utils/DragDropHandler";
-import { IMHCalendarEvent as IMHCalendarEvent2 } from "./components";
-export { IMHCalendarEvent as IMHCalendarEvent1, IMHCalendarFullOptions, UserApi } from "./types";
-export { IMHCalendarEvent, IMHCalendarViewType } from "./store/mh-calendar-store.types";
+import { IMHCalendarViewType } from "./store/mh-calendar-store.types";
+export { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from "./types";
 export { DragDropState } from "./utils/DragDropHandler";
-export { IMHCalendarEvent as IMHCalendarEvent2 } from "./components";
+export { IMHCalendarViewType } from "./store/mh-calendar-store.types";
 export namespace Components {
     interface MhCalendar {
         /**
@@ -36,7 +34,7 @@ export namespace Components {
         "showCurrentDate": boolean;
     }
     interface MhCalendarDayAllDayEventsHolder {
-        "allDayEvents": IMHCalendarEvent1[];
+        "allDayEvents": IMHCalendarEvent[];
         "dragDropState": DragDropState;
         "handleDragLeave": (e: DragEvent) => void;
         "handleDragOver": (e: DragEvent) => void;
@@ -52,13 +50,13 @@ export namespace Components {
     interface MhCalendarDayMonthViewEvents {
         "calendarDayElementHeight"?: number;
         "day"?: Date;
-        "groupedEvents": IMHCalendarEvent1[];
+        "groupedEvents": IMHCalendarEvent[];
         "maxVisibleEventsInMonthView": number;
     }
     interface MhCalendarDayTimeViewEvents {
         "calendarDayElementHeight"?: number;
         "day"?: Date;
-        "groupedEvents": Map<string, IMHCalendarEvent1[]>;
+        "groupedEvents": Map<string, IMHCalendarEvent[]>;
     }
     interface MhCalendarDayTimeViewOverlays {
         "calendarDayElementHeight": number;
@@ -70,7 +68,7 @@ export namespace Components {
     interface MhCalendarEvent {
         "dayHeight"?: number;
         "dayOfRendering"?: Date;
-        "event"?: IMHCalendarEvent1;
+        "event"?: IMHCalendarEvent;
         "eventTopPosition"?: number;
         "instanceOfEvent"?: string;
         /**
@@ -82,7 +80,7 @@ export namespace Components {
         "event"?: IMHCalendarEvent;
     }
     interface MhCalendarEventSmall {
-        "event"?: IMHCalendarEvent2;
+        "event"?: IMHCalendarEvent;
     }
     interface MhCalendarHeader {
         /**
@@ -285,7 +283,7 @@ declare namespace LocalJSX {
         "showCurrentDate"?: boolean;
     }
     interface MhCalendarDayAllDayEventsHolder {
-        "allDayEvents": IMHCalendarEvent1[];
+        "allDayEvents": IMHCalendarEvent[];
         "dragDropState": DragDropState;
         "handleDragLeave": (e: DragEvent) => void;
         "handleDragOver": (e: DragEvent) => void;
@@ -301,13 +299,13 @@ declare namespace LocalJSX {
     interface MhCalendarDayMonthViewEvents {
         "calendarDayElementHeight"?: number;
         "day"?: Date;
-        "groupedEvents": IMHCalendarEvent1[];
+        "groupedEvents": IMHCalendarEvent[];
         "maxVisibleEventsInMonthView": number;
     }
     interface MhCalendarDayTimeViewEvents {
         "calendarDayElementHeight"?: number;
         "day"?: Date;
-        "groupedEvents": Map<string, IMHCalendarEvent1[]>;
+        "groupedEvents": Map<string, IMHCalendarEvent[]>;
     }
     interface MhCalendarDayTimeViewOverlays {
         "calendarDayElementHeight": number;
@@ -319,7 +317,7 @@ declare namespace LocalJSX {
     interface MhCalendarEvent {
         "dayHeight"?: number;
         "dayOfRendering"?: Date;
-        "event"?: IMHCalendarEvent1;
+        "event"?: IMHCalendarEvent;
         "eventTopPosition"?: number;
         "instanceOfEvent"?: string;
         /**
@@ -331,7 +329,7 @@ declare namespace LocalJSX {
         "event"?: IMHCalendarEvent;
     }
     interface MhCalendarEventSmall {
-        "event"?: IMHCalendarEvent2;
+        "event"?: IMHCalendarEvent;
     }
     interface MhCalendarHeader {
         /**

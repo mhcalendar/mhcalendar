@@ -1,20 +1,12 @@
-import { IMHCalendarFullOptions, IMHCalendarDateRange, SlotOption, BusinessHoursConfig } from '../types';
+import {
+  IMHCalendarFullOptions,
+  IMHCalendarDateRange,
+  SlotOption,
+  BusinessHoursConfig,
+  IMHCalendarEvent,
+} from '../types';
 import { EventDisplayMode } from '../types/enums';
 import { EventBuilderMapByDate } from '../utils/EventManager';
-
-export interface IMHCalendarEvent {
-  id: string;
-  startDate: Date;
-  endDate: Date;
-  title?: string;
-  allDay?: boolean;
-  description?: string;
-  isHidden?: boolean;
-  color?: string;
-  resourceId?: string;
-  draggingToggle?: boolean;
-  [key: string]: unknown;
-}
 
 export enum IMHCalendarViewType {
   DAY = 'DAY',
@@ -88,36 +80,6 @@ export interface IMHCalendarState extends IMHCalendarFullOptions {
   heightOfCalendarDay?: number;
   properties: Record<string, string>;
   modal?: IModalState;
-}
-
-export interface IMHCalendarStore {
-  readonly state: IMHCalendarState;
-  // Computed
-  daysInRange: number;
-  hoursInDay: number;
-  hoursRangeCal: number;
-  mainTimezone: string;
-  headerMargin: number;
-  // Queries
-  getEventById: (id: string) => IMHCalendarEvent[];
-  getEvents: () => IMHCalendarEvent[];
-  getInlineStyleForClass: (className: string) => object;
-  // Subscriptions
-  onChange: (key: keyof IMHCalendarState, callback: (value: any) => void) => void;
-  // Actions
-  setConfig: (payload: Record<string, any>) => void;
-  changeView: (viewType: IMHCalendarViewType) => void;
-  nextPeriod: () => void;
-  previousPeriod: () => void;
-  setToToday: () => void;
-  setDraggedEvent: (event: IMHCalendarEvent | null) => void;
-  dropEvent: (payload: IEventDropPayload) => void;
-  resizeEvent: (payload: IEventResizePayload) => void;
-  openModal: (content: any, position?: IModalPosition) => void;
-  closeModal: () => void;
-  addEvent: (event: IMHCalendarEvent) => void;
-  updateEvent: (eventId: string, event: IMHCalendarEvent) => void;
-  removeEvent: (eventId: string) => void;
 }
 
 export enum UserErrors {

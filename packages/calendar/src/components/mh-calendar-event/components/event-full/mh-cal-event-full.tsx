@@ -1,7 +1,8 @@
 import { Component, h, Prop } from '@stencil/core';
 import { store, storeState } from '../../../../store/mh-calendar-store';
-import { IMHCalendarEvent, IMHCalendarViewType } from '../../../../store/mh-calendar-store.types';
+import { IMHCalendarViewType } from '../../../../store/mh-calendar-store.types';
 import { DateUtils } from '../../../../utils/DateUtils';
+import { IMHCalendarEvent } from '../../../../types';
 
 @Component({
   tag: 'mh-calendar-event-full',
@@ -25,9 +26,7 @@ export class MHCalendarEventFull {
           <div
             class="mhCalendarEventFull__userEventContentHolder"
             style={{
-              ...store.getInlineStyleForClass(
-                'mhCalendarEventFull__userEventContentHolder',
-              ),
+              ...store.getInlineStyleForClass('mhCalendarEventFull__userEventContentHolder'),
             }}
             innerHTML={storeState.eventContent?.(this.event)}
           />
@@ -51,9 +50,7 @@ export class MHCalendarEventFull {
                 <div
                   class="mhCalendarEventFull__content__date"
                   style={{
-                    ...store.getInlineStyleForClass(
-                      'mhCalendarEventFull__content__date',
-                    ),
+                    ...store.getInlineStyleForClass('mhCalendarEventFull__content__date'),
                   }}
                 >
                   {DateUtils.formatTime(this.event.startDate)}-

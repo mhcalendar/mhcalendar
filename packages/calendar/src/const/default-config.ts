@@ -1,9 +1,6 @@
 import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
-import {
-  IMHCalendarConfigBaseUserActions,
-  IMHCalendarConfigBase,
-  IMHCalendarWeekConfig,
-} from '../types';
+import { IMHCalendarConfigBase, IMHCalendarWeekConfig } from '../types';
+import { IMHCalendarConfigBaseUserActions } from '../types/config/callbacks';
 import { EventDisplayMode } from '../types/enums';
 import { DEFAULT_THEME } from './default-theme';
 

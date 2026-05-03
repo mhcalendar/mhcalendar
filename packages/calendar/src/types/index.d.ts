@@ -1,6 +1,23 @@
-import type { IMHCalendarEvent } from '../components';
-export type { IMHCalendarEvent };
 import { IMHCalendarStoreUserApi } from '../store/mh-calendar-store.user-api';
+import { IMHCalendarConfigBaseUserActions } from './config/callbacks';
+import { CssStyles } from './config/cssStyles';
+import { IMHCalendarCustomRenderConfig } from './config/customElements';
+import { ConfigCSSProperites } from './config/properties';
+import { EventDisplayMode, IMHCalendarViewType } from './enums';
+
+export interface IMHCalendarEvent {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  title?: string;
+  allDay?: boolean;
+  description?: string;
+  isHidden?: boolean;
+  color?: string;
+  resourceId?: string;
+  draggingToggle?: boolean;
+  [key: string]: unknown;
+}
 
 export type IMHCalendarDateRange = {
   fromDate?: Date;
@@ -12,214 +29,14 @@ export type IMHCalendarDayClickPayload = {
   resourceId?: string;
 };
 
-type CSSinJS = Record<string, string>;
-
 export type IMHCalendarConfigBaseStyle = {
   /*
    * Properties can be overwritten, by passing them right here.
    * Check documentation for more information.
    */
-  properties: {
-    /**
-     * Width of the time column on the left side of DAY and WEEK views (showing hour labels).
-     * Default: '70px'
-     */
-    timeSlotWidth?: string;
-
-    /**
-     * Color of all internal grid borders — between time slots, day columns, and header cells.
-     * Applies across DAY, WEEK, MONTH, AGENDA, and SHIFTPLAN views.
-     * Default: '#eaeaeaff'
-     */
-    bordersColor?: string;
-
-    /**
-     * Default background color for events that have no per-event `color` set.
-     * Individual events can override this via the `color` field on the event object.
-     * Default: '#00b536'
-     */
-    eventBackgroundColor?: string;
-
-    /**
-     * Background color used to highlight the "today" cell in the header and shiftplan view.
-     * Default: '#00b536'
-     */
-    headerTodayBackgroundColor?: string;
-
-    /**
-     * Color of the current time indicator line shown in DAY and WEEK views.
-     * Also used for the current time text label in SHIFTPLAN view.
-     * Default: '#db372d'
-     */
-    currentTimeColor?: string;
-
-    /**
-     * Color of the drag handle shown at the bottom of events in DAY and WEEK views.
-     * Matches the event color by default when set per-event; this property controls the fallback.
-     * Default: '#00b536'
-     */
-    eventResizeHandleColor?: string;
-
-    /**
-     * CSS filter applied to events on hover.
-     * Default: 'brightness(0.88)' (slight darkening).
-     * Set to 'none' to disable hover effect.
-     * Examples: 'brightness(1.1)', 'saturate(1.5)', 'brightness(0.8) saturate(1.2)'
-     */
-    eventHoverFilter?: string;
-
-    /**
-     * Background color of the time tooltip that appears while resizing an event.
-     * Default: '#fff'
-     */
-    eventTimeLabelBg?: string;
-
-    /**
-     * Text color of the time tooltip that appears while resizing an event.
-     * Default: '#222'
-     */
-    eventTimeLabelColor?: string;
-
-    /**
-     * Color of the duration diff label (e.g. "+15 min") inside the resize tooltip.
-     * Default: '#3578fa'
-     */
-    eventTimeDiffColor?: string;
-
-    /**
-     * Color of the semi-transparent overlay applied to time slots outside business hours.
-     * Business hours are configured via the `businessHours` config option.
-     * Default: 'rgba(0, 0, 0, 0.03)'
-     */
-    nonBusinessHoursOverlayColor?: string;
-
-    /**
-     * Height of the day/week header row that displays day names and dates.
-     * Affects the top section of DAY and WEEK views.
-     * Default: '70px'
-     */
-    viewHeaderHeight?: string;
-
-    /**
-     * Height of the top navigation bar (title, arrow buttons, view switcher).
-     * Default: '20%'
-     */
-    calendarNavigationHeight?: string;
-
-    /**
-     * Height of a single event row in MONTH, AGENDA, and SHIFTPLAN views.
-     * Default: '20px'
-     */
-    monthEventHeight?: string;
-  };
-
-  /*
-   * Style for the event box component.
-   */
-  mhCalendarEvent: CSSinJS;
-
-  /*
-   * Style for the small event box component.
-   */
-  mhCalendarEventSmall: CSSinJS;
-
-  /*
-   * Style for the full event box component.
-   */
-  mhCalendarEventFull: CSSinJS;
-  mhCalendarEventFull__content: CSSinJS;
-  mhCalendarEventFull__userEventContentHolder: CSSinJS;
-  mhCalendarEventFull__content__title: CSSinJS;
-  mhCalendarEventFull__content__date: CSSinJS;
-
-  /*
-   * Style for the header component.
-   */
-  mhCalendarHeader: CSSinJS;
-  mhCalendarHeader__date: CSSinJS;
-  mhCalendarHeader__today: CSSinJS;
-
-  /*
-   * Style for the month component.
-   */
-  mhCalendarMonth: CSSinJS;
-
-  /*
-   * Style for the multi view component.
-   */
-  mhCalendarMultiView__holder: CSSinJS;
-
-  /*
-   * Style for the calendar wrapper component.
-   */
-  mhCalendar: CSSinJS;
-
-  /*
-   * Style for the navigation.
-   */
-  mhCalendarNavigation__container: CSSinJS;
-  mhCalendarNavigation__viewSwitcher: CSSinJS;
-
-  /*
-   * Style for the day component.
-   */
-  mhCalendarDay: CSSinJS;
-  mhCalendarDay_allDaysEventHolder: CSSinJS;
-  mhCalendarDay_dayDate: CSSinJS;
-  mhCalendarDay__currentTime: CSSinJS;
-  mhCalendarDay__eventHolder: CSSinJS;
-  mhCalendarDay__eventsLeftIndicator: CSSinJS;
+  properties: ConfigCSSProperites;
+  styles: CssStyles;
 };
-
-export interface IMHCalendarConfigBaseUserActions {
-  /**
-   * Callback function to be called when an event is clicked.
-   */
-  onEventClick: (event: IMHCalendarEvent) => void;
-
-  /**
-   * Callback function to be called when an event is clicked with right mouse.
-   */
-  onRightEventClick: (event: IMHCalendarEvent) => void;
-
-  /**
-   * Callback function to be called when a day is clicked.
-   */
-  onDayClick: (day: IMHCalendarDayClickPayload) => void;
-
-  /**
-   * Callback function to be called when a day is right clicked.
-   */
-  onRightDayClick: (day: IMHCalendarDayClickPayload) => void;
-
-  /**
-   * Callback function to be called when a new event is created via click.
-   * The callback receives the newly created event object.
-   * You should add this event to your events array to display it in the calendar.
-   */
-  onEventCreated?: (event: IMHCalendarEvent) => void;
-
-  /**
-   * Callback function to be called when an event is updated (e.g., title, description, dates).
-   * The callback receives the updated event object.
-   * You should update the event in your events array.
-   */
-  onEventUpdated?: (event: IMHCalendarEvent) => void;
-}
-
-export interface IMHCalendarCustomRenderConfig {
-  /**
-   * Custom render function for full-size events (WEEK/DAY views).
-   * Receives the event object and should return an HTML string.
-   */
-  eventContent: (event: any) => any;
-
-  /**
-   * Custom render function for small/compact events (MONTH, SHIFTPLAN, AGENDA views).
-   * Receives the event object and should return an HTML string.
-   */
-  eventSmallContent: (event: any) => any;
-}
 
 export interface IMHCalendarConfigBase
   extends Partial<IMHCalendarCustomRenderConfig>, Partial<IMHCalendarConfigBaseUserActions> {
@@ -481,18 +298,5 @@ export interface IMHCalendarWeekConfig extends IMHCalendarConfigBaseMultiViewOpt
 }
 
 export interface IMHCalendarFullOptions extends IMHCalendarWeekConfig {}
-
-export enum IMHCalendarViewType {
-  DAY = 'DAY',
-  MONTH = 'MONTH',
-  WEEK = 'WEEK',
-  AGENDA = 'AGENDA',
-  SHIFTPLAN = 'SHIFTPLAN',
-}
-
-export enum EventDisplayMode {
-  SideBySide = 'side-by-side',
-  Overlapping = 'overlapping',
-}
 
 export type UserApi = IMHCalendarStoreUserApi;

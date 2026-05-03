@@ -1,8 +1,8 @@
 import { Component, Element, Method, Prop, State, Watch, h } from '@stencil/core';
-import { IMHCalendarFullOptions, UserApi } from '../../types';
+import { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from '../../types';
 import { DEFAULT_WEEK_VIEW_CONFIG } from '../../const/default-config';
 import { store, storeState } from '../../store/mh-calendar-store';
-import { IMHCalendarEvent, IMHCalendarViewType } from '../../store/mh-calendar-store.types';
+import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
 import { createUserAPI } from '../../store/mh-calendar-store.user-api';
 
 @Component({

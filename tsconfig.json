@@ -12,5 +12,6 @@
     "strict": true,
     "strictNullChecks": true
   },
+  "files": [],
   "exclude": ["node_modules"]
 }

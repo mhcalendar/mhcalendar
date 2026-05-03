@@ -1,7 +1,7 @@
 import { Component, Element, State, h } from '@stencil/core';
 import dayjs from 'dayjs';
 import { store, storeState } from '../../store/mh-calendar-store';
-import { IMHCalendarResource } from '../../store/mh-calendar-store.types';
+import { IMHCalendarResource } from '../../types';
 import { IMHCalendarEvent } from '../../types';
 import { DateUtils } from '../../utils/DateUtils';
 import { EventManager } from '../../utils/EventManager';

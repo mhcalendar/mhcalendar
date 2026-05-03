@@ -1,4 +1,4 @@
-import { IMHCalendarDayClickPayload, IMHCalendarEvent } from '../';
+import { IMHCalendarDayClickPayload, IMHCalendarEvent } from './event';
 
 export interface IMHCalendarConfigBaseUserActions {
   /**

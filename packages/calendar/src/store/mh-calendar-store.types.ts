@@ -1,25 +1,8 @@
-import {
-  IMHCalendarFullOptions,
-  IMHCalendarDateRange,
-  SlotOption,
-  BusinessHoursConfig,
-  IMHCalendarEvent,
-} from '../types';
-import { EventDisplayMode } from '../types/enums';
+import { IMHCalendarDateRange, IMHCalendarEvent } from '../types';
+import { ICalendarWeekConfig } from '../types/config/week';
 import { EventBuilderMapByDate } from '../utils/EventManager';
 
-export enum IMHCalendarViewType {
-  DAY = 'DAY',
-  MONTH = 'MONTH',
-  WEEK = 'WEEK',
-  AGENDA = 'AGENDA',
-  SHIFTPLAN = 'SHIFTPLAN',
-}
-
-export interface IMHCalendarResource {
-  id: string;
-  title: string;
-}
+export { IMHCalendarViewType } from '../types/enums';
 
 export interface IModalPosition {
   x?: number;
@@ -47,46 +30,17 @@ export interface IEventResizePayload {
   dayOfRendering: Date;
 }
 
-export interface IMHCalendarState extends IMHCalendarFullOptions {
-  // Override optional config properties — these always have defaults in state
-  showAllDayTasks: boolean;
-  allDayEventsHeight: number;
-  makeAllDaysSticky: boolean;
-  showTimeIndicator: boolean;
-  allowEventResize: boolean;
-  minEventDuration: number;
-  hoursDisplayFormat: string;
-  createEventOnClick: boolean;
-  eventDisplayMode: EventDisplayMode;
-  resources: IMHCalendarResource[];
-  shiftplanDays: number;
-  showWeekends: boolean;
-  timezones: string[];
-  showTimeFrom: number;
-  showTimeTo: number;
-  slotInterval: SlotOption;
-  hoursSlotInterval: SlotOption;
-  businessHours: BusinessHoursConfig[];
-  showDateSwitcher: boolean;
-  showViewTypeSwitcher: boolean;
-  showCalendarNavigation: boolean;
-  allowEventDragging: boolean;
-  showViewHeader: boolean;
+export interface IMHCalendarState extends ICalendarWeekConfig {
   // Runtime-only internal state
   calendarDateRange: IMHCalendarDateRange;
   reactiveEvents: EventBuilderMapByDate;
   draggedEvent: IMHCalendarEvent | null;
   heightOfCalendarHour: number;
-  heightOfCalendarDay?: number;
+  heightOfCalendarDay: number | undefined;
   properties: Record<string, string>;
-  modal?: IModalState;
+  modal: IModalState;
 }
 
 export enum UserErrors {
   DIRECT_STORE_SET = "State can't be set directly.",
-}
-
-export interface IDateRange {
-  fromDate: Date;
-  toDate: Date;
 }

@@ -4,7 +4,6 @@
   grid-template-rows: repeat(6, minmax(0, 1fr));
   gap: 0;
   width: 100%;
-  /* Ensure grid rows stretch to fill full height */
   align-items: stretch;
   overflow: hidden;
 }

@@ -12,6 +12,7 @@
   overflow: hidden;
   opacity: 0.9;
   transition: filter 0.15s ease;
+  color: var(--fontColor);
 }
 
 .mhCalendarEvent:hover {

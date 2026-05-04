@@ -196,47 +196,30 @@ export class MHCalendarAgendaView {
               </div>
               <div class="mhCalendarAgendaView__events">
                 {dayData.events.map((event) => {
-                  const eventSmallContent = storeState.eventSmallContent;
-                  const customContent =
-                    eventSmallContent && typeof eventSmallContent === 'function'
-                      ? eventSmallContent(event)
-                      : null;
-
                   const eventColor = EventStyleManager.getEventColor(event);
-
-                  // Read-only view - no click handlers, no drag handlers
                   return (
                     <div
                       key={event.id}
                       class="mhCalendarAgendaView__event"
                       data-event-id={event.id}
-                      style={
-                        {
-                          '--eventColor': eventColor,
-                        } as any
-                      }
+                      style={{
+                        '--eventColor': eventColor,
+                      }}
                     >
                       <div class="mhCalendarAgendaView__eventTime">
                         {DateUtils.formatEventTime(event)}
                       </div>
                       <div class="mhCalendarAgendaView__eventContent">
-                        {customContent ? (
-                          <div
-                            class="mhCalendarAgendaView__eventCustom"
-                            innerHTML={customContent}
-                          />
-                        ) : (
-                          <>
-                            <div class="mhCalendarAgendaView__eventTitle">
-                              {event.title || 'Untitled Event'}
+                        <>
+                          <div class="mhCalendarAgendaView__eventTitle">
+                            {event.title || 'Untitled Event'}
+                          </div>
+                          {event.description && (
+                            <div class="mhCalendarAgendaView__eventDescription">
+                              {event.description}
                             </div>
-                            {event.description && (
-                              <div class="mhCalendarAgendaView__eventDescription">
-                                {event.description}
-                              </div>
-                            )}
-                          </>
-                        )}
+                          )}
+                        </>
                       </div>
                     </div>
                   );

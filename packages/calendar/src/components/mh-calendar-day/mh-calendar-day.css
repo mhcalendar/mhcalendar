@@ -29,7 +29,7 @@
   min-width: 100%;
   display: block;
   height: min-content;
-  color: #000;
+  color: var(--dateFontColor);
 }
 
 .day__hovered {
@@ -38,7 +38,7 @@
 }
 
 .mhCalendarDay.current-month {
-  color: #000;
+  color: var(--dateFontColor);
   font-weight: normal;
 }
 
@@ -50,7 +50,7 @@
 
 .mhCalendarDay.different-month {
   font-weight: normal;
-  color: rgb(31, 31, 31);
+  color: var(--dateFontColor);
 }
 
 .mhCalendarDay_allDaysEventHolder {

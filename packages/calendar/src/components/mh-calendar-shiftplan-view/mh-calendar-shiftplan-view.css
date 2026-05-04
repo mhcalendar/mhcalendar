@@ -1,7 +1,6 @@
 .mhCalendarShiftplan {
   width: 100%;
   overflow: auto;
-  font-family: system-ui;
   box-sizing: border-box;
 }
 

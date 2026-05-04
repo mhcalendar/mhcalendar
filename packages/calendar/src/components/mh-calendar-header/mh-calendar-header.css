@@ -1,5 +1,5 @@
 .mhCalendarHeader {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--bordersColor);
   padding: 8px 0 8px 0;
   font-size: 12px;
   height: var(--viewHeaderHeight);
@@ -16,13 +16,12 @@
   font-size: 80%;
   text-align: center;
   font-weight: 500;
-  color: #5f6368;
+  color: var(--dateFontColor);
   text-transform: uppercase;
   padding: 0 3px;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  font-family: system-ui;
 }
 
 .mhCalendarHeader__today {

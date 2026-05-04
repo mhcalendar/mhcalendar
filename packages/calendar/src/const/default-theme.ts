@@ -10,7 +10,6 @@ export const CALENDAR_BACKGROUND_COLOR = '#14141a';
 
 const DEFAULT_PROPERTIES: ConfigCSSProperites = {
   timeSlotWidth: '70px',
-  bordersColor: '#eaeaeaff',
   eventBackgroundColor: DEFAULT_THEME_COLOR,
   /*
    Set to undefined at purpose as user may want
@@ -27,6 +26,14 @@ const DEFAULT_PROPERTIES: ConfigCSSProperites = {
   monthEventHeight: '20px',
   viewHeaderHeight: VIEW_HEADER_HEIGHT,
   calendarNavigationHeight: '70px',
+
+  mainBackgroundColor: '#131314',
+  navigationBackgroundColor: '#1b1b1b',
+  fontColor: '#d4d4d4',
+  fontFamily: 'system-ui',
+  dateFontColor: '#82828e',
+  bordersColor: '#82828e',
+  buttonsColor: '#232323',
 };
 
 export const DEFAULT_THEME: IMHCalendarConfigBaseStyle = {

@@ -1,12 +1,7 @@
-* {
-  box-sizing: border-box;
-}
-
 .mhCalendarNavigation__container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'system-ui';
   height: 100%;
 }
 
@@ -14,8 +9,8 @@
   display: flex;
   align-items: center;
   padding: 4px;
-  background-color: #f3f4f6;
-  color: #1a1a1a;
+  background-color: var(--mainBackgroundColor);
+  color: var(--fontColor);
   border-radius: 10px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   font-size: 14px;
@@ -24,25 +19,45 @@
   font-weight: 500;
 }
 
+/* Shared base for all nav buttons */
+.mhCalendarNavigation__arrowBtn,
+.mhCalendarNavigation__todayBtn,
+.view-switch-btn {
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fontColor);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Filled buttons (arrow + today) */
+.mhCalendarNavigation__arrowBtn,
+.mhCalendarNavigation__todayBtn {
+  height: 32px;
+  background: var(--buttonsColor);
+}
+
+.mhCalendarNavigation__arrowBtn:hover,
+.mhCalendarNavigation__todayBtn:hover {
+  background-color: color-mix(in srgb, var(--mainBackgroundColor), white 5%);
+  color: var(--fontColor);
+}
+
 .mhCalendarNavigation__arrowBtn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
-  height: 32px;
   flex-shrink: 0;
-  color: #4b5563;
-  border: none;
-  border-radius: 8px;
   padding: 0;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: transparent;
+  color: var(--dateFontColor);
 }
 
 .mhCalendarNavigation__arrowBtn:hover {
-  background-color: #ffffff;
-  color: #1a1a1a;
+  color: var(--fontColor);
 }
 
 .mhCalendarNavigation__arrowBtn svg {
@@ -60,72 +75,45 @@
   text-align: center;
   padding: 0 4px;
   white-space: nowrap;
-  color: #1a1a1a;
+  color: var(--fontColor);
   font-weight: 600;
   font-size: 14px;
   user-select: none;
 }
 
 .mhCalendarNavigation__todayBtn {
-  flex-shrink: 0;
-  color: #4b5563;
-  border: none;
-  border-radius: 8px;
   padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: transparent;
-  white-space: nowrap;
 }
 
 .mhCalendarNavigation__todayBtn:hover {
-  background-color: #ffffff;
-  color: #1a1a1a;
   font-weight: 600;
 }
 
 .mhCalendarNavigation__viewSwitcher {
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 4px;
   padding: 4px;
-  background-color: #f3f4f6;
+  background-color: var(--mainBackgroundColor);
   border-radius: 10px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
 .view-switch-btn {
-  color: #4b5563;
-  border: none;
-  border-radius: 8px;
+  height: 32px;
   padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
   text-align: center;
   background: transparent;
-  white-space: nowrap;
 }
 
 .view-switch-btn:hover {
-  color: #1a1a1a;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: color-mix(in srgb, var(--mainBackgroundColor), white 5%);
 }
 
 .view-switch-btn.active {
-  background-color: #ffffff;
-  color: #1a1a1a;
+  background: var(--buttonsColor);
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.view-switch-btn.active:hover {
-  background-color: #fff;
-  color: #000;
 }
 
 @media (max-width: 600px) {

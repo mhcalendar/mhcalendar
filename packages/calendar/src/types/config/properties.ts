@@ -86,14 +86,20 @@ export type ConfigCSSProperites = {
   viewHeaderHeight: string;
 
   /**
-   * Height of the top navigation bar (title, arrow buttons, view switcher).
-   * Default: '20%'
-   */
-  calendarNavigationHeight: string;
-
-  /**
    * Height of a single event row in MONTH, AGENDA, and SHIFTPLAN views.
    * Default: '20px'
    */
   monthEventHeight: string;
+
+  mainBackgroundColor: string;
+  fontColor: string;
+  fontFamily: string;
+  dateFontColor: string;
+  navigationBackgroundColor: string;
+  buttonsColor: string;
+  /**
+   * Height of the top navigation bar (title, arrow buttons, view switcher).
+   * Default: '20%'
+   */
+  calendarNavigationHeight: string;
 };

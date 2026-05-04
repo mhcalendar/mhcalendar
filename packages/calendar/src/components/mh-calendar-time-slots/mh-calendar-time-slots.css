@@ -11,6 +11,10 @@
 .time__holder {
   display: flex;
   align-items: center;
+  color: var(--dateFontColor);
+  border-bottom: solid 1px var(--bordersColor);
+  font-size: 10px;
+
   justify-content: center;
   overflow: visible;
   position: relative;
@@ -32,7 +36,6 @@
   color: #6b7280;
   font-size: 14px;
   border-bottom: none;
-  font-family: 'system-ui';
 }
 
 .mhCalendarWeek__border {
@@ -41,7 +44,6 @@
   border-top: var(--bordersColor) solid 1px;
 
   font-size: 12px;
-  font-family: system-ui;
   color: #6b7280;
 }
 
@@ -58,7 +60,8 @@
 
 .mhCalendarWeek__border__mainTime {
   font-weight: 500;
-  color: #374151;
+  padding: 5px 10px;
+  color: var(--dateFontColor);
 }
 
 .mhCalendarWeek__border__additionalTimezones {
@@ -97,5 +100,4 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-family: system-ui;
 }

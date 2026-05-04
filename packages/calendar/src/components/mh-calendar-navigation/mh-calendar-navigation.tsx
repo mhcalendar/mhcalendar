@@ -38,10 +38,6 @@ export class MhCalendarNavigation {
     store.setToToday();
   };
 
-  private onViewChange = (newViewType: IMHCalendarViewType) => {
-    store.changeView(newViewType);
-  };
-
   private onDateRangeChange(event: Event, amount: number) {
     event.preventDefault();
     event.stopPropagation();
@@ -91,18 +87,7 @@ export class MhCalendarNavigation {
             </span>
           </div>
         )}
-        {storeState.showViewTypeSwitcher && (
-          <div class="mhCalendarNavigation__viewSwitcher">
-            {(Object.values(IMHCalendarViewType) as IMHCalendarViewType[]).map((viewType) => (
-              <button
-                class={`view-switch-btn ${storeState.viewType === viewType ? 'active' : ''}`}
-                onClick={() => this.onViewChange(viewType)}
-              >
-                {viewType.charAt(0) + viewType.slice(1).toLowerCase()}
-              </button>
-            ))}
-          </div>
-        )}
+        {storeState.showViewTypeSwitcher && <mh-view-switcher />}
       </div>
     );
   }

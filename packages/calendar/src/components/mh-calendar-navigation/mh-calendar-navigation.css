@@ -21,8 +21,7 @@
 
 /* Shared base for all nav buttons */
 .mhCalendarNavigation__arrowBtn,
-.mhCalendarNavigation__todayBtn,
-.view-switch-btn {
+.mhCalendarNavigation__todayBtn {
   border: none;
   border-radius: 8px;
   font-size: 13px;
@@ -87,49 +86,4 @@
 
 .mhCalendarNavigation__todayBtn:hover {
   font-weight: 600;
-}
-
-.mhCalendarNavigation__viewSwitcher {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  padding: 4px;
-  background-color: var(--mainBackgroundColor);
-  border-radius: 10px;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
-}
-
-.view-switch-btn {
-  height: 32px;
-  padding: 6px 14px;
-  text-align: center;
-  background: transparent;
-}
-
-.view-switch-btn:hover {
-  background-color: color-mix(in srgb, var(--mainBackgroundColor), white 5%);
-}
-
-.view-switch-btn.active {
-  background: var(--buttonsColor);
-  font-weight: 600;
-}
-
-@media (max-width: 600px) {
-  .mhCalendarNavigation__container {
-    flex-direction: column;
-    width: 100%;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-
-  .mhCalendarNavigation,
-  .mhCalendarNavigation__viewSwitcher {
-    scale: 0.8;
-  }
-
-  .mhCalendarNavigation {
-    margin: 0;
-  }
 }

@@ -121,6 +121,8 @@ export namespace Components {
     }
     interface MhCalendarTimeSlots {
     }
+    interface MhViewSwitcher {
+    }
 }
 declare global {
     interface HTMLMhCalendarElement extends Components.MhCalendar, HTMLStencilElement {
@@ -237,6 +239,12 @@ declare global {
         prototype: HTMLMhCalendarTimeSlotsElement;
         new (): HTMLMhCalendarTimeSlotsElement;
     };
+    interface HTMLMhViewSwitcherElement extends Components.MhViewSwitcher, HTMLStencilElement {
+    }
+    var HTMLMhViewSwitcherElement: {
+        prototype: HTMLMhViewSwitcherElement;
+        new (): HTMLMhViewSwitcherElement;
+    };
     interface HTMLElementTagNameMap {
         "mh-calendar": HTMLMhCalendarElement;
         "mh-calendar-agenda-view": HTMLMhCalendarAgendaViewElement;
@@ -257,6 +265,7 @@ declare global {
         "mh-calendar-resize-event-handler": HTMLMhCalendarResizeEventHandlerElement;
         "mh-calendar-shiftplan-view": HTMLMhCalendarShiftplanViewElement;
         "mh-calendar-time-slots": HTMLMhCalendarTimeSlotsElement;
+        "mh-view-switcher": HTMLMhViewSwitcherElement;
     }
 }
 declare namespace LocalJSX {
@@ -370,6 +379,8 @@ declare namespace LocalJSX {
     }
     interface MhCalendarTimeSlots {
     }
+    interface MhViewSwitcher {
+    }
 
     interface MhCalendarAttributes {
         "reactComponent": string;
@@ -434,6 +445,7 @@ declare namespace LocalJSX {
         "mh-calendar-resize-event-handler": Omit<MhCalendarResizeEventHandler, keyof MhCalendarResizeEventHandlerAttributes> & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes]?: MhCalendarResizeEventHandler[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `attr:${K}`]?: MhCalendarResizeEventHandlerAttributes[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `prop:${K}`]?: MhCalendarResizeEventHandler[K] } & OneOf<"eventId", MhCalendarResizeEventHandler["eventId"], MhCalendarResizeEventHandlerAttributes["eventId"]> & OneOf<"eventHeight", MhCalendarResizeEventHandler["eventHeight"], MhCalendarResizeEventHandlerAttributes["eventHeight"]>;
         "mh-calendar-shiftplan-view": MhCalendarShiftplanView;
         "mh-calendar-time-slots": MhCalendarTimeSlots;
+        "mh-view-switcher": MhViewSwitcher;
     }
 }
 export { LocalJSX as JSX };
@@ -459,6 +471,7 @@ declare module "@stencil/core" {
             "mh-calendar-resize-event-handler": LocalJSX.IntrinsicElements["mh-calendar-resize-event-handler"] & JSXBase.HTMLAttributes<HTMLMhCalendarResizeEventHandlerElement>;
             "mh-calendar-shiftplan-view": LocalJSX.IntrinsicElements["mh-calendar-shiftplan-view"] & JSXBase.HTMLAttributes<HTMLMhCalendarShiftplanViewElement>;
             "mh-calendar-time-slots": LocalJSX.IntrinsicElements["mh-calendar-time-slots"] & JSXBase.HTMLAttributes<HTMLMhCalendarTimeSlotsElement>;
+            "mh-view-switcher": LocalJSX.IntrinsicElements["mh-view-switcher"] & JSXBase.HTMLAttributes<HTMLMhViewSwitcherElement>;
         }
     }
 }

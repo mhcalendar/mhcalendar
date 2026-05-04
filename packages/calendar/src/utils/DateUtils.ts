@@ -11,16 +11,22 @@ export class DateUtils {
   static formatDateRange(from: Date, to: Date, isOneDay = false): string {
     const fromDate = dayjs(from);
     const toDate = dayjs(to);
+    const showYear = typeof window !== 'undefined' && window.innerWidth > 600;
 
     if (isOneDay || fromDate.isSame(toDate, 'day')) {
-      return fromDate.format('MMMM D, YYYY');
+      return fromDate.format(showYear ? 'MMMM D, YYYY' : 'MMMM D');
     }
 
     const sameMonth = fromDate.month() === toDate.month();
-    const sameYear = fromDate.year() === toDate.year();
 
     const fromStr = fromDate.format('MMMM D');
     const toStr = sameMonth ? toDate.format('D') : toDate.format('MMMM D');
+
+    if (!showYear) {
+      return `${fromStr} - ${toStr}`;
+    }
+
+    const sameYear = fromDate.year() === toDate.year();
 
     const yearStr = sameYear
       ? fromDate.format(', YYYY')

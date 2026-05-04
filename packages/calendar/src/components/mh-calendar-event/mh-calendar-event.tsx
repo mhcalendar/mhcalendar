@@ -130,6 +130,7 @@ export class MHCalendarEvent {
         opacity: '1',
         borderRadius: '5px', // Ensure border radius is visible
         overflow: 'hidden', // Ensure content stays within rounded corners
+        background: eventColor,
         ...store.getInlineStyleForClass('mhCalendarEvent'),
       };
     }
@@ -147,14 +148,14 @@ export class MHCalendarEvent {
     }
 
     const shouldEventHaveCustomHeight =
-      [IMHCalendarViewType.WEEK, IMHCalendarViewType.DAY].includes(
-        storeState.viewType,
-      ) && !this.event.allDay;
+      [IMHCalendarViewType.WEEK, IMHCalendarViewType.DAY].includes(storeState.viewType) &&
+      !this.event.allDay;
 
     if (shouldEventHaveCustomHeight) {
       return {
         height: this.calculateEventHeight(),
         maxHeight: this.calculateEventHeight(),
+        background: eventColor,
         position: 'relative',
       };
     }
@@ -173,9 +174,7 @@ export class MHCalendarEvent {
     if (!this.event || !storeState.viewType) return;
 
     if (
-      [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(
-        storeState.viewType,
-      ) &&
+      [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(storeState.viewType) &&
       !this.event.allDay
     ) {
       return <mh-calendar-event-full event={this.event} />;

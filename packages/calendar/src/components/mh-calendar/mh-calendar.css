@@ -20,7 +20,7 @@ mh-calendar {
 }
 
 .mhCalendar__navigationHolder {
-  max-height: var(--calendarNavigationHeight);
+  height: var(--calendarNavigationHeight);
   width: 100%;
   background-color: var(--mainBackgroundColor);
   padding: 7px;

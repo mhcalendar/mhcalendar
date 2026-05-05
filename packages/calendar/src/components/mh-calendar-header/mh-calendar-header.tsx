@@ -40,7 +40,7 @@ export class MHCalendarHeader {
           >{`${dayjs(date).format('ddd')}`}</span>
           <span
             style={{
-              fontSize: '20px',
+              fontSize: '15px',
               fontWeight: 'bold',
             }}
           >{`${dayjs(date).date()}`}</span>

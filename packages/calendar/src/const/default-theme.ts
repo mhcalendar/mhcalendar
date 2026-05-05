@@ -1,15 +1,15 @@
 import { IMHCalendarConfigBaseStyle } from '../types';
 import { ConfigCSSProperites } from '../types/config/properties';
 
-export const DEFAULT_THEME_COLOR = '#00b536';
-export const VIEW_HEADER_HEIGHT = '70px';
+export const DEFAULT_THEME_COLOR = '#8a79ff';
+export const VIEW_HEADER_HEIGHT = '30px';
 export const VIEW_HEIGHT = `calc(100% - ${VIEW_HEADER_HEIGHT})`;
 export const NAVIGATION_HEIGHT = '20%';
 export const CALENDAR_HEIGHT = `calc(100% - ${NAVIGATION_HEIGHT})`;
 export const CALENDAR_BACKGROUND_COLOR = '#14141a';
 
 const DEFAULT_PROPERTIES: ConfigCSSProperites = {
-  timeSlotWidth: '70px',
+  timeSlotWidth: '60px',
   eventBackgroundColor: DEFAULT_THEME_COLOR,
   /*
    Set to undefined at purpose as user may want
@@ -32,7 +32,7 @@ const DEFAULT_PROPERTIES: ConfigCSSProperites = {
   fontColor: '#d4d4d4',
   fontFamily: 'system-ui',
   dateFontColor: '#82828e',
-  bordersColor: '#82828e',
+  bordersColor: '#2a2a36',
   buttonsColor: '#232323',
 };
 

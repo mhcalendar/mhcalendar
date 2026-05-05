@@ -6,7 +6,6 @@
   display: flex;
   background-color: var(--eventBackgroundColor);
   border-radius: 5px;
-  padding: 9px;
   position: relative;
   background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
   overflow: hidden;

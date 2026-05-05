@@ -2,7 +2,7 @@ import { IMHCalendarConfigBaseStyle } from '../types';
 import { ConfigCSSProperites } from '../types/config/properties';
 
 export const DEFAULT_THEME_COLOR = '#8a79ff';
-export const VIEW_HEADER_HEIGHT = '40px';
+export const VIEW_HEADER_HEIGHT = '60px';
 export const VIEW_HEIGHT = `calc(100% - ${VIEW_HEADER_HEIGHT})`;
 export const NAVIGATION_HEIGHT = '20%';
 export const CALENDAR_HEIGHT = `calc(100% - ${NAVIGATION_HEIGHT})`;
@@ -34,6 +34,7 @@ const DEFAULT_PROPERTIES: ConfigCSSProperites = {
   dateFontColor: '#82828e',
   bordersColor: '#2a2a36',
   buttonsColor: '#232323',
+  holidayDateColor: '#8a2929',
 };
 
 export const DEFAULT_THEME: IMHCalendarConfigBaseStyle = {

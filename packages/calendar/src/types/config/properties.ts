@@ -97,6 +97,7 @@ export type ConfigCSSProperites = {
   dateFontColor: string;
   navigationBackgroundColor: string;
   buttonsColor: string;
+  holidayDateColor: string;
   /**
    * Height of the top navigation bar (title, arrow buttons, view switcher).
    * Default: '20%'

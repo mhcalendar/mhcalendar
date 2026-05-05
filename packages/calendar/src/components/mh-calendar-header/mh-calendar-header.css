@@ -1,21 +1,13 @@
 .mhCalendarHeader {
   border-bottom: 1px solid var(--bordersColor);
-
   font-size: 12px;
   height: var(--viewHeaderHeight);
   width: 100%;
 }
 
-.mhCalendarHeader__emptyCell {
-  background-color: #fff;
-  border-right: 1px solid #e0e0e0;
-}
-
 .mhCalendarHeader__date {
   align-items: center;
-  font-size: 80%;
   text-align: center;
-  font-weight: 500;
   color: var(--dateFontColor);
   text-transform: uppercase;
   padding: 0 3px;
@@ -25,8 +17,44 @@
 }
 
 .mhCalendarHeader__today {
-  background-color: var(--headerTodayBackgroundColor);
-  color: #fff;
+  color: color-mix(in srgb, var(--dateFontColor), white 40%);
   font-weight: bold;
-  border-radius: 5px;
+  position: relative;
+}
+
+.mhCalendarHeader__today::after {
+  content: '';
+  position: absolute;
+  inset: 50%;
+  translate: -50% -50%;
+  width: 1.4em;
+  height: 1.4em;
+  border: solid 1px var(--headerTodayBackgroundColor);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.mhCalendarHeader__dateCell {
+  display: flex;
+  justify-content: center;
+}
+
+.mhCalendarHeader__dateWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  scale: 0.8;
+}
+
+.mhCalendarHeader__dateWrapper--weekend {
+  color: var(--holidayDateColor);
+}
+
+.mhCalendarHeader__dayName {
+  letter-spacing: 2px;
+  padding-bottom: 3px;
+}
+
+.mhCalendarHeader__dayNumber {
+  font-size: 25px;
 }

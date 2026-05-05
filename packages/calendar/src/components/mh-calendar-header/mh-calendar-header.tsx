@@ -24,26 +24,17 @@ export class MHCalendarHeader {
 
   private formatDate(date: Date) {
     if (this.showCurrentDate) {
+      // Works for multiview, where we need to display day number
+      const dayDate = dayjs(date);
+      const isWeekend = [0, 6].includes(dayDate.day());
       return (
         <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '5px',
-            scale: '0.8',
-          }}
+          class={`mhCalendarHeader__dateWrapper ${isWeekend ? 'mhCalendarHeader__dateWrapper--weekend' : ''}`}
         >
+          <span class="mhCalendarHeader__dayName">{`${dayDate.format('ddd')}`}</span>
           <span
-            style={{
-              letterSpacing: '2px',
-            }}
-          >{`${dayjs(date).format('ddd')}`}</span>
-          <span
-            style={{
-              fontSize: '15px',
-              fontWeight: 'bold',
-            }}
-          >{`${dayjs(date).date()}`}</span>
+            class={`mhCalendarHeader__dayNumber  ${DateUtils.isToday(date) ? 'mhCalendarHeader__today' : ''}`}
+          >{`${dayDate.date()}`}</span>
         </div>
       );
     }
@@ -113,9 +104,9 @@ export class MHCalendarHeader {
           storeState.viewType === IMHCalendarViewType.DAY) && <div />}
 
         {days.map((day) => (
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div class="mhCalendarHeader__dateCell">
             <div
-              class={`mhCalendarHeader__date ${DateUtils.isToday(day) ? 'mhCalendarHeader__today' : ''}`}
+              class={`mhCalendarHeader__date`}
               style={{
                 ...store.getInlineStyleForClass('mhCalendarHeader__date'),
                 ...(DateUtils.isToday(day)

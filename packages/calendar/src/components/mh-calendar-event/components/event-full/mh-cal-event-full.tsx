@@ -3,6 +3,7 @@ import { store, storeState } from '../../../../store/mh-calendar-store';
 import { IMHCalendarViewType } from '../../../../store/mh-calendar-store.types';
 import { DateUtils } from '../../../../utils/DateUtils';
 import { IMHCalendarEvent } from '../../../../types';
+import { EventStyleManager } from '../../../../utils/EventStyleManager';
 
 @Component({
   tag: 'mh-calendar-event-full',
@@ -14,6 +15,8 @@ export class MHCalendarEventFull {
 
   render() {
     if (!this.event) return;
+
+    const eventColor = EventStyleManager.getEventColor(this.event);
 
     return (
       <div
@@ -34,6 +37,7 @@ export class MHCalendarEventFull {
           <div
             class="mhCalendarEventFull__content"
             style={{
+              '--eventBackgroundColor': eventColor,
               ...store.getInlineStyleForClass('mhCalendarEventFull__content'),
             }}
           >

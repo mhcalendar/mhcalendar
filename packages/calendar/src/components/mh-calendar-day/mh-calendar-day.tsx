@@ -22,7 +22,7 @@ export class MHCalendarDay {
   @State() calendarDayElementHeight?: number;
   @State() isToday: boolean = false;
   @State() currentTimePosition?: { top: string };
-  @State() groupedEvents: Map<string, IMHCalendarEvent[]> = new Map();
+  @State() groupedEvents: Map<string, IMHCalendarEvent[]> | IMHCalendarEvent[] = new Map();
   @State() allDayEvents: IMHCalendarEvent[] = [];
   @State() dragDropState: DragDropState = {
     isDraggedOver: null,
@@ -99,7 +99,6 @@ export class MHCalendarDay {
     const isMonthView = storeState.viewType === IMHCalendarViewType.MONTH;
 
     if (isMonthView) {
-      // @ts-expect-error test
       this.groupedEvents = eventsArray;
       return;
     }
@@ -221,11 +220,7 @@ export class MHCalendarDay {
    * based on available height in the day cell
    */
   private calculateMaxVisibleEventsInMonthView(): void {
-    if (
-      !this.el ||
-      !storeState.viewType ||
-      storeState.viewType !== IMHCalendarViewType.MONTH
-    ) {
+    if (!this.el || !storeState.viewType || storeState.viewType !== IMHCalendarViewType.MONTH) {
       return;
     }
 
@@ -361,17 +356,16 @@ export class MHCalendarDay {
           calendarDayElementHeight={this.calendarDayElementHeight}
           viewType={storeState.viewType}
         />
-        {!isTimeView ? (
-          <mh-calendar-day-month-view-events
-            // @ts-expect-error test
-            groupedEvents={this.groupedEvents}
-            maxVisibleEventsInMonthView={this.maxVisibleEventsInMonthView}
+        {isTimeView ? (
+          <mh-calendar-day-time-view-events
+            groupedEvents={this.groupedEvents as Map<string, IMHCalendarEvent[]>}
             calendarDayElementHeight={this.calendarDayElementHeight}
             day={this.day}
           />
         ) : (
-          <mh-calendar-day-time-view-events
-            groupedEvents={this.groupedEvents}
+          <mh-calendar-day-month-view-events
+            groupedEvents={this.groupedEvents as IMHCalendarEvent[]}
+            maxVisibleEventsInMonthView={this.maxVisibleEventsInMonthView}
             calendarDayElementHeight={this.calendarDayElementHeight}
             day={this.day}
           />

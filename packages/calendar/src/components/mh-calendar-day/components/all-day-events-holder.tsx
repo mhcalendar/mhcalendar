@@ -37,16 +37,6 @@ export class AllDayEventsHolder {
       : this.allDayEvents;
     const hiddenCount = this.allDayEvents.length - eventsToShow.length;
 
-    console.log(
-      Math.floor(
-        (storeState.allDayEventsHeight - ALL_DAY_CONTAINER_PADDING) /
-          (MONTH_EVENT_HEIGHT + ALL_DAY_EVENT_GAP),
-      ),
-      storeState.allDayEventsHeight,
-      ALL_DAY_CONTAINER_PADDING,
-      MONTH_EVENT_HEIGHT,
-      ALL_DAY_EVENT_GAP,
-    );
     return (
       <div
         class="mhCalendarDay_allDaysEventHolder"

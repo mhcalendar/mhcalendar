@@ -18,6 +18,7 @@ export class MonthViewEvents {
     }
 
     const sortedEvents = [...this.groupedEvents].sort((a, b) => {
+      console.log(this.groupedEvents);
       if (a.allDay !== b.allDay) {
         return a.allDay ? -1 : 1;
       }

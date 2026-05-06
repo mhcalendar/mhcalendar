@@ -7,10 +7,7 @@ import { DateUtils } from '../../utils/DateUtils';
 
 export class DayUtils {
   static getDayStyles(day: string | Date): string[] {
-    const isDayCurrentMonth = dayjs(day).isSame(
-     storeState.calendarDateRange.fromDate,
-      'month',
-    );
+    const isDayCurrentMonth = dayjs(day).isSame(storeState.calendarDateRange.fromDate, 'month');
     const style = [];
     if (isDayCurrentMonth) style.push('current-month');
     // Needed to properly show days with styles but not in the current month
@@ -54,6 +51,7 @@ export class DayUtils {
   } {
     const allDayEvents: IMHCalendarEvent[] = [];
     const regularEvents: IMHCalendarEvent[] = [];
+
     for (const event of events) {
       (event.allDay ? allDayEvents : regularEvents).push(event);
     }

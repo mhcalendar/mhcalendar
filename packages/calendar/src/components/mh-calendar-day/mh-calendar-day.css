@@ -66,16 +66,16 @@
 }
 
 .mhCalendarDay__eventsLeftIndicator {
-  padding: 4px;
   font-size: 11px;
   display: flex;
   align-items: center;
-  background: #2ec62e;
-  width: 96%;
-  margin: 3px auto;
+  background: var(--eventBackgroundColor);
+  margin: 1px auto;
   border-radius: 5px;
   color: white;
   font-weight: bold;
+  padding: 2px;
+  cursor: pointer;
 }
 
 .mhCalendarDay_dayDate {

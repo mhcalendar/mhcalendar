@@ -92,6 +92,9 @@ export namespace Components {
     }
     interface MhCalendarMonth {
     }
+    interface MhCalendarMoreEventsIndicator {
+        "hiddenCount": number;
+    }
     interface MhCalendarMultiView {
     }
     interface MhCalendarNavigation {
@@ -209,6 +212,12 @@ declare global {
         prototype: HTMLMhCalendarMonthElement;
         new (): HTMLMhCalendarMonthElement;
     };
+    interface HTMLMhCalendarMoreEventsIndicatorElement extends Components.MhCalendarMoreEventsIndicator, HTMLStencilElement {
+    }
+    var HTMLMhCalendarMoreEventsIndicatorElement: {
+        prototype: HTMLMhCalendarMoreEventsIndicatorElement;
+        new (): HTMLMhCalendarMoreEventsIndicatorElement;
+    };
     interface HTMLMhCalendarMultiViewElement extends Components.MhCalendarMultiView, HTMLStencilElement {
     }
     var HTMLMhCalendarMultiViewElement: {
@@ -260,6 +269,7 @@ declare global {
         "mh-calendar-header": HTMLMhCalendarHeaderElement;
         "mh-calendar-modal": HTMLMhCalendarModalElement;
         "mh-calendar-month": HTMLMhCalendarMonthElement;
+        "mh-calendar-more-events-indicator": HTMLMhCalendarMoreEventsIndicatorElement;
         "mh-calendar-multi-view": HTMLMhCalendarMultiViewElement;
         "mh-calendar-navigation": HTMLMhCalendarNavigationElement;
         "mh-calendar-resize-event-handler": HTMLMhCalendarResizeEventHandlerElement;
@@ -350,6 +360,9 @@ declare namespace LocalJSX {
     }
     interface MhCalendarMonth {
     }
+    interface MhCalendarMoreEventsIndicator {
+        "hiddenCount": number;
+    }
     interface MhCalendarMultiView {
     }
     interface MhCalendarNavigation {
@@ -416,6 +429,9 @@ declare namespace LocalJSX {
     interface MhCalendarHeaderAttributes {
         "showCurrentDate": boolean;
     }
+    interface MhCalendarMoreEventsIndicatorAttributes {
+        "hiddenCount": number;
+    }
     interface MhCalendarNavigationAttributes {
         "changeDateRangeByUnit": IMHCalendarViewType;
     }
@@ -440,6 +456,7 @@ declare namespace LocalJSX {
         "mh-calendar-header": Omit<MhCalendarHeader, keyof MhCalendarHeaderAttributes> & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes]?: MhCalendarHeader[K] } & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes as `attr:${K}`]?: MhCalendarHeaderAttributes[K] } & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes as `prop:${K}`]?: MhCalendarHeader[K] };
         "mh-calendar-modal": MhCalendarModal;
         "mh-calendar-month": MhCalendarMonth;
+        "mh-calendar-more-events-indicator": Omit<MhCalendarMoreEventsIndicator, keyof MhCalendarMoreEventsIndicatorAttributes> & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes]?: MhCalendarMoreEventsIndicator[K] } & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes as `attr:${K}`]?: MhCalendarMoreEventsIndicatorAttributes[K] } & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes as `prop:${K}`]?: MhCalendarMoreEventsIndicator[K] } & OneOf<"hiddenCount", MhCalendarMoreEventsIndicator["hiddenCount"], MhCalendarMoreEventsIndicatorAttributes["hiddenCount"]>;
         "mh-calendar-multi-view": MhCalendarMultiView;
         "mh-calendar-navigation": Omit<MhCalendarNavigation, keyof MhCalendarNavigationAttributes> & { [K in keyof MhCalendarNavigation & keyof MhCalendarNavigationAttributes]?: MhCalendarNavigation[K] } & { [K in keyof MhCalendarNavigation & keyof MhCalendarNavigationAttributes as `attr:${K}`]?: MhCalendarNavigationAttributes[K] } & { [K in keyof MhCalendarNavigation & keyof MhCalendarNavigationAttributes as `prop:${K}`]?: MhCalendarNavigation[K] };
         "mh-calendar-resize-event-handler": Omit<MhCalendarResizeEventHandler, keyof MhCalendarResizeEventHandlerAttributes> & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes]?: MhCalendarResizeEventHandler[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `attr:${K}`]?: MhCalendarResizeEventHandlerAttributes[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `prop:${K}`]?: MhCalendarResizeEventHandler[K] } & OneOf<"eventId", MhCalendarResizeEventHandler["eventId"], MhCalendarResizeEventHandlerAttributes["eventId"]> & OneOf<"eventHeight", MhCalendarResizeEventHandler["eventHeight"], MhCalendarResizeEventHandlerAttributes["eventHeight"]>;
@@ -466,6 +483,7 @@ declare module "@stencil/core" {
             "mh-calendar-header": LocalJSX.IntrinsicElements["mh-calendar-header"] & JSXBase.HTMLAttributes<HTMLMhCalendarHeaderElement>;
             "mh-calendar-modal": LocalJSX.IntrinsicElements["mh-calendar-modal"] & JSXBase.HTMLAttributes<HTMLMhCalendarModalElement>;
             "mh-calendar-month": LocalJSX.IntrinsicElements["mh-calendar-month"] & JSXBase.HTMLAttributes<HTMLMhCalendarMonthElement>;
+            "mh-calendar-more-events-indicator": LocalJSX.IntrinsicElements["mh-calendar-more-events-indicator"] & JSXBase.HTMLAttributes<HTMLMhCalendarMoreEventsIndicatorElement>;
             "mh-calendar-multi-view": LocalJSX.IntrinsicElements["mh-calendar-multi-view"] & JSXBase.HTMLAttributes<HTMLMhCalendarMultiViewElement>;
             "mh-calendar-navigation": LocalJSX.IntrinsicElements["mh-calendar-navigation"] & JSXBase.HTMLAttributes<HTMLMhCalendarNavigationElement>;
             "mh-calendar-resize-event-handler": LocalJSX.IntrinsicElements["mh-calendar-resize-event-handler"] & JSXBase.HTMLAttributes<HTMLMhCalendarResizeEventHandlerElement>;

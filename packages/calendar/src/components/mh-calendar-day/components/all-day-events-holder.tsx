@@ -52,21 +52,7 @@ export class AllDayEventsHolder {
         {eventsToShow.map((event) => (
           <mh-calendar-event event={event} />
         ))}
-        {hasMoreEvents && (
-          <div
-            class="mhCalendarDay__eventsLeftIndicator"
-            style={{
-              fontSize: '11px',
-              padding: '2px 4px',
-              fontWeight: 'bold',
-              color: '#666',
-              cursor: 'pointer',
-              ...store.getInlineStyleForClass('mhCalendarDay__eventsLeftIndicator'),
-            }}
-          >
-            {`+${hiddenCount} more`}
-          </div>
-        )}
+        {hasMoreEvents && <mh-calendar-more-events-indicator hiddenCount={hiddenCount} />}
         {this.dragDropState.isDraggedOverAllDay &&
           storeState.draggedEvent &&
           (() => {

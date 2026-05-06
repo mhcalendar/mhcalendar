@@ -12,6 +12,7 @@ import { createComponent } from '@stencil/react-output-target/runtime';
 import React from 'react';
 
 import type { Components } from "@mhcalendar/calendar/dist/components";
+import { MhCalendarMoreEventsIndicator as MhCalendarMoreEventsIndicatorElement, defineCustomElement as defineMhCalendarMoreEventsIndicator } from "@mhcalendar/calendar/dist/components/mh-calendar-more-events-indicator.js";
 import { MhCalendar as MhCalendarElement, defineCustomElement as defineMhCalendar } from "@mhcalendar/calendar/dist/components/mh-calendar.js";
 import { MhViewSwitcher as MhViewSwitcherElement, defineCustomElement as defineMhViewSwitcher } from "@mhcalendar/calendar/dist/components/mh-view-switcher.js";
 
@@ -24,6 +25,17 @@ export const MhCalendar: StencilReactComponent<MhCalendarElement, MhCalendarEven
     react: React,
     events: {} as MhCalendarEvents,
     defineCustomElement: defineMhCalendar
+});
+
+export type MhCalendarMoreEventsIndicatorEvents = NonNullable<unknown>;
+
+export const MhCalendarMoreEventsIndicator: StencilReactComponent<MhCalendarMoreEventsIndicatorElement, MhCalendarMoreEventsIndicatorEvents, Components.MhCalendarMoreEventsIndicator> = /*@__PURE__*/ createComponent<MhCalendarMoreEventsIndicatorElement, MhCalendarMoreEventsIndicatorEvents, Components.MhCalendarMoreEventsIndicator>({
+    tagName: 'mh-calendar-more-events-indicator',
+    elementClass: MhCalendarMoreEventsIndicatorElement,
+    // @ts-ignore - ignore potential React type mismatches between the Stencil Output Target and your project.
+    react: React,
+    events: {} as MhCalendarMoreEventsIndicatorEvents,
+    defineCustomElement: defineMhCalendarMoreEventsIndicator
 });
 
 export type MhViewSwitcherEvents = NonNullable<unknown>;

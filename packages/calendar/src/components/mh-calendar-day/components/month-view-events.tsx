@@ -72,19 +72,11 @@ export class MonthViewEvents {
               ...store.getInlineStyleForClass('mhCalendarDay__eventHolder'),
             }}
           >
-            <div
-              class="mhCalendarDay__eventsLeftIndicator"
-              style={{
-                fontSize: '11px',
-                padding: '2px 4px',
-                fontWeight: 'bold',
-                color: '#666',
-                cursor: 'pointer',
-                ...store.getInlineStyleForClass('mhCalendarDay__eventsLeftIndicator'),
-              }}
-            >
-              {`+${sortedEvents.length - eventsToShow.length} more`}
-            </div>
+            {hasMoreEvents && (
+              <mh-calendar-more-events-indicator
+                hiddenCount={sortedEvents.length - eventsToShow.length}
+              />
+            )}
           </div>
         )}
       </div>

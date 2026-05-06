@@ -5,7 +5,7 @@ import store from '../../../store/mh-calendar-store';
   tag: 'mh-calendar-more-events-indicator',
   shadow: false,
 })
-export class AllDayEventsHolder {
+export class MoreEventsIndicator {
   @Prop() hiddenCount!: number;
 
   render() {

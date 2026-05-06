@@ -43,6 +43,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       payload.shiftplanDays,
     );
 
+    state.anchorDate = fromDate;
     state.calendarDateRange = { fromDate, toDate };
     state.eventContent = payload.eventContent;
     state.eventSmallContent = payload.eventSmallContent;
@@ -101,7 +102,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
   ): IMHCalendarState {
     const newCalendarDateRange = this.updateDateRangeForViewType(
       payload.viewType,
-      state.calendarDateRange.fromDate ?? new Date(),
+      state.anchorDate ?? state.calendarDateRange.fromDate ?? new Date(),
       state.shiftplanDays,
     );
     state.viewType = payload.viewType;
@@ -113,13 +114,14 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     state: IMHCalendarState,
     payload: { amount: number },
   ): IMHCalendarState {
-    if (!state.viewType || !state.calendarDateRange.fromDate) return state;
+    if (!state.viewType || !state.anchorDate) return state;
     state.calendarDateRange = this.shiftCalendar(
       state.viewType,
-      state.calendarDateRange.fromDate,
+      state.anchorDate,
       payload.amount,
       state.shiftplanDays,
     );
+    state.anchorDate = state.calendarDateRange.fromDate;
     return state;
   }
 
@@ -130,6 +132,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       new Date(),
       state.shiftplanDays,
     );
+    state.anchorDate = state.calendarDateRange.fromDate;
     return state;
   }
 

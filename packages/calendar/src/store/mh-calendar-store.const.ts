@@ -6,9 +6,11 @@ export const DEFAULT_HOUR_HEIGHT = 50;
 
 export const initialState: IMHCalendarState = {
   ...DEFAULT_WEEK_VIEW_CONFIG,
+
   // viewType and style are managed by setConfig, not pre-initialized
   viewType: undefined,
   style: {} as IMHCalendarConfigBaseStyle,
+  
   // Runtime-only internal state
   calendarDateRange: {
     fromDate: undefined,

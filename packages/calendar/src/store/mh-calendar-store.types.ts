@@ -32,6 +32,7 @@ export interface IEventResizePayload {
 
 export interface IMHCalendarState extends ICalendarWeekConfig {
   // Runtime-only internal state
+  anchorDate: Date | undefined;
   calendarDateRange: IMHCalendarDateRange;
   reactiveEvents: EventBuilderMapByDate;
   draggedEvent: IMHCalendarEvent | null;

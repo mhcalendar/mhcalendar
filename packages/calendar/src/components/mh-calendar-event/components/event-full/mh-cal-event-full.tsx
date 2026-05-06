@@ -1,7 +1,9 @@
 import { Component, h, Prop } from '@stencil/core';
 import { store, storeState } from '../../../../store/mh-calendar-store';
-import { IMHCalendarEvent, IMHCalendarViewType } from '../../../../store/mh-calendar-store.types';
+import { IMHCalendarViewType } from '../../../../store/mh-calendar-store.types';
 import { DateUtils } from '../../../../utils/DateUtils';
+import { IMHCalendarEvent } from '../../../../types';
+import { EventStyleManager } from '../../../../utils/EventStyleManager';
 
 @Component({
   tag: 'mh-calendar-event-full',
@@ -14,6 +16,8 @@ export class MHCalendarEventFull {
   render() {
     if (!this.event) return;
 
+    const eventColor = EventStyleManager.getEventColor(this.event);
+
     return (
       <div
         class="mhCalendarEventFull"
@@ -25,9 +29,7 @@ export class MHCalendarEventFull {
           <div
             class="mhCalendarEventFull__userEventContentHolder"
             style={{
-              ...store.getInlineStyleForClass(
-                'mhCalendarEventFull__userEventContentHolder',
-              ),
+              ...store.getInlineStyleForClass('mhCalendarEventFull__userEventContentHolder'),
             }}
             innerHTML={storeState.eventContent?.(this.event)}
           />
@@ -35,6 +37,7 @@ export class MHCalendarEventFull {
           <div
             class="mhCalendarEventFull__content"
             style={{
+              '--eventBackgroundColor': eventColor,
               ...store.getInlineStyleForClass('mhCalendarEventFull__content'),
             }}
           >
@@ -51,9 +54,7 @@ export class MHCalendarEventFull {
                 <div
                   class="mhCalendarEventFull__content__date"
                   style={{
-                    ...store.getInlineStyleForClass(
-                      'mhCalendarEventFull__content__date',
-                    ),
+                    ...store.getInlineStyleForClass('mhCalendarEventFull__content__date'),
                   }}
                 >
                   {DateUtils.formatTime(this.event.startDate)}-

@@ -1,0 +1,73 @@
+.mhViewSwitcher {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background-color: var(--mainBackgroundColor);
+  border-radius: 10px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.mhViewSwitcher__btn {
+  height: 32px;
+  padding: 6px 14px;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fontColor);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mhViewSwitcher__btn:hover {
+  background-color: color-mix(in srgb, var(--mainBackgroundColor), white 5%);
+}
+
+.mhViewSwitcher__btn--active {
+  background: var(--buttonsColor);
+  font-weight: 600;
+}
+
+.mhViewSwitcher--select {
+  position: relative;
+  padding: 4px;
+  background-color: var(--mainBackgroundColor);
+  border-radius: 10px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.mhViewSwitcher--select::after {
+  content: '';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--fontColor);
+}
+
+.mhViewSwitcher__select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--buttonsColor);
+  color: var(--fontColor);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 36px 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  height: 32px;
+  min-width: 100px;
+  outline: none;
+  font-family: inherit;
+}

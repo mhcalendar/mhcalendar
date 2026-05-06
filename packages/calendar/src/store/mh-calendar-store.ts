@@ -3,9 +3,7 @@ import { MHCalendarActions } from './mh-calendar-store.actions';
 import {
   IEventDropPayload,
   IEventResizePayload,
-  IMHCalendarEvent,
   IMHCalendarState,
-  IMHCalendarStore,
   IMHCalendarViewType,
   IModalPosition,
 } from './mh-calendar-store.types';
@@ -13,8 +11,10 @@ import dayjs from 'dayjs';
 import { DaysGenerator } from '../utils/DaysGenerator';
 import { initialState } from './mh-calendar-store.const';
 import { EventManager } from '../utils/EventManager';
+import { CssStyles } from '../types/config/cssStyles';
+import { IMHCalendarEvent } from '../types';
 
-export class MHCalendarStore extends MHCalendarActions implements IMHCalendarStore {
+export class MHCalendarStore extends MHCalendarActions {
   private readonly _map: ObservableMap<IMHCalendarState>;
   readonly state: IMHCalendarState;
 
@@ -24,8 +24,8 @@ export class MHCalendarStore extends MHCalendarActions implements IMHCalendarSto
     this.state = this._map.state;
   }
 
-  onChange(key: keyof IMHCalendarState, callback: (value: any) => void) {
-    this._map.onChange(key, callback);
+  onChange(key: keyof IMHCalendarState, callback: (value: any) => void): () => void {
+    return this._map.onChange(key, callback);
   }
 
   // ###### Computed getters ######
@@ -82,8 +82,8 @@ export class MHCalendarStore extends MHCalendarActions implements IMHCalendarSto
     return allEvents;
   }
 
-  getInlineStyleForClass(className: string) {
-    return this.state?.style?.[className as keyof typeof this.state.style] || {};
+  getInlineStyleForClass(className: keyof CssStyles) {
+    return this.state?.style?.styles?.[className] || {};
   }
 
   // ###### Actions ######

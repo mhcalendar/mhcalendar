@@ -40,7 +40,6 @@
   white-space: nowrap;
   pointer-events: none;
   z-index: 1000;
-  font-family: inherit;
   font-weight: 500;
   transition:
     opacity 0.18s,

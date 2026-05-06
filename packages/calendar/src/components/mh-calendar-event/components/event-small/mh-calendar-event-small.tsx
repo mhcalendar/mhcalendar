@@ -1,7 +1,7 @@
 import { Component, h, Prop } from '@stencil/core';
-import { IMHCalendarEvent } from '../../../../components';
 import { store, storeState } from '../../../../store/mh-calendar-store';
 import { DateUtils } from '../../../../utils/DateUtils';
+import { IMHCalendarEvent } from '../../../../types';
 
 @Component({
   tag: 'mh-calendar-event-small',

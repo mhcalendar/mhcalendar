@@ -15,30 +15,34 @@ export class MHCalendarTimeSlots {
   @State() amountOfPrintedSlots?: number;
   @State() amountOfPrintedHoursSlots?: string[];
 
+  private storeUnsubscribers: (() => void)[] = [];
+
   connectedCallback() {
     this.currentTimeFrom = storeState.calendarDateRange.fromDate;
 
-    if (!storeState.slotInterval || !storeState.hoursSlotInterval)
-      return;
+    if (!storeState.slotInterval || !storeState.hoursSlotInterval) return;
 
     const userSlotDivider =
-      (storeState.slotInterval.hours * 60 +
-       storeState.slotInterval.minutes) /
-      60;
+      (storeState.slotInterval.hours * 60 + storeState.slotInterval.minutes) / 60;
 
-    const userHourSlotDivider = DaysGenerator.generateSlotHours(
-      storeState.hoursSlotInterval,
-    );
+    const userHourSlotDivider = DaysGenerator.generateSlotHours(storeState.hoursSlotInterval);
 
     this.amountOfPrintedSlots = store.hoursRangeCal / userSlotDivider;
 
     this.amountOfPrintedHoursSlots = userHourSlotDivider;
 
-    store.onChange('calendarDateRange', () => {
-      if (storeState.calendarDateRange.fromDate) {
-        this.currentTimeFrom = storeState.calendarDateRange.fromDate;
-      }
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', () => {
+        if (storeState.calendarDateRange.fromDate) {
+          this.currentTimeFrom = storeState.calendarDateRange.fromDate;
+        }
+      }),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   componentDidLoad() {
@@ -71,15 +75,12 @@ export class MHCalendarTimeSlots {
   }
 
   private renderCalendarSlots() {
-    if (!storeState.slotInterval || !storeState.hoursSlotInterval)
-      return;
+    if (!storeState.slotInterval || !storeState.hoursSlotInterval) return;
     // Extract constants
     const slotDurationMinutes =
-      storeState.slotInterval.hours * 60 +
-      storeState.slotInterval.minutes;
+      storeState.slotInterval.hours * 60 + storeState.slotInterval.minutes;
     const hourIntervalMinutes =
-      storeState.hoursSlotInterval.hours * 60 +
-      storeState.hoursSlotInterval.minutes;
+      storeState.hoursSlotInterval.hours * 60 + storeState.hoursSlotInterval.minutes;
     const startTimeMinutes = (storeState.showTimeFrom || 0) * 60;
 
     // Helper functions
@@ -210,7 +211,7 @@ export class MHCalendarTimeSlots {
               }}
             >
               <span
-                class="gtm-info"
+                class="gtmInfo"
                 style={{
                   display: 'flex',
                   justifyContent: 'center',
@@ -218,18 +219,14 @@ export class MHCalendarTimeSlots {
                   textAlign: 'center',
                   width: '100%',
                   height: '100%',
-                  ...store.getInlineStyleForClass('gtm-info'),
+                  ...store.getInlineStyleForClass('gtmInfo'),
                 }}
               >
                 {storeState.timezoneLabel !== undefined
                   ? storeState.timezoneLabel
                   : (() => {
-                      const offset = TimezoneUtils.getTimezoneOffset(
-                        store.mainTimezone,
-                      );
-                      const abbr = TimezoneUtils.getTimezoneAbbreviation(
-                        store.mainTimezone,
-                      );
+                      const offset = TimezoneUtils.getTimezoneOffset(store.mainTimezone);
+                      const abbr = TimezoneUtils.getTimezoneAbbreviation(store.mainTimezone);
 
                       if (abbr) {
                         return `${abbr} (GMT${offset >= 0 ? '+' : ''}${offset})`;

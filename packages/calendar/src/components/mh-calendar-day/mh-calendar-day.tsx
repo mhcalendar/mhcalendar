@@ -22,7 +22,7 @@ export class MHCalendarDay {
   @State() calendarDayElementHeight?: number;
   @State() isToday: boolean = false;
   @State() currentTimePosition?: { top: string };
-  @State() groupedEvents: Map<string, IMHCalendarEvent[]> = new Map();
+  @State() groupedEvents: Map<string, IMHCalendarEvent[]> | IMHCalendarEvent[] = new Map();
   @State() allDayEvents: IMHCalendarEvent[] = [];
   @State() dragDropState: DragDropState = {
     isDraggedOver: null,
@@ -42,6 +42,9 @@ export class MHCalendarDay {
   private intervalId?: number;
   private storeUnsubscribers: (() => void)[] = [];
   private resizeTimerId?: number;
+
+  private groupedEventsRafId: number | null = null;
+  private lastRenderedViewType?: IMHCalendarViewType;
 
   private processDragPosition = (clientY: number): void => {
     const newState = this.dragDropHandler.processDragPosition(clientY, this.dragDropState);
@@ -88,36 +91,48 @@ export class MHCalendarDay {
     this.isDayHovered = false;
   }
 
+  private scheduleGetGroupedEvents(): void {
+    if (this.groupedEventsRafId !== null) {
+      cancelAnimationFrame(this.groupedEventsRafId);
+    }
+    this.groupedEventsRafId = requestAnimationFrame(() => {
+      this.getGroupedEvents();
+      this.groupedEventsRafId = null;
+    });
+  }
+
   // Component lifecycle and data management
   private getGroupedEvents(): void {
-    if (!this.day) {
-      throw new Error('Event groups: init problem');
-    }
+    if (!this.day) return;
 
     const eventsArray = EventManager.getEventsForDate(this.day);
-
     const isMonthView = storeState.viewType === IMHCalendarViewType.MONTH;
 
+    this.lastRenderedViewType = storeState.viewType;
+
     if (isMonthView) {
-      // @ts-expect-error test
       this.groupedEvents = eventsArray;
+      this.allDayEvents = [];
       return;
     }
 
     const groupedEvents = DayUtils.groupEvents(eventsArray);
     this.allDayEvents = groupedEvents.allDayEvents;
-
     this.groupedEvents = groupedEvents.dayEvents;
   }
 
   @Watch('day')
-  dayChanged(newDay: Date): void {
-    if (newDay) {
-      this.isToday = DateUtils.isToday(newDay);
-      this.getGroupedEvents();
-      this.updateCurrentTimePosition();
-      this.dragDropHandler.updateDay(newDay);
+  dayChanged(newDay: Date, oldDay?: Date): void {
+    if (!newDay) return;
+
+    if (oldDay && dayjs(newDay).isSame(oldDay, 'day')) {
+      return;
     }
+
+    this.isToday = DateUtils.isToday(newDay);
+    this.scheduleGetGroupedEvents();
+    this.updateCurrentTimePosition();
+    this.dragDropHandler.updateDay(newDay);
   }
 
   componentWillLoad(): void {
@@ -126,7 +141,7 @@ export class MHCalendarDay {
 
     if (this.day) {
       this.isToday = DateUtils.isToday(this.day);
-      this.getGroupedEvents();
+      this.scheduleGetGroupedEvents();
     }
   }
 
@@ -161,24 +176,31 @@ export class MHCalendarDay {
   }
 
   private setupStoreSubscriptions(): void {
-    store.onChange('calendarDateRange', () => {
-      this.getGroupedEvents();
-      this.calculateMaxVisibleEventsInMonthView();
-    });
-
-    store.onChange('reactiveEvents', () => {
-      this.getGroupedEvents();
-      // Recalculate max events when events change
-      setTimeout(() => {
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', () => {
+        this.scheduleGetGroupedEvents();
         this.calculateMaxVisibleEventsInMonthView();
-      }, 50);
-    });
+      }),
+    );
 
-    store.onChange('viewType', () => {
-      this.getGroupedEvents();
-      this.updateCurrentTimePosition();
-      this.calculateMaxVisibleEventsInMonthView();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('reactiveEvents', () => {
+        this.scheduleGetGroupedEvents();
+        setTimeout(() => {
+          this.calculateMaxVisibleEventsInMonthView();
+        }, 50);
+      }),
+    );
+
+    this.storeUnsubscribers.push(
+      store.onChange('viewType', () => {
+        if (this.lastRenderedViewType !== storeState.viewType) {
+          this.scheduleGetGroupedEvents();
+        }
+        this.updateCurrentTimePosition();
+        this.calculateMaxVisibleEventsInMonthView();
+      }),
+    );
   }
 
   private handleResize = (): void => {
@@ -221,11 +243,7 @@ export class MHCalendarDay {
    * based on available height in the day cell
    */
   private calculateMaxVisibleEventsInMonthView(): void {
-    if (
-      !this.el ||
-      !storeState.viewType ||
-      storeState.viewType !== IMHCalendarViewType.MONTH
-    ) {
+    if (!this.el || !storeState.viewType || storeState.viewType !== IMHCalendarViewType.MONTH) {
       return;
     }
 
@@ -246,6 +264,9 @@ export class MHCalendarDay {
     }
     if (this.resizeTimerId) {
       window.clearTimeout(this.resizeTimerId);
+    }
+    if (this.groupedEventsRafId !== null) {
+      cancelAnimationFrame(this.groupedEventsRafId);
     }
     window.removeEventListener('resize', this.handleResize);
 
@@ -361,17 +382,16 @@ export class MHCalendarDay {
           calendarDayElementHeight={this.calendarDayElementHeight}
           viewType={storeState.viewType}
         />
-        {!isTimeView ? (
-          <mh-calendar-day-month-view-events
-            // @ts-expect-error test
-            groupedEvents={this.groupedEvents}
-            maxVisibleEventsInMonthView={this.maxVisibleEventsInMonthView}
+        {isTimeView ? (
+          <mh-calendar-day-time-view-events
+            groupedEvents={this.groupedEvents as Map<string, IMHCalendarEvent[]>}
             calendarDayElementHeight={this.calendarDayElementHeight}
             day={this.day}
           />
         ) : (
-          <mh-calendar-day-time-view-events
-            groupedEvents={this.groupedEvents}
+          <mh-calendar-day-month-view-events
+            groupedEvents={this.groupedEvents as IMHCalendarEvent[]}
+            maxVisibleEventsInMonthView={this.maxVisibleEventsInMonthView}
             calendarDayElementHeight={this.calendarDayElementHeight}
             day={this.day}
           />

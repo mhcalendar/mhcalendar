@@ -1,6 +1,6 @@
 import { DEFAULT_THEME } from '../const/default-theme';
-import { IMHCalendarEvent, IMHCalendarConfigBaseStyle } from '../types';
-import { IDateRange, IMHCalendarViewType } from './mh-calendar-store.types';
+import { ICalendarDateRange, IMHCalendarEvent, IMHCalendarConfigBaseStyle } from '../types';
+import { IMHCalendarViewType } from './mh-calendar-store.types';
 
 type StylesWithoutProperties = Omit<IMHCalendarConfigBaseStyle, 'properties'>;
 
@@ -20,7 +20,7 @@ export class MHCalendarStoreUtils {
     return differenceInMs / (1000 * 60);
   }
 
-  protected getDatesForWeekView(startDate: Date | string): IDateRange {
+  protected getDatesForWeekView(startDate: Date | string): ICalendarDateRange {
     const today = new Date(startDate);
     const dayOfWeek = today.getDay();
     const diffToMonday = (dayOfWeek === 0 ? -6 : 1) - dayOfWeek;
@@ -35,7 +35,7 @@ export class MHCalendarStoreUtils {
     viewType: IMHCalendarViewType,
     fromDate: Date,
     shiftplanDays: number = 7,
-  ): IDateRange {
+  ): ICalendarDateRange {
     switch (viewType) {
       case IMHCalendarViewType.MONTH: {
         const year = fromDate.getFullYear();
@@ -63,7 +63,7 @@ export class MHCalendarStoreUtils {
     fromDate: Date,
     amount: number = 1,
     shiftplanDays: number = 7,
-  ): IDateRange {
+  ): ICalendarDateRange {
     const newFromDate = new Date(fromDate);
     switch (by) {
       case IMHCalendarViewType.DAY:

@@ -1,58 +1,53 @@
 import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
-import {
-  IMHCalendarConfigBaseUserActions,
-  IMHCalendarConfigBase,
-  IMHCalendarWeekConfig,
-} from '../types';
+import { IMHCalendarConfigBase, IMHCalendarWeekConfig } from '../types';
 import { EventDisplayMode } from '../types/enums';
 import { DEFAULT_THEME } from './default-theme';
 
 export const MIN_EVENT_DURATION_MINUTES = 15;
 
-export const DEF_USER_ACTIONS: Partial<IMHCalendarConfigBaseUserActions> = {
+export const DEFAULT_CALENDAR_CONFIG: IMHCalendarConfigBase = {
+  style: DEFAULT_THEME,
+  viewType: IMHCalendarViewType.MONTH,
+  fixedHeight: undefined,
+  virtualScrollHeight: undefined,
+  eventContent: undefined,
+  eventSmallContent: undefined,
   onEventClick: undefined,
   onRightEventClick: undefined,
   onDayClick: undefined,
   onRightDayClick: undefined,
-};
-
-export const DEFAULT_CALENDAR_CONFIG: IMHCalendarConfigBase = {
-  style: DEFAULT_THEME,
-  viewType: IMHCalendarViewType.MONTH,
-  eventContent: undefined,
+  onEventCreated: undefined,
+  onEventUpdated: undefined,
   showDateSwitcher: true,
   showViewTypeSwitcher: true,
   showCalendarNavigation: true,
   allowEventDragging: true,
   showViewHeader: true,
-  ...DEF_USER_ACTIONS,
+  createEventOnClick: false,
 };
 
 export const DEFAULT_WEEK_VIEW_CONFIG: IMHCalendarWeekConfig = {
   ...DEFAULT_CALENDAR_CONFIG,
+  startDate: new Date(),
   showTimeFrom: 8,
   showTimeTo: 17,
-  startDate: new Date(),
-  showWeekends: true,
+  slotInterval: { hours: 1, minutes: 0 },
+  hoursSlotInterval: { hours: 1, minutes: 0 },
+  businessHours: [],
+  hoursDisplayFormat: 'h A',
   showAllDayTasks: true,
   allDayEventsHeight: 100,
-  allowEventResize: true,
-  minEventDuration: MIN_EVENT_DURATION_MINUTES,
   makeAllDaysSticky: false,
-  showTimeIndicator: true,
-  slotInterval: {
-    hours: 1,
-    minutes: 0,
-  },
-  hoursSlotInterval: {
-    hours: 1,
-    minutes: 0,
-  },
-  hoursDisplayFormat: 'h A',
-  businessHours: [],
+  minEventDuration: MIN_EVENT_DURATION_MINUTES,
+  allowEventResize: true,
+  hiddenDays: [],
+  blockBusinessHours: false,
   timezones: [],
-  createEventOnClick: false,
+  timezoneLabel: undefined,
   eventDisplayMode: EventDisplayMode.SideBySide,
+  showTimeIndicator: true,
+  customWeekView: false,
+  showWeekends: true,
   resources: [],
   shiftplanDays: 7,
 };

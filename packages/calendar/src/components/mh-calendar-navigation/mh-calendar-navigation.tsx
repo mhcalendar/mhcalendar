@@ -16,14 +16,17 @@ export class MhCalendarNavigation {
   @State() currentDateRange?: IMHCalendarDateRange;
 
   private isOneDay: boolean = false;
+  private storeUnsubscribers: (() => void)[] = [];
 
   connectedCallback() {
     this.currentDateRange = { ...storeState.calendarDateRange };
 
-    store.onChange('calendarDateRange', (value) => {
-      this.currentDateRange = { ...value };
-      this.isOneDay = dayjs(value.fromDate).isSame(value.toDate, 'day');
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', (value) => {
+        this.currentDateRange = { ...value };
+        this.isOneDay = dayjs(value.fromDate).isSame(value.toDate, 'day');
+      }),
+    );
 
     this.isOneDay = dayjs(storeState.calendarDateRange.fromDate).isSame(
       storeState.calendarDateRange.toDate,
@@ -31,15 +34,16 @@ export class MhCalendarNavigation {
     );
   }
 
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
+  }
+
   private onTodayClick = (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
     store.setToToday();
-  };
-
-  private onViewChange = (newViewType: IMHCalendarViewType) => {
-    store.changeView(newViewType);
   };
 
   private onDateRangeChange(event: Event, amount: number) {
@@ -65,6 +69,9 @@ export class MhCalendarNavigation {
       >
         {storeState.showDateSwitcher && (
           <div class="mhCalendarNavigation">
+            <button class="mhCalendarNavigation__todayBtn" onClick={this.onTodayClick}>
+              Today
+            </button>
             <button
               class="mhCalendarNavigation__arrowBtn"
               onClick={(e) => this.onDateRangeChange(e, -1)}
@@ -73,9 +80,7 @@ export class MhCalendarNavigation {
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
-            <span class="mhCalendarNavigation__dateLabel">
-              {DateUtils.formatDateRange(fromDate, toDate, this.isOneDay) || '...'}
-            </span>
+
             <button
               class="mhCalendarNavigation__arrowBtn"
               onClick={(e) => this.onDateRangeChange(e, 1)}
@@ -84,23 +89,13 @@ export class MhCalendarNavigation {
                 <polyline points="9 6 15 12 9 18" />
               </svg>
             </button>
-            <button class="mhCalendarNavigation__todayBtn" onClick={this.onTodayClick}>
-              Today
-            </button>
+
+            <span class="mhCalendarNavigation__dateLabel">
+              {DateUtils.formatDateRange(fromDate, toDate, this.isOneDay) || '...'}
+            </span>
           </div>
         )}
-        {storeState.showViewTypeSwitcher && (
-          <div class="mhCalendarNavigation__viewSwitcher">
-            {(Object.values(IMHCalendarViewType) as IMHCalendarViewType[]).map((viewType) => (
-              <button
-                class={`view-switch-btn ${storeState.viewType === viewType ? 'active' : ''}`}
-                onClick={() => this.onViewChange(viewType)}
-              >
-                {viewType.charAt(0) + viewType.slice(1).toLowerCase()}
-              </button>
-            ))}
-          </div>
-        )}
+        {storeState.showViewTypeSwitcher && <mh-view-switcher />}
       </div>
     );
   }

@@ -21,17 +21,27 @@ export class MHCalendarAgendaView {
     events: IMHCalendarEvent[];
   }> = [];
 
+  private storeUnsubscribers: (() => void)[] = [];
+
   componentWillLoad() {
     this.updateEvents();
 
-    // Watch for changes in calendar date range and events
-    store.onChange('calendarDateRange', () => {
-      this.updateEvents();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', () => {
+        this.updateEvents();
+      }),
+    );
 
-    store.onChange('reactiveEvents', () => {
-      this.updateEvents();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('reactiveEvents', () => {
+        this.updateEvents();
+      }),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   @Watch('sortedEvents')
@@ -196,47 +206,30 @@ export class MHCalendarAgendaView {
               </div>
               <div class="mhCalendarAgendaView__events">
                 {dayData.events.map((event) => {
-                  const eventSmallContent = storeState.eventSmallContent;
-                  const customContent =
-                    eventSmallContent && typeof eventSmallContent === 'function'
-                      ? eventSmallContent(event)
-                      : null;
-
                   const eventColor = EventStyleManager.getEventColor(event);
-
-                  // Read-only view - no click handlers, no drag handlers
                   return (
                     <div
                       key={event.id}
                       class="mhCalendarAgendaView__event"
                       data-event-id={event.id}
-                      style={
-                        {
-                          '--eventColor': eventColor,
-                        } as any
-                      }
+                      style={{
+                        '--eventColor': eventColor,
+                      }}
                     >
                       <div class="mhCalendarAgendaView__eventTime">
                         {DateUtils.formatEventTime(event)}
                       </div>
                       <div class="mhCalendarAgendaView__eventContent">
-                        {customContent ? (
-                          <div
-                            class="mhCalendarAgendaView__eventCustom"
-                            innerHTML={customContent}
-                          />
-                        ) : (
-                          <>
-                            <div class="mhCalendarAgendaView__eventTitle">
-                              {event.title || 'Untitled Event'}
+                        <>
+                          <div class="mhCalendarAgendaView__eventTitle">
+                            {event.title || 'Untitled Event'}
+                          </div>
+                          {event.description && (
+                            <div class="mhCalendarAgendaView__eventDescription">
+                              {event.description}
                             </div>
-                            {event.description && (
-                              <div class="mhCalendarAgendaView__eventDescription">
-                                {event.description}
-                              </div>
-                            )}
-                          </>
-                        )}
+                          )}
+                        </>
                       </div>
                     </div>
                   );

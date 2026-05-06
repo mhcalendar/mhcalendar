@@ -23,7 +23,6 @@
   overflow: auto;
   min-width: 200px;
   min-height: 100px;
-  font-family: system-ui;
 }
 
 /* Event Modal Styles */
@@ -68,7 +67,6 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
-  font-family: system-ui;
 }
 
 .mhCalendarEventModal__field input[type='text']:focus,
@@ -98,7 +96,6 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
-  font-family: system-ui;
 }
 
 .mhCalendarEventModal__footer {

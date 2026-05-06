@@ -8,12 +8,12 @@ import { BusinessHoursUtils } from '../utils/BusinessHoursUtils';
 import {
   IEventDropPayload,
   IEventResizePayload,
-  IMHCalendarEvent,
   IMHCalendarState,
   IMHCalendarViewType,
   IModalPosition,
 } from './mh-calendar-store.types';
 import { MHCalendarStoreUtils } from './mh-calendar-store.utils';
+import { IMHCalendarEvent } from '../types';
 
 export class MHCalendarActions extends MHCalendarStoreUtils {
   protected _setConfig(state: IMHCalendarState, payload: Record<string, any>): IMHCalendarState {
@@ -40,9 +40,10 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     const { fromDate, toDate } = this.updateDateRangeForViewType(
       payload.viewType,
       payload.startDate || new Date(),
-      payload.shiftplanDays ?? 7,
+      payload.shiftplanDays,
     );
 
+    state.anchorDate = fromDate;
     state.calendarDateRange = { fromDate, toDate };
     state.eventContent = payload.eventContent;
     state.eventSmallContent = payload.eventSmallContent;
@@ -101,8 +102,8 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
   ): IMHCalendarState {
     const newCalendarDateRange = this.updateDateRangeForViewType(
       payload.viewType,
-      state.calendarDateRange.fromDate ?? new Date(),
-      state.shiftplanDays ?? 7,
+      state.anchorDate ?? state.calendarDateRange.fromDate ?? new Date(),
+      state.shiftplanDays,
     );
     state.viewType = payload.viewType;
     state.calendarDateRange = newCalendarDateRange;
@@ -113,13 +114,14 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     state: IMHCalendarState,
     payload: { amount: number },
   ): IMHCalendarState {
-    if (!state.viewType || !state.calendarDateRange.fromDate) return state;
+    if (!state.viewType || !state.anchorDate) return state;
     state.calendarDateRange = this.shiftCalendar(
       state.viewType,
-      state.calendarDateRange.fromDate,
+      state.anchorDate,
       payload.amount,
-      state.shiftplanDays ?? 7,
+      state.shiftplanDays,
     );
+    state.anchorDate = state.calendarDateRange.fromDate;
     return state;
   }
 
@@ -128,8 +130,9 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     state.calendarDateRange = this.updateDateRangeForViewType(
       state.viewType,
       new Date(),
-      state.shiftplanDays ?? 7,
+      state.shiftplanDays,
     );
+    state.anchorDate = state.calendarDateRange.fromDate;
     return state;
   }
 
@@ -181,11 +184,10 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     }
 
     if (!isAllDay && state.draggedEvent.allDay) {
-      const startHour = state.showTimeFrom ?? 0;
-      const endHour = state.showTimeTo ?? 24;
+      const startHour = state.showTimeFrom;
+      const endHour = state.showTimeTo;
       const dayString = dayjs(date).format('YYYY-MM-DD');
-      const mainTimezone =
-        state.timezones?.[0] || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const mainTimezone = state.timezones[0] || Intl.DateTimeFormat().resolvedOptions().timeZone;
 
       let startDate: Date;
       let endDate: Date;
@@ -247,7 +249,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     let endDate = DateUtils.getExactDateBasedOnUserPosition(payload.finalY, payload.dayOfRendering);
     if (dayjs(endDate).isBefore(dayjs(event.startDate))) {
       endDate = dayjs(event.startDate)
-        .add(state.minEventDuration ?? 15, 'minute')
+        .add(state.minEventDuration, 'minute')
         .toDate();
     }
 

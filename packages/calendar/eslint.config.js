@@ -4,35 +4,20 @@ import stencil from '@stencil/eslint-plugin';
 import prettier from 'eslint-config-prettier';
 
 export default [
-  // -------------------------
-  // ignores (ESLint 9+ way)
-  // -------------------------
   {
-    ignores: ['dist', 'www', 'build', 'node_modules', './src/components.d.ts'],
+    ignores: ['dist', 'build', 'node_modules', './src/components.d.ts'],
   },
 
-  // -------------------------
-  // base JS rules
-  // -------------------------
   js.configs.recommended,
 
-  // -------------------------
-  // TypeScript rules
-  // -------------------------
   ...tseslint.configs.recommended,
 
-  // -------------------------
-  // Stencil plugin
-  // -------------------------
   {
     plugins: {
       '@stencil': stencil,
     },
   },
 
-  // -------------------------
-  // TS / TSX rules (main app)
-  // -------------------------
   {
     files: ['**/*.ts', '**/*.tsx'],
 
@@ -57,20 +42,14 @@ export default [
         },
       ],
 
-      // --- relax for reducers / switch cases
       'no-case-declarations': 'off',
       'no-prototype-builtins': 'off',
 
-      // --- allow const flexibility in reducers
       'prefer-const': 'warn',
 
-      // --- React rule (Stencil JSX compatibility)
       'react/react-in-jsx-scope': 'off',
     },
   },
 
-  // -------------------------
-  // Prettier (must be last)
-  // -------------------------
   prettier,
 ];

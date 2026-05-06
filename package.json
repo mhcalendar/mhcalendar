@@ -9,6 +9,7 @@
     "build:calendar": "lerna run build --scope=@mhcalendar/calendar",
     "build:react": "lerna run build --scope=@mhcalendar/react",
     "dev": "lerna run dev --scope=@mhcalendar/calendar",
+    "start": "lerna run start --scope=@mhcalendar/calendar",
     "test": "lerna run test",
     "lint": "lerna run lint",
     "format": "lerna run format",

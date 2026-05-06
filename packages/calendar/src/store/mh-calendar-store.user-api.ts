@@ -1,5 +1,5 @@
-// import { store, storeState } from './mh-calendar-store';
-import { IMHCalendarState, IMHCalendarStore, UserErrors } from './mh-calendar-store.types';
+import { MHCalendarStore } from './mh-calendar-store';
+import { IMHCalendarState, UserErrors } from './mh-calendar-store.types';
 
 const allowedKeys = ['calendarDateRange', 'viewType'] as const;
 type AllowedKeys = (typeof allowedKeys)[number];
@@ -18,13 +18,13 @@ const allowedGetters = [
   'removeEvent',
 ] as const;
 type AllowedGetters = (typeof allowedGetters)[number];
-type PublicGetters = Pick<IMHCalendarStore, AllowedGetters>;
+type PublicGetters = Pick<MHCalendarStore, AllowedGetters>;
 
 type AllowedAPI = PublicGetters & PublicState;
 
 export interface IMHCalendarStoreUserApi extends Readonly<AllowedAPI> {}
 
-export function createUserAPI(store: IMHCalendarStore): IMHCalendarStoreUserApi {
+export function createUserAPI(store: MHCalendarStore): IMHCalendarStoreUserApi {
   const proxy = {} as Partial<IMHCalendarStoreUserApi>;
 
   // Proxy state fields
@@ -42,7 +42,7 @@ export function createUserAPI(store: IMHCalendarStore): IMHCalendarStoreUserApi 
   for (const key of allowedGetters) {
     Object.defineProperty(proxy, key, {
       get: () => {
-        const value = store[key as keyof IMHCalendarStore];
+        const value = store[key as keyof MHCalendarStore];
         return typeof value === 'function' ? (value as Function).bind(store) : value;
       },
       enumerable: true,

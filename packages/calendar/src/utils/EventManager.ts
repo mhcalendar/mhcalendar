@@ -132,14 +132,13 @@ export class EventManager {
    * Get all events for a specific date
    */
   public static getEventsForDate(date: Date | string): IMHCalendarEvent[] {
-    const events = storeState.reactiveEvents;
-
     const dateKey = typeof date === 'string' ? date : DateUtils.convertDateToString(date);
-    const dailyEvents = events.get(dateKey);
+    const dailyEvents = storeState.reactiveEvents.get(dateKey);
 
     if (dailyEvents) {
       const window = EventUtils.getTimeViewWindow(dateKey);
       if (!window) return [];
+
       const { windowStart, windowEnd } = window;
       return Array.from(dailyEvents.values()).filter((event) =>
         EventUtils.shouldEventBeDisplayedInTimeView(event, windowStart, windowEnd),
@@ -223,13 +222,13 @@ export class EventManager {
     });
 
     if (typeof storeState.onEventUpdated === 'function') {
-     storeState.onEventUpdated(updatedEvent);
+      storeState.onEventUpdated(updatedEvent);
     }
 
     // Trigger reactivity by creating a new Map reference
-   storeState.reactiveEvents = new Map(reactiveEvents);
+    storeState.reactiveEvents = new Map(reactiveEvents);
 
     // Clear the dragged event
-   storeState.draggedEvent = null;
+    storeState.draggedEvent = null;
   }
 }

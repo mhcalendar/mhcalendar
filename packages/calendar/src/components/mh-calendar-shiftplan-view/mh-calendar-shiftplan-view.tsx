@@ -1,7 +1,7 @@
 import { Component, Element, State, h } from '@stencil/core';
 import dayjs from 'dayjs';
 import { store, storeState } from '../../store/mh-calendar-store';
-import { IMHCalendarResource } from '../../store/mh-calendar-store.types';
+import { IMHCalendarResource } from '../../types';
 import { IMHCalendarEvent } from '../../types';
 import { DateUtils } from '../../utils/DateUtils';
 import { EventManager } from '../../utils/EventManager';
@@ -27,16 +27,27 @@ export class MHCalendarShiftplanView {
   @State() resources: IMHCalendarResource[] = [];
   @State() eventMap: Map<string, IMHCalendarEvent[]> = new Map();
 
+  private storeUnsubscribers: (() => void)[] = [];
+
   componentWillLoad() {
     this.updateView();
 
-    store.onChange('calendarDateRange', () => {
-      this.updateView();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', () => {
+        this.updateView();
+      }),
+    );
 
-    store.onChange('reactiveEvents', () => {
-      this.updateEventMap();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('reactiveEvents', () => {
+        this.updateEventMap();
+      }),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   private updateView() {

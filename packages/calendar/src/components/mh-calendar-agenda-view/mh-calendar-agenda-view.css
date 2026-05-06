@@ -1,7 +1,6 @@
 .mhCalendarAgendaView {
   width: 100%;
   padding: 20px;
-  font-family: system-ui;
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
@@ -16,7 +15,7 @@
 }
 
 .mhCalendarAgendaView__emptyMessage {
-  color: #9ca3af;
+  color: var(--fontColor);
   font-size: 14px;
   text-align: center;
 }
@@ -41,12 +40,12 @@
 .mhCalendarAgendaView__dayDate {
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: var(--dateFontColor);
 }
 
 .mhCalendarAgendaView__dayDateFull {
   font-size: 14px;
-  color: #6b7280;
+  color: var(--dateFontColor);
 }
 
 .mhCalendarAgendaView__events {
@@ -60,32 +59,16 @@
   gap: 16px;
   padding: 12px;
   border-radius: 8px;
-  background-color: #f9fafb;
+  background-color: var(--mainBackgroundColor);
   transition: background-color 0.2s;
-  position: relative;
   overflow: hidden;
-}
-
-.mhCalendarAgendaView__event::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: var(--eventColor, #3b82f6);
-  border-radius: 8px 0 0 8px;
-}
-
-.mhCalendarAgendaView__event:hover {
-  background-color: #f3f4f6;
 }
 
 .mhCalendarAgendaView__eventTime {
   flex-shrink: 0;
   width: 140px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--fontColor);
   font-weight: 500;
   padding-top: 2px;
 }
@@ -102,14 +85,28 @@
 .mhCalendarAgendaView__eventTitle {
   font-size: 15px;
   font-weight: 500;
-  color: #111827;
+  color: var(--fontColor);
   margin-bottom: 4px;
   line-height: 1.4;
+  position: relative;
+}
+
+.mhCalendarAgendaView__eventTitle::before {
+  content: '';
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  bottom: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 8px;
+  transform: translateY(-50%);
+  background-color: var(--eventColor);
 }
 
 .mhCalendarAgendaView__eventDescription {
   font-size: 13px;
-  color: #6b7280;
+  color: var(--fontColor);
   line-height: 1.5;
   margin-top: 4px;
 }

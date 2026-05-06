@@ -16,19 +16,27 @@ export class MhCalendarNavigation {
   @State() currentDateRange?: IMHCalendarDateRange;
 
   private isOneDay: boolean = false;
+  private storeUnsubscribers: (() => void)[] = [];
 
   connectedCallback() {
     this.currentDateRange = { ...storeState.calendarDateRange };
 
-    store.onChange('calendarDateRange', (value) => {
-      this.currentDateRange = { ...value };
-      this.isOneDay = dayjs(value.fromDate).isSame(value.toDate, 'day');
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', (value) => {
+        this.currentDateRange = { ...value };
+        this.isOneDay = dayjs(value.fromDate).isSame(value.toDate, 'day');
+      }),
+    );
 
     this.isOneDay = dayjs(storeState.calendarDateRange.fromDate).isSame(
       storeState.calendarDateRange.toDate,
       'day',
     );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   private onTodayClick = (event: MouseEvent) => {

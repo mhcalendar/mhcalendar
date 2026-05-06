@@ -24,8 +24,8 @@ export class MHCalendarStore extends MHCalendarActions {
     this.state = this._map.state;
   }
 
-  onChange(key: keyof IMHCalendarState, callback: (value: any) => void) {
-    this._map.onChange(key, callback);
+  onChange(key: keyof IMHCalendarState, callback: (value: any) => void): () => void {
+    return this._map.onChange(key, callback);
   }
 
   // ###### Computed getters ######

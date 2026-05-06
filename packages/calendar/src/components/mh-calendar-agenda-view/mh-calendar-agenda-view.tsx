@@ -21,17 +21,27 @@ export class MHCalendarAgendaView {
     events: IMHCalendarEvent[];
   }> = [];
 
+  private storeUnsubscribers: (() => void)[] = [];
+
   componentWillLoad() {
     this.updateEvents();
 
-    // Watch for changes in calendar date range and events
-    store.onChange('calendarDateRange', () => {
-      this.updateEvents();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', () => {
+        this.updateEvents();
+      }),
+    );
 
-    store.onChange('reactiveEvents', () => {
-      this.updateEvents();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('reactiveEvents', () => {
+        this.updateEvents();
+      }),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   @Watch('sortedEvents')

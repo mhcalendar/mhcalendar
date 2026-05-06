@@ -15,11 +15,20 @@ export class MHCalendarHeader {
   @Prop() showCurrentDate: boolean = false;
   @State() currentDateRange?: IMHCalendarDateRange;
 
+  private storeUnsubscribers: (() => void)[] = [];
+
   connectedCallback() {
     this.currentDateRange = storeState.calendarDateRange;
-    store.onChange('calendarDateRange', (value) => {
-      this.currentDateRange = { ...value };
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', (value) => {
+        this.currentDateRange = { ...value };
+      }),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   private formatDate(date: Date) {

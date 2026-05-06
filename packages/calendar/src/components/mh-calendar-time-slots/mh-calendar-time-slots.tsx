@@ -15,6 +15,8 @@ export class MHCalendarTimeSlots {
   @State() amountOfPrintedSlots?: number;
   @State() amountOfPrintedHoursSlots?: string[];
 
+  private storeUnsubscribers: (() => void)[] = [];
+
   connectedCallback() {
     this.currentTimeFrom = storeState.calendarDateRange.fromDate;
 
@@ -29,11 +31,18 @@ export class MHCalendarTimeSlots {
 
     this.amountOfPrintedHoursSlots = userHourSlotDivider;
 
-    store.onChange('calendarDateRange', () => {
-      if (storeState.calendarDateRange.fromDate) {
-        this.currentTimeFrom = storeState.calendarDateRange.fromDate;
-      }
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', () => {
+        if (storeState.calendarDateRange.fromDate) {
+          this.currentTimeFrom = storeState.calendarDateRange.fromDate;
+        }
+      }),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   componentDidLoad() {

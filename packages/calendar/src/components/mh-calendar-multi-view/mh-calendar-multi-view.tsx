@@ -12,6 +12,8 @@ import { VIEW_HEIGHT } from '../../const/default-theme';
 export class MHCalendarMultiView {
   @Element() MHCalendarMultiViewEl?: HTMLElement;
 
+  private storeUnsubscribers: (() => void)[] = [];
+
   updateCSSProperties() {
     const daysInView = store.daysInRange;
     this.MHCalendarMultiViewEl?.style.setProperty('--days-in-view', `${daysInView}`);
@@ -20,13 +22,22 @@ export class MHCalendarMultiView {
   componentWillLoad() {
     this.updateCSSProperties();
 
-    store.onChange('calendarDateRange', () => {
-      this.updateCSSProperties();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', () => {
+        this.updateCSSProperties();
+      }),
+    );
 
-    store.onChange('hiddenDays', () => {
-      this.updateCSSProperties();
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('hiddenDays', () => {
+        this.updateCSSProperties();
+      }),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   render() {

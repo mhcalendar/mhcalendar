@@ -12,11 +12,20 @@ import { VIEW_HEIGHT } from '../../const/default-theme';
 export class MHCalendarMonth {
   @State() currentFromDate: Date | undefined;
 
+  private storeUnsubscribers: (() => void)[] = [];
+
   connectedCallback() {
     this.currentFromDate = storeState.calendarDateRange.fromDate;
-    store.onChange('calendarDateRange', (value: IMHCalendarDateRange) => {
-      this.currentFromDate = value.fromDate;
-    });
+    this.storeUnsubscribers.push(
+      store.onChange('calendarDateRange', (value: IMHCalendarDateRange) => {
+        this.currentFromDate = value.fromDate;
+      }),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   render() {

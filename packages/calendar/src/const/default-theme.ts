@@ -7,6 +7,7 @@ export const VIEW_HEIGHT = `calc(100% - ${VIEW_HEADER_HEIGHT})`;
 export const NAVIGATION_HEIGHT = '20%';
 export const CALENDAR_HEIGHT = `calc(100% - ${NAVIGATION_HEIGHT})`;
 export const CALENDAR_BACKGROUND_COLOR = '#14141a';
+export const MONTH_EVENT_HEIGHT = 20;
 
 const DEFAULT_PROPERTIES: ConfigCSSProperites = {
   timeSlotWidth: '60px',
@@ -23,7 +24,7 @@ const DEFAULT_PROPERTIES: ConfigCSSProperites = {
   nonBusinessHoursOverlayColor: 'rgba(0, 0, 0, 0.03)',
   headerTodayBackgroundColor: DEFAULT_THEME_COLOR,
   currentTimeColor: '#db372d',
-  monthEventHeight: '20px',
+  monthEventHeight: `${MONTH_EVENT_HEIGHT}px`,
   viewHeaderHeight: VIEW_HEADER_HEIGHT,
   calendarNavigationHeight: '80px',
 

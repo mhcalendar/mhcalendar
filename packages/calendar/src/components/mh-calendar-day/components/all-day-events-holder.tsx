@@ -2,8 +2,8 @@ import { Component, Prop, h } from '@stencil/core';
 import { IMHCalendarEvent } from '../../../types';
 import { DragDropState } from '../../../utils/DragDropHandler';
 import { store, storeState } from '../../../store/mh-calendar-store';
+import { MONTH_EVENT_HEIGHT } from '../../../const/default-theme';
 
-const ALL_DAY_EVENT_HEIGHT = 40;
 const ALL_DAY_EVENT_GAP = 3;
 const ALL_DAY_CONTAINER_PADDING = 4;
 
@@ -26,12 +26,27 @@ export class AllDayEventsHolder {
 
     const maxEvents = Math.max(
       1,
-      Math.floor((storeState.allDayEventsHeight - ALL_DAY_CONTAINER_PADDING) / (ALL_DAY_EVENT_HEIGHT + ALL_DAY_EVENT_GAP)),
+      Math.floor(
+        (storeState.allDayEventsHeight - ALL_DAY_CONTAINER_PADDING) /
+          (MONTH_EVENT_HEIGHT + ALL_DAY_EVENT_GAP),
+      ),
     );
     const hasMoreEvents = this.allDayEvents.length > maxEvents;
-    const eventsToShow = hasMoreEvents ? this.allDayEvents.slice(0, maxEvents - 1) : this.allDayEvents;
+    const eventsToShow = hasMoreEvents
+      ? this.allDayEvents.slice(0, maxEvents - 1)
+      : this.allDayEvents;
     const hiddenCount = this.allDayEvents.length - eventsToShow.length;
 
+    console.log(
+      Math.floor(
+        (storeState.allDayEventsHeight - ALL_DAY_CONTAINER_PADDING) /
+          (MONTH_EVENT_HEIGHT + ALL_DAY_EVENT_GAP),
+      ),
+      storeState.allDayEventsHeight,
+      ALL_DAY_CONTAINER_PADDING,
+      MONTH_EVENT_HEIGHT,
+      ALL_DAY_EVENT_GAP,
+    );
     return (
       <div
         class="mhCalendarDay_allDaysEventHolder"
@@ -63,7 +78,7 @@ export class AllDayEventsHolder {
           </div>
         )}
         {this.dragDropState.isDraggedOverAllDay &&
-         storeState.draggedEvent &&
+          storeState.draggedEvent &&
           (() => {
             const previewEvent = {
               ...storeState.draggedEvent,

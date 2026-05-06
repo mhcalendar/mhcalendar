@@ -29,8 +29,9 @@
 
     <script type="module">
       const today = new Date();
-      const at = (h, m = 0) => {
+      const at = (dayOffset, h, m = 0) => {
         const d = new Date(today);
+        d.setDate(d.getDate() + dayOffset);
         d.setHours(h, m, 0, 0);
         return d;
       };
@@ -43,16 +44,138 @@
         {
           id: '1',
           title: 'Team standup',
-          startDate: at(9),
-          endDate: at(9, 30),
+          startDate: at(0, 9),
+          endDate: at(0, 9, 30),
+          color: '#4A90E2',
+        },
+        { id: '2', title: 'Lunch', startDate: at(0, 12), endDate: at(0, 13), color: '#7ED321' },
+        {
+          id: '3',
+          title: 'Product review',
+          startDate: at(0, 14),
+          endDate: at(0, 15, 30),
+          color: '#E84393',
+        },
+        {
+          id: '4',
+          title: 'Doctor appointment',
+          startDate: at(0, 16),
+          endDate: at(0, 17),
+          color: '#F5A623',
+        },
+        { id: '5', title: 'Morning jog', startDate: at(1, 7), endDate: at(1, 8), color: '#50E3C2' },
+        {
+          id: '6',
+          title: 'Team standup',
+          startDate: at(1, 9),
+          endDate: at(1, 9, 30),
           color: '#4A90E2',
         },
         {
-          id: '2',
-          title: 'Lunch',
-          startDate: at(12),
-          endDate: at(13),
+          id: '7',
+          title: 'Design sync',
+          startDate: at(1, 10),
+          endDate: at(1, 11),
+          color: '#9B59B6',
+        },
+        {
+          id: '8',
+          title: 'Sprint planning',
+          startDate: at(1, 13),
+          endDate: at(1, 15),
+          color: '#E74C3C',
+        },
+        {
+          id: '9',
+          title: 'Team standup',
+          startDate: at(2, 9),
+          endDate: at(2, 9, 30),
+          color: '#4A90E2',
+        },
+        {
+          id: '10',
+          title: 'Coffee with Anna',
+          startDate: at(2, 11),
+          endDate: at(2, 11, 30),
+          color: '#F5A623',
+        },
+        {
+          id: '11',
+          title: 'Code review',
+          startDate: at(2, 15),
+          endDate: at(2, 16),
+          color: '#3498DB',
+        },
+        { id: '12', title: 'Gym', startDate: at(2, 18), endDate: at(2, 19, 30), color: '#2ECC71' },
+        {
+          id: '13',
+          title: 'Team standup',
+          startDate: at(3, 9),
+          endDate: at(3, 9, 30),
+          color: '#4A90E2',
+        },
+        {
+          id: '14',
+          title: 'Client call — Acme',
+          startDate: at(3, 11),
+          endDate: at(3, 12),
+          color: '#E84393',
+        },
+        {
+          id: '15',
+          title: 'Lunch with team',
+          startDate: at(3, 13),
+          endDate: at(3, 14),
           color: '#7ED321',
+        },
+        {
+          id: '16',
+          title: 'Retrospective',
+          startDate: at(3, 16),
+          endDate: at(3, 17),
+          color: '#9B59B6',
+        },
+        {
+          id: '17',
+          title: 'Team standup',
+          startDate: at(4, 9),
+          endDate: at(4, 9, 30),
+          color: '#4A90E2',
+        },
+        {
+          id: '18',
+          title: 'Workshop: UX basics',
+          startDate: at(4, 10),
+          endDate: at(4, 12),
+          color: '#F39C12',
+        },
+        {
+          id: '19',
+          title: 'One-on-one w/ manager',
+          startDate: at(4, 14),
+          endDate: at(4, 14, 45),
+          color: '#1ABC9C',
+        },
+        {
+          id: '20',
+          title: 'Happy hour',
+          startDate: at(4, 17),
+          endDate: at(4, 19),
+          color: '#E74C3C',
+        },
+        {
+          id: '21',
+          title: 'Weekend hike',
+          startDate: at(5, 8),
+          endDate: at(5, 12),
+          color: '#27AE60',
+        },
+        {
+          id: '22',
+          title: 'Family dinner',
+          startDate: at(6, 19),
+          endDate: at(6, 21),
+          color: '#E84393',
         },
       ];
     </script>

@@ -59,7 +59,7 @@ export class MhCalendarNavigation {
 
   render() {
     const { fromDate, toDate } = storeState.calendarDateRange;
-    if (!fromDate || !toDate) return;
+    if (!fromDate || !toDate) return [];
     return (
       <div
         class="mhCalendarNavigation__container"

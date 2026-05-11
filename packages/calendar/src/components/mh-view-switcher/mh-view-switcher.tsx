@@ -31,8 +31,11 @@ export class MhViewSwitcher {
   };
 
   render() {
-    const viewTypes = Object.values(IMHCalendarViewType) as IMHCalendarViewType[];
     const currentView = storeState.viewType;
+    const viewTypes = Object.values(IMHCalendarViewType) as IMHCalendarViewType[];
+    const filteredViewTypes = storeState.avaliableViews
+      ? viewTypes.filter((viewType) => storeState.avaliableViews?.includes(viewType))
+      : viewTypes;
 
     if (this.isCompact) {
       return (
@@ -43,7 +46,7 @@ export class MhViewSwitcher {
               this.onViewChange((e.target as HTMLSelectElement).value as IMHCalendarViewType)
             }
           >
-            {viewTypes.map((viewType) => (
+            {filteredViewTypes.map((viewType) => (
               <option value={viewType} selected={currentView === viewType}>
                 {viewType.charAt(0) + viewType.slice(1).toLowerCase()}
               </option>
@@ -55,7 +58,7 @@ export class MhViewSwitcher {
 
     return (
       <div class="mhViewSwitcher">
-        {viewTypes.map((viewType) => (
+        {filteredViewTypes.map((viewType) => (
           <button
             class={`mhViewSwitcher__btn${currentView === viewType ? ' mhViewSwitcher__btn--active' : ''}`}
             onClick={() => this.onViewChange(viewType)}

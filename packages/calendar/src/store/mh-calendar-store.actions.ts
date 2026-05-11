@@ -87,6 +87,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       'createEventOnClick',
       'resources',
       'shiftplanDays',
+      'avaliableViews',
     ] as const;
 
     for (const key of configKeys) {
@@ -248,9 +249,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
 
     let endDate = DateUtils.getExactDateBasedOnUserPosition(payload.finalY, payload.dayOfRendering);
     if (dayjs(endDate).isBefore(dayjs(event.startDate))) {
-      endDate = dayjs(event.startDate)
-        .add(state.minEventDuration, 'minute')
-        .toDate();
+      endDate = dayjs(event.startDate).add(state.minEventDuration, 'minute').toDate();
     }
 
     EventManager.handleEventDateChange(event.startDate, endDate, event);

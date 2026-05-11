@@ -31,6 +31,16 @@ export interface ICalendarBaseConfig {
   allowEventDragging: boolean;
   showViewHeader: boolean;
   createEventOnClick: boolean;
+
+  /**
+   * Option to determiante which views are avalaible in view switcher
+   * if not provided all views are displayed
+   *
+   * @default undefined
+   * @example ['WEEK', 'AGENDA']
+   * @remarks IMHCalendarViewType contains names of views that user can use
+   */
+  avaliableViews: string[] | undefined;
 }
 
 /**

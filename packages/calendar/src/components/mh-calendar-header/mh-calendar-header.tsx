@@ -76,7 +76,7 @@ export class MHCalendarHeader {
   render() {
     let days: Date[] = [];
 
-    if (!this.currentDateRange?.fromDate || !storeState.showViewHeader) return;
+    if (!this.currentDateRange?.fromDate || !storeState.showViewHeader) return [];
 
     switch (storeState.viewType) {
       case IMHCalendarViewType.DAY:

@@ -30,7 +30,7 @@ export const DEFAULT_CALENDAR_CONFIG: IMHCalendarConfigBase = {
 export const DEFAULT_WEEK_VIEW_CONFIG: IMHCalendarWeekConfig = {
   ...DEFAULT_CALENDAR_CONFIG,
   startDate: new Date(),
-  showTimeFrom: 9,
+  showTimeFrom: 8,
   showTimeTo: 17,
   slotInterval: { hours: 1, minutes: 0 },
   hoursSlotInterval: { hours: 1, minutes: 0 },

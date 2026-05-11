@@ -152,7 +152,7 @@ export class MHCalendarShiftplanView {
 
   private onCellClick = (date: Date, resourceId: string) => {
     if (typeof storeState.onDayClick === 'function') {
-     storeState.onDayClick({ date, resourceId });
+      storeState.onDayClick({ date, resourceId });
     }
   };
 

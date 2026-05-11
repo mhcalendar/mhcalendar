@@ -1,5 +1,4 @@
-import { Component, h, Prop, State } from '@stencil/core';
-import { IMHCalendarDateRange } from '../../types';
+import { Component, h, Prop } from '@stencil/core';
 import { store, storeState } from '../../store/mh-calendar-store';
 import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
 import dayjs from 'dayjs';
@@ -13,36 +12,9 @@ import { DateUtils } from '../../utils/DateUtils';
 export class MhCalendarNavigation {
   @Prop() changeDateRangeByUnit: IMHCalendarViewType = IMHCalendarViewType.WEEK;
 
-  @State() currentDateRange?: IMHCalendarDateRange;
-
-  private isOneDay: boolean = false;
-  private storeUnsubscribers: (() => void)[] = [];
-
-  connectedCallback() {
-    this.currentDateRange = { ...storeState.calendarDateRange };
-
-    this.storeUnsubscribers.push(
-      store.onChange('calendarDateRange', (value) => {
-        this.currentDateRange = { ...value };
-        this.isOneDay = dayjs(value.fromDate).isSame(value.toDate, 'day');
-      }),
-    );
-
-    this.isOneDay = dayjs(storeState.calendarDateRange.fromDate).isSame(
-      storeState.calendarDateRange.toDate,
-      'day',
-    );
-  }
-
-  disconnectedCallback() {
-    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
-    this.storeUnsubscribers = [];
-  }
-
   private onTodayClick = (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
-
     store.setToToday();
   };
 
@@ -59,7 +31,10 @@ export class MhCalendarNavigation {
 
   render() {
     const { fromDate, toDate } = storeState.calendarDateRange;
-    if (!fromDate || !toDate) return [];
+    if (!fromDate || !toDate) return null;
+
+    const isOneDay = dayjs(fromDate).isSame(toDate, 'day');
+
     return (
       <div
         class="mhCalendarNavigation__container"
@@ -91,7 +66,7 @@ export class MhCalendarNavigation {
             </button>
 
             <span class="mhCalendarNavigation__dateLabel">
-              {DateUtils.formatDateRange(fromDate, toDate, this.isOneDay) || '...'}
+              {DateUtils.formatDateRange(fromDate, toDate, isOneDay) || '...'}
             </span>
           </div>
         )}

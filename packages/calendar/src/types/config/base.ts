@@ -8,6 +8,8 @@ export type IMHCalendarConfigBaseStyle = {
   styles: CssStyles;
 };
 
+export type MHCalendarTheme = 'dark' | 'light' | (string & {});
+
 export interface ICalendarBaseConfig {
   // custom render
   eventContent: ((event: any) => any) | undefined;
@@ -20,6 +22,7 @@ export interface ICalendarBaseConfig {
   onEventCreated: ((event: IMHCalendarEvent) => void) | undefined;
   onEventUpdated: ((event: IMHCalendarEvent) => void) | undefined;
   // base config
+  theme: MHCalendarTheme | undefined;
   style: Partial<IMHCalendarConfigBaseStyle> | undefined;
   viewType: IMHCalendarViewType | undefined;
   fixedHeight: string | undefined;

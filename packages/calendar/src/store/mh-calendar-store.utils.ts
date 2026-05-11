@@ -7,8 +7,9 @@ type StylesWithoutProperties = Omit<IMHCalendarConfigBaseStyle, 'properties'>;
 export class MHCalendarStoreUtils {
   protected mergeStyles(
     userStyles: Partial<StylesWithoutProperties>,
+    baseTheme: IMHCalendarConfigBaseStyle = DEFAULT_THEME,
   ): Partial<IMHCalendarConfigBaseStyle> {
-    const mergedStyles: Partial<IMHCalendarConfigBaseStyle> = { ...DEFAULT_THEME };
+    const mergedStyles: Partial<IMHCalendarConfigBaseStyle> = { ...baseTheme };
     (Object.keys(userStyles) as (keyof StylesWithoutProperties)[]).forEach((key) => {
       mergedStyles[key] = { ...userStyles[key], ...mergedStyles[key] };
     });

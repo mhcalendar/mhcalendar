@@ -1,12 +1,12 @@
 import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarConfigBase, IMHCalendarWeekConfig } from '../types';
 import { EventDisplayMode } from '../types/enums';
-import { DEFAULT_THEME } from './default-theme';
 
 export const MIN_EVENT_DURATION_MINUTES = 15;
 
 export const DEFAULT_CALENDAR_CONFIG: IMHCalendarConfigBase = {
-  style: DEFAULT_THEME,
+  theme: 'light',
+  style: undefined,
   viewType: IMHCalendarViewType.AGENDA,
   fixedHeight: undefined,
   virtualScrollHeight: undefined,

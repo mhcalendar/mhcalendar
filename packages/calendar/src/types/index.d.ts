@@ -9,7 +9,7 @@ export type { ICalendarMultiViewConfig, SlotOption, BusinessHoursConfig } from '
 export type { ICalendarWeekConfig, IMHCalendarResource } from './config/week';
 
 // Config types — public (user-facing, all Partial<>)
-export type { IMHCalendarConfigBase } from './config/base';
+export type { IMHCalendarConfigBase, MHCalendarTheme } from './config/base';
 export type { IMHCalendarConfigBaseMultiViewOptions } from './config/multiview';
 export type { IMHCalendarWeekConfig, IMHCalendarFullOptions } from './config/week';
 

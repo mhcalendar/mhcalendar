@@ -1,6 +1,5 @@
-import { Component, h, Prop } from '@stencil/core';
+import { Component, h } from '@stencil/core';
 import { store, storeState } from '../../store/mh-calendar-store';
-import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
 import dayjs from 'dayjs';
 import { DateUtils } from '../../utils/DateUtils';
 
@@ -10,8 +9,6 @@ import { DateUtils } from '../../utils/DateUtils';
   shadow: false,
 })
 export class MhCalendarNavigation {
-  @Prop() changeDateRangeByUnit: IMHCalendarViewType = IMHCalendarViewType.WEEK;
-
   private onTodayClick = (event: MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();

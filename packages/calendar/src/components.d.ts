@@ -98,10 +98,6 @@ export namespace Components {
     interface MhCalendarMultiView {
     }
     interface MhCalendarNavigation {
-        /**
-          * @default IMHCalendarViewType.WEEK
-         */
-        "changeDateRangeByUnit": IMHCalendarViewType;
     }
     interface MhCalendarResizeEventHandler {
         /**
@@ -366,10 +362,6 @@ declare namespace LocalJSX {
     interface MhCalendarMultiView {
     }
     interface MhCalendarNavigation {
-        /**
-          * @default IMHCalendarViewType.WEEK
-         */
-        "changeDateRangeByUnit"?: IMHCalendarViewType;
     }
     interface MhCalendarResizeEventHandler {
         /**
@@ -432,9 +424,6 @@ declare namespace LocalJSX {
     interface MhCalendarMoreEventsIndicatorAttributes {
         "hiddenCount": number;
     }
-    interface MhCalendarNavigationAttributes {
-        "changeDateRangeByUnit": IMHCalendarViewType;
-    }
     interface MhCalendarResizeEventHandlerAttributes {
         "eventId": string;
         "eventHeight": string;
@@ -458,7 +447,7 @@ declare namespace LocalJSX {
         "mh-calendar-month": MhCalendarMonth;
         "mh-calendar-more-events-indicator": Omit<MhCalendarMoreEventsIndicator, keyof MhCalendarMoreEventsIndicatorAttributes> & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes]?: MhCalendarMoreEventsIndicator[K] } & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes as `attr:${K}`]?: MhCalendarMoreEventsIndicatorAttributes[K] } & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes as `prop:${K}`]?: MhCalendarMoreEventsIndicator[K] } & OneOf<"hiddenCount", MhCalendarMoreEventsIndicator["hiddenCount"], MhCalendarMoreEventsIndicatorAttributes["hiddenCount"]>;
         "mh-calendar-multi-view": MhCalendarMultiView;
-        "mh-calendar-navigation": Omit<MhCalendarNavigation, keyof MhCalendarNavigationAttributes> & { [K in keyof MhCalendarNavigation & keyof MhCalendarNavigationAttributes]?: MhCalendarNavigation[K] } & { [K in keyof MhCalendarNavigation & keyof MhCalendarNavigationAttributes as `attr:${K}`]?: MhCalendarNavigationAttributes[K] } & { [K in keyof MhCalendarNavigation & keyof MhCalendarNavigationAttributes as `prop:${K}`]?: MhCalendarNavigation[K] };
+        "mh-calendar-navigation": MhCalendarNavigation;
         "mh-calendar-resize-event-handler": Omit<MhCalendarResizeEventHandler, keyof MhCalendarResizeEventHandlerAttributes> & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes]?: MhCalendarResizeEventHandler[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `attr:${K}`]?: MhCalendarResizeEventHandlerAttributes[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `prop:${K}`]?: MhCalendarResizeEventHandler[K] } & OneOf<"eventId", MhCalendarResizeEventHandler["eventId"], MhCalendarResizeEventHandlerAttributes["eventId"]> & OneOf<"eventHeight", MhCalendarResizeEventHandler["eventHeight"], MhCalendarResizeEventHandlerAttributes["eventHeight"]>;
         "mh-calendar-shiftplan-view": MhCalendarShiftplanView;
         "mh-calendar-time-slots": MhCalendarTimeSlots;

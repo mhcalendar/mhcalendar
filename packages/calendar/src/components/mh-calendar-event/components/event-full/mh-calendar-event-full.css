@@ -17,7 +17,7 @@ mh-calendar-event-full {
   position: relative;
   padding: 5px 10px;
   border: solid 1px color-mix(in srgb, var(--eventBackgroundColor) 90%, white);
-  background: color-mix(in srgb, var(--eventBackgroundColor) 22%, #1a1a22);
+  background: color-mix(in srgb, var(--eventBackgroundColor) 52%, #1a1a22);
 }
 
 .mhCalendarEventFull__content::before {
@@ -31,7 +31,7 @@ mh-calendar-event-full {
 }
 
 .mhCalendarEventFull__content__title {
-  color: color-mix(in srgb, var(--eventBackgroundColor) 80%, #f0f0f0);
+  color: color-mix(in srgb, var(--eventBackgroundColor) 30%, #f0f0f0);
   font-size: 12px;
   font-weight: bold;
 }

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { MINUTES_IN_HOUR } from '../components/mh-calendar-day/mh-calendar-day.const';
-import { DEFAULT_THEME } from '../const/default-theme';
+import { DEFAULT_THEME, THEMES } from '../const/default-theme';
 import { ConfigValidator } from '../utils/ConfigValidator';
 import { DateUtils } from '../utils/DateUtils';
 import { EventManager } from '../utils/EventManager';
@@ -20,15 +20,17 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     const configValidator = new ConfigValidator(payload);
     if (!configValidator.validateConfig()) return state;
 
-    const { properties, ...userJsCss } = payload.style;
+    const baseTheme = (payload.theme && THEMES[payload.theme]) ? THEMES[payload.theme] : DEFAULT_THEME;
 
-    if (userJsCss) {
-      state.style = this.mergeStyles(userJsCss);
-    }
+    const { properties, ...userJsCss } = payload.style ?? {};
+
+    state.style = Object.keys(userJsCss).length
+      ? this.mergeStyles(userJsCss, baseTheme)
+      : { ...baseTheme };
 
     const userPropsMergeWithDefaults = {
-      ...DEFAULT_THEME.properties,
-      ...(properties || {}),
+      ...baseTheme.properties,
+      ...(properties ?? {}),
     };
     state.properties = userPropsMergeWithDefaults;
 
@@ -87,6 +89,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       'createEventOnClick',
       'resources',
       'shiftplanDays',
+      'avaliableViews',
     ] as const;
 
     for (const key of configKeys) {
@@ -248,9 +251,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
 
     let endDate = DateUtils.getExactDateBasedOnUserPosition(payload.finalY, payload.dayOfRendering);
     if (dayjs(endDate).isBefore(dayjs(event.startDate))) {
-      endDate = dayjs(event.startDate)
-        .add(state.minEventDuration, 'minute')
-        .toDate();
+      endDate = dayjs(event.startDate).add(state.minEventDuration, 'minute').toDate();
     }
 
     EventManager.handleEventDateChange(event.startDate, endDate, event);

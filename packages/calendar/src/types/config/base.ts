@@ -8,6 +8,8 @@ export type IMHCalendarConfigBaseStyle = {
   styles: CssStyles;
 };
 
+export type MHCalendarTheme = 'dark' | 'light' | (string & {});
+
 export interface ICalendarBaseConfig {
   // custom render
   eventContent: ((event: any) => any) | undefined;
@@ -20,6 +22,7 @@ export interface ICalendarBaseConfig {
   onEventCreated: ((event: IMHCalendarEvent) => void) | undefined;
   onEventUpdated: ((event: IMHCalendarEvent) => void) | undefined;
   // base config
+  theme: MHCalendarTheme | undefined;
   style: Partial<IMHCalendarConfigBaseStyle> | undefined;
   viewType: IMHCalendarViewType | undefined;
   fixedHeight: string | undefined;
@@ -31,6 +34,16 @@ export interface ICalendarBaseConfig {
   allowEventDragging: boolean;
   showViewHeader: boolean;
   createEventOnClick: boolean;
+
+  /**
+   * Option to determiante which views are avalaible in view switcher
+   * if not provided all views are displayed
+   *
+   * @default undefined
+   * @example ['WEEK', 'AGENDA']
+   * @remarks IMHCalendarViewType contains names of views that user can use
+   */
+  avaliableViews: string[] | undefined;
 }
 
 /**

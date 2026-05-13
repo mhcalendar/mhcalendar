@@ -14,7 +14,7 @@ export class MHCalendarEventFull {
   @Prop() event?: IMHCalendarEvent;
 
   render() {
-    if (!this.event) return;
+    if (!this.event) return null;
 
     const eventColor = EventStyleManager.getEventColor(this.event);
 

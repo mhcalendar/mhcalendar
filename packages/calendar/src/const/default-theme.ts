@@ -9,7 +9,7 @@ export const CALENDAR_HEIGHT = `calc(100% - ${NAVIGATION_HEIGHT})`;
 export const CALENDAR_BACKGROUND_COLOR = '#14141a';
 export const MONTH_EVENT_HEIGHT = 20;
 
-const DEFAULT_PROPERTIES: ConfigCSSProperites = {
+const DARK_PROPERTIES: ConfigCSSProperites = {
   timeSlotWidth: '60px',
   eventBackgroundColor: DEFAULT_THEME_COLOR,
   /*
@@ -38,7 +38,42 @@ const DEFAULT_PROPERTIES: ConfigCSSProperites = {
   holidayDateColor: '#8a2929',
 };
 
+const LIGHT_PROPERTIES: ConfigCSSProperites = {
+  timeSlotWidth: '60px',
+  eventBackgroundColor: DEFAULT_THEME_COLOR,
+  eventResizeHandleColor: undefined,
+  eventTimeLabelBg: '#fff',
+  eventTimeLabelColor: '#222',
+  eventTimeDiffColor: '#3578fa',
+  eventHoverFilter: 'brightness(0.92)',
+  nonBusinessHoursOverlayColor: 'rgba(0, 0, 0, 0.04)',
+  headerTodayBackgroundColor: DEFAULT_THEME_COLOR,
+  currentTimeColor: '#db372d',
+  monthEventHeight: `${MONTH_EVENT_HEIGHT}px`,
+  viewHeaderHeight: VIEW_HEADER_HEIGHT,
+  calendarNavigationHeight: '80px',
+
+  mainBackgroundColor: '#ffffff',
+  navigationBackgroundColor: '#f5f5f7',
+  fontColor: '#1a1a1a',
+  fontFamily: 'system-ui',
+  dateFontColor: '#6e6e80',
+  bordersColor: '#e2e2e8',
+  buttonsColor: '#ebebef',
+  holidayDateColor: '#c0392b',
+};
+
 export const DEFAULT_THEME: IMHCalendarConfigBaseStyle = {
-  properties: DEFAULT_PROPERTIES,
+  properties: DARK_PROPERTIES,
   styles: {},
+};
+
+export const LIGHT_THEME: IMHCalendarConfigBaseStyle = {
+  properties: LIGHT_PROPERTIES,
+  styles: {},
+};
+
+export const THEMES: Record<string, IMHCalendarConfigBaseStyle> = {
+  dark: DEFAULT_THEME,
+  light: LIGHT_THEME,
 };

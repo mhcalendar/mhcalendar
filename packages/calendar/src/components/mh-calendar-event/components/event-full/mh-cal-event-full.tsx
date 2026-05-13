@@ -18,8 +18,6 @@ export class MHCalendarEventFull {
 
     const eventColor = EventStyleManager.getEventColor(this.event);
 
-    const eventColor = EventStyleManager.getEventColor(this.event);
-
     return (
       <div
         class="mhCalendarEventFull"

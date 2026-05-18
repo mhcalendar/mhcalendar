@@ -20,7 +20,8 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     const configValidator = new ConfigValidator(payload);
     if (!configValidator.validateConfig()) return state;
 
-    const baseTheme = (payload.theme && THEMES[payload.theme]) ? THEMES[payload.theme] : DEFAULT_THEME;
+    const baseTheme =
+      payload.theme && THEMES[payload.theme] ? THEMES[payload.theme] : DEFAULT_THEME;
 
     const { properties, ...userJsCss } = payload.style ?? {};
 

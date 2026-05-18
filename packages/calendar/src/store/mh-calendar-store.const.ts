@@ -10,7 +10,7 @@ export const initialState: IMHCalendarState = {
   // viewType and style are managed by setConfig, not pre-initialized
   viewType: undefined,
   style: {} as IMHCalendarConfigBaseStyle,
-  
+
   // Runtime-only internal state
   calendarDateRange: {
     fromDate: undefined,

@@ -34,6 +34,11 @@ export class MHCalendar {
     this.applyConfig();
   }
 
+  @Watch('events')
+  onEventsChange() {
+    store.setEvents(this.events);
+  }
+
   private applyConfig() {
     store.setConfig({
       ...DEFAULT_WEEK_VIEW_CONFIG,

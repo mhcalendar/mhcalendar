@@ -25,7 +25,8 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@mhcalendar/calendar": "^0.2.0"
+    "@mhcalendar/calendar": "^0.2.0",
+    "@stencil/react-output-target": "^1.0.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.0",

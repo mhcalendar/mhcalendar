@@ -20,6 +20,10 @@
       "import": "./loader/index.js",
       "require": "./loader/index.cjs.js"
     },
+    "./dist/components": {
+      "types": "./dist/types/components.d.ts",
+      "import": "./dist/components/index.js"
+    },
     "./dist/components/*": "./dist/components/*"
   },
   "files": [

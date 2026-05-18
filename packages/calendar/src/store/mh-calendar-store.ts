@@ -128,6 +128,10 @@ export class MHCalendarStore extends MHCalendarActions {
     this._closeModal(this.state);
   }
 
+  setEvents(events: IMHCalendarEvent[]): void {
+    this.state.reactiveEvents = EventManager.mapEventsByDate(events);
+  }
+
   addEvent(event: IMHCalendarEvent): void {
     EventManager.addEvent(event);
   }

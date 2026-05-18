@@ -10,8 +10,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
   },
-  "files": [],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

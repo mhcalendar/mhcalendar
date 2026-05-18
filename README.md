@@ -1,7 +1,7 @@
 <br />
 
 <p align="center">
-  <img src="../../assets/logo.svg" alt="mhcalendar" style="max-width: 100%; width: 458px; margin-left: 60px;"/>
+  <img src="src/global/logo.svg" alt="mhcalendar" style="max-width: 100%; width: 458px; margin-left: 60px;"/>
 </p>
 
 <p align="center">

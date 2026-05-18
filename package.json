@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "scripts": {
     "build": "lerna run build",
@@ -10,6 +11,7 @@
     "build:react": "lerna run build --scope=@mhcalendar/react",
     "dev": "lerna run dev --scope=@mhcalendar/calendar",
     "start": "lerna run start --scope=@mhcalendar/calendar",
+    "react": "npm run watch --workspace @mhcalendar/calendar & npm run dev --workspace @mhcalendar/react & npm run dev --workspace @mhcalendar/example-react-vite & wait",
     "test": "lerna run test",
     "lint": "lerna run lint",
     "format": "lerna run format",

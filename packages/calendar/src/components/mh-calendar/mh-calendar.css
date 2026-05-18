@@ -1,5 +1,6 @@
 * {
   font-family: var(--fontFamily);
+  box-sizing: border-box;
 }
 
 mh-calendar {
@@ -24,7 +25,7 @@ mh-calendar {
   width: 100%;
   background-color: var(--mainBackgroundColor);
   padding: 7px;
-  border: solid 1px var(--bordersColor);
+  border-bottom: solid 1px var(--bordersColor);
 }
 
 .mhCalendar__calendarViewHolder {

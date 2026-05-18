@@ -33,6 +33,7 @@
   "scripts": {
     "prebuild": "rm -rf dist loader",
     "build": "stencil build",
+    "watch": "stencil build --watch",
     "start": "stencil build --dev --watch --serve",
     "dev": "stencil build --watch --serve",
     "test": "stencil test --spec --e2e",

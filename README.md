@@ -1,7 +1,7 @@
 <br />
 
 <p align="center">
-  <img src="src/global/logo.svg" alt="mhcalendar" style="max-width: 100%; width: 458px; margin-left: 60px;"/>
+  <img src="src/logo.svg" alt="mhcalendar" style="max-width: 100%; width: 458px; margin-left: 60px;"/>
 </p>
 
 <p align="center">
@@ -11,7 +11,7 @@
   <a href="https://bundlephobia.com/package/mhcalendar-core"><img src="https://img.shields.io/bundlephobia/minzip/mh-calendar-core?style=flat-square&color=green" alt="Bundle Size"></a>
 </p>
 
-A highly customizable, full-sized event calendar built with TypeScript, Stencil, and Day.js.
+A hybrid, highly customizable, full-sized event calendar built with TypeScript, Stencil, and Day.js.
 
 > [!WARNING]
 > mhcalendar is currently in its `0.x.x` phase. As per Semantic Versioning, the API is not yet stable, and any new minor or patch release might introduce breaking changes. We recommend pinning the exact version in your `package.json` until we reach `1.0.0`.

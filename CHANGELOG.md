@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.2] - 2026-05-18
+
+### Fixed
+- Documentation markdown updates and corrections across `.md` files.
+
+## [2.0.1] - 2026-05-18
+
+### Changed
+- Repository moved to a monorepo structure.
+
+### Fixed
+- Multiple small logic fixes.
+- Type-related fixes.
+
+### Refactored
+- General code cleanup and maintenance improvements.
+
 ## [0.1.2] - 2026-04-23
 
 ### Added
@@ -22,3 +39,5 @@
 ---
 
 [0.1.2]: https://github.com/MH-Calendar/mh-calendar-core/releases/tag/v0.1.2
+[2.0.1]: https://github.com/MH-Calendar/mh-calendar-core/releases/tag/v2.0.1
+[2.0.2]: https://github.com/MH-Calendar/mh-calendar-core/releases/tag/v2.0.2

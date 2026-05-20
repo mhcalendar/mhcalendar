@@ -1,4 +1,4 @@
-export * from './components/components';
+export * from './components/components.js';
 
 export type {
   IMHCalendarEvent,

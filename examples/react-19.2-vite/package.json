@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@mhcalendar/react": "*",
+    "@mhcalendar/react": "file:../../packages/react/mhcalendar-react-0.2.2.tgz",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },

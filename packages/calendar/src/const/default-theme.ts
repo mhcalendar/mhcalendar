@@ -2,7 +2,7 @@ import { IMHCalendarConfigBaseStyle } from '../types';
 import { ConfigCSSProperites } from '../types/config/properties';
 
 export const DEFAULT_THEME_COLOR = '#8a79ff';
-export const VIEW_HEADER_HEIGHT = '60px';
+export const VIEW_HEADER_HEIGHT = '70px';
 export const VIEW_HEIGHT = `calc(100% - ${VIEW_HEADER_HEIGHT})`;
 export const NAVIGATION_HEIGHT = '20%';
 export const CALENDAR_HEIGHT = `calc(100% - ${NAVIGATION_HEIGHT})`;

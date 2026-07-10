@@ -18,9 +18,10 @@ export class TimezoneUtils {
     format: string = 'h A',
     referenceDate?: Date,
   ): string {
-    if (!targetTimezone) return '';
-
     try {
+      if (!targetTimezone) {
+        throw new Error('targetTimezone is required')
+      }
       // Use reference date if provided, otherwise use current date
       const baseDate = referenceDate || new Date();
       const dateString = dayjs(baseDate).format('YYYY-MM-DD');
@@ -79,9 +80,8 @@ export class TimezoneUtils {
    * @returns Offset in hours (e.g., 1, -3)
    */
   static getTimezoneOffset(timezone: string): number {
-    if (!timezone) return 0;
-
     try {
+      if (!timezone) throw new Error('timezone is undefined');
       const now = dayjs().tz(timezone);
       return now.utcOffset() / 60; // Convert minutes to hours
     } catch (error) {
@@ -96,7 +96,7 @@ export class TimezoneUtils {
    * @returns Main timezone string
    */
   static getMainTimezone(timezones?: string[]): string {
-    if (timezones && timezones.length > 0) {
+    if (timezones && timezones.length > 0 && Array.isArray(timezones)) {
       return timezones[0];
     }
 

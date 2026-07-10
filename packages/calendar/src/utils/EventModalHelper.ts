@@ -25,7 +25,7 @@ export class EventModalHelper {
           <input
             type="text"
             id="event-title"
-            value="${event.title || ''}"
+            value="${this.escapeHtml(event.title || '')}"
             placeholder="Enter title"
           />
         </div>
@@ -35,7 +35,7 @@ export class EventModalHelper {
             id="event-description"
             placeholder="Enter description (optional)"
             rows="3"
-          >${event.description || ''}</textarea>
+          >${this.escapeHtml(event.description || '')}</textarea>
         </div>
         <div class="mhCalendarEventModal__field">
           <label>Date and Time:</label>
@@ -216,5 +216,18 @@ export class EventModalHelper {
    */
   private static formatDateTimeLocal(date: Date): string {
     return dayjs(date).tz(store.mainTimezone).format('YYYY-MM-DDTHH:mm');
+  }
+
+  /**
+   * Escapes HTML special characters to prevent XSS when interpolating
+   * user-controlled event data into an innerHTML template.
+   */
+  private static escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 }

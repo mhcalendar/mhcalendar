@@ -92,7 +92,7 @@ export class DaysGenerator {
   public static generateSlotHours(userInput: { hours: number; minutes: number }): string[] {
     const { showTimeFrom, showTimeTo } = store.state;
 
-    if (!showTimeFrom || !showTimeTo) return [];
+    if (typeof showTimeFrom !== 'number' || typeof showTimeTo !== 'number') return [];
 
     const slots: string[] = [];
 

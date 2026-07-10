@@ -118,6 +118,18 @@ describe('EventUtils', () => {
       expect(EventUtils.getTimeViewWindow('2026-07-10')).toBeNull();
     });
 
+    it('computes the window when showTimeFrom is 0 (midnight is a valid start hour)', () => {
+      store.state.showTimeFrom = 0;
+      store.state.showTimeTo = 12;
+
+      const result = EventUtils.getTimeViewWindow('2026-07-10');
+
+      expect(result).toEqual({
+        windowStart: new Date('2026-07-10T00:00:00Z').getTime(),
+        windowEnd: new Date('2026-07-10T12:00:00Z').getTime(),
+      });
+    });
+
     it('computes the window start/end for the given date in the configured timezone', () => {
       store.state.showTimeFrom = 8;
       store.state.showTimeTo = 17;

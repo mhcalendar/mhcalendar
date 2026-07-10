@@ -118,7 +118,7 @@ export class BusinessHoursUtils {
     if (!isTimeView) return [];
 
     // If no business hours configured, don't show overlay
-    if (!businessHours || !showTimeFrom || !showTimeTo) {
+    if (!businessHours || typeof showTimeFrom !== 'number' || typeof showTimeTo !== 'number') {
       return [];
     }
 

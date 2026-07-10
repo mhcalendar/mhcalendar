@@ -19,8 +19,27 @@ describe('ConfigValidator', () => {
     );
   });
 
-  it('rejects showTimeFrom of 0', () => {
+  it('accepts showTimeFrom of 0 (midnight is a valid start hour)', () => {
     const config = { ...validConfig, showTimeFrom: 0 };
+    expect(new ConfigValidator(config).validateConfig()).toBe(true);
+  });
+
+  it('rejects showTimeTo equal to showTimeFrom', () => {
+    const config = { ...validConfig, showTimeFrom: 9, showTimeTo: 9 };
+    expect(() => new ConfigValidator(config).validateConfig()).toThrow(
+      ERROR_MESSAGES[ConfigErrorCodes.SHOW_TIME_HOURS],
+    );
+  });
+
+  it('rejects showTimeTo before showTimeFrom', () => {
+    const config = { ...validConfig, showTimeFrom: 20, showTimeTo: 4 };
+    expect(() => new ConfigValidator(config).validateConfig()).toThrow(
+      ERROR_MESSAGES[ConfigErrorCodes.SHOW_TIME_HOURS],
+    );
+  });
+
+  it('rejects a non-numeric showTimeFrom', () => {
+    const config = { ...validConfig, showTimeFrom: undefined as unknown as number };
     expect(() => new ConfigValidator(config).validateConfig()).toThrow(
       ERROR_MESSAGES[ConfigErrorCodes.SHOW_TIME_HOURS],
     );

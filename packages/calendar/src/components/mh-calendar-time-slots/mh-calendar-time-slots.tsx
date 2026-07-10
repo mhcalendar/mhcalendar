@@ -81,7 +81,7 @@ export class MHCalendarTimeSlots {
       storeState.slotInterval.hours * 60 + storeState.slotInterval.minutes;
     const hourIntervalMinutes =
       storeState.hoursSlotInterval.hours * 60 + storeState.hoursSlotInterval.minutes;
-    const startTimeMinutes = (storeState.showTimeFrom || 0) * 60;
+    const startTimeMinutes = (typeof storeState.showTimeFrom === 'number' ? storeState.showTimeFrom : 0) * 60;
 
     // Helper functions
     const calculateSlotTime = (index: number) => {
@@ -90,9 +90,9 @@ export class MHCalendarTimeSlots {
       return totalMinutes / 60; // Convert to hours
     };
 
-    const shouldShowTime = (timeInHours: number) => {
+    const shouldShowTime = (timeInHours: number): number | null => {
       const hourInterval = hourIntervalMinutes / 60;
-      return timeInHours % hourInterval === 0 ? timeInHours : '';
+      return timeInHours % hourInterval === 0 ? timeInHours : null;
     };
 
     const additionalTimezones = (storeState.timezones || []).slice(1);
@@ -110,7 +110,7 @@ export class MHCalendarTimeSlots {
           ? 'mhCalendarWeek__border'
           : 'mhCalendarWeek__border mhCalendarWeek__border--hidden';
 
-      if (!displayTime) {
+      if (displayTime === null) {
         return (
           <div class={borderClass}>
             <span></span>

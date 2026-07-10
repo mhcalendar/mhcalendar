@@ -345,7 +345,7 @@ export class EventStyleManager {
     const startHour = storeState.showTimeFrom;
     const endHour = storeState.showTimeTo;
 
-    if (!startHour || !endHour) return 0;
+    if (typeof startHour !== 'number' || typeof endHour !== 'number') return 0;
 
     const totalDisplayedMinutes = (endHour - startHour) * MINUTES_IN_HOUR;
 

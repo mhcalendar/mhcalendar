@@ -243,6 +243,21 @@ describe('BusinessHoursUtils', () => {
       ).toEqual([]);
     });
 
+    it('does not short-circuit when showTimeFrom is 0 (midnight is a valid start hour)', () => {
+      const styles = BusinessHoursUtils.getNonBusinessHoursStyles(
+        day,
+        900, // (9-0)*100 => 100px/hour
+        IMHCalendarViewType.DAY,
+        { start: 3, end: 9 },
+        0,
+        9,
+        0,
+      );
+      expect(styles).toHaveLength(1);
+      expect(styles[0].top).toBe('0px');
+      expect(parseFloat(styles[0].height)).toBeCloseTo(300, 5);
+    });
+
     it('returns no overlays when business hours span the entire displayed range', () => {
       const styles = BusinessHoursUtils.getNonBusinessHoursStyles(
         day,

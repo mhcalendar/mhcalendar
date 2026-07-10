@@ -19,7 +19,7 @@
     "@docusaurus/faster": "3.10.1",
     "@docusaurus/preset-classic": "3.10.1",
     "@mdx-js/react": "^3.0.0",
-    "@mhcalendar/react": "file:../../packages/react/mhcalendar-react-0.2.2.tgz",
+    "@mhcalendar/react": "^0.2.3",
     "clsx": "^2.0.0",
     "prism-react-renderer": "^2.3.0",
     "react": "^19.0.0",

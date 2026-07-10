@@ -29,7 +29,7 @@ export const MhCalendar: StencilReactComponent<MhCalendarElement, MhCalendarEven
 
 export type MhCalendarMoreEventsIndicatorEvents = NonNullable<unknown>;
 
-export const MhCalendarMoreEventsIndicator: StencilReactComponent<MhCalendarMoreEventsIndicatorElement, MhCalendarMoreEventsIndicatorEvents, Components.MhCalendarMoreEventsIndicator> = /*@__PURE__*/ createComponent<MhCalendarMoreEventsIndicatorElement, MhCalendarMoreEventsIndicatorEvents, Components.MhCalendarMoreEventsIndicator>({
+export const MhCalendarMoreEventsIndicator: StencilReactComponent<MhCalendarMoreEventsIndicatorElement, MhCalendarMoreEventsIndicatorEvents, Components.MhCalendarMoreEventsIndicator, 'hiddenCount'> = /*@__PURE__*/ createComponent<MhCalendarMoreEventsIndicatorElement, MhCalendarMoreEventsIndicatorEvents, Components.MhCalendarMoreEventsIndicator, 'hiddenCount'>({
     tagName: 'mh-calendar-more-events-indicator',
     elementClass: MhCalendarMoreEventsIndicatorElement,
     // @ts-ignore - ignore potential React type mismatches between the Stencil Output Target and your project.

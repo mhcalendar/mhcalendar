@@ -1,6 +1,6 @@
 {
   "name": "@mhcalendar/calendar",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "MH Calendar — Stencil web component",
   "type": "module",
   "main": "dist/index.cjs.js",

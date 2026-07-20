@@ -5,10 +5,10 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/mh-calendar-core"><img src="https://img.shields.io/npm/v/mh-calendar-core.svg?style=flat-square&color=blue" alt="NPM Version"></a>
+  <a href="https://www.npmjs.com/package/@mhcalendar/calendar"><img src="https://img.shields.io/npm/v/@mhcalendar/calendar.svg?style=flat-square&color=blue" alt="NPM Version"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
-  <!-- <a href="https://github.com/mhcalendar/mhcalendar/actions"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar/ci.yml?style=flat-square" alt="CI Status"></a> -->
-  <a href="https://bundlephobia.com/package/mhcalendar-core"><img src="https://img.shields.io/bundlephobia/minzip/mh-calendar-core?style=flat-square&color=green" alt="Bundle Size"></a>
+  <a href="https://github.com/mhcalendar/mhcalendar-mono/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar-mono/ci.yml?style=flat-square" alt="CI Status"></a>
+  <a href="https://bundlephobia.com/package/@mhcalendar/calendar"><img src="https://img.shields.io/bundlephobia/minzip/@mhcalendar/calendar?style=flat-square&color=green" alt="Bundle Size"></a>
 </p>
 
 A highly customizable, full-sized event calendar built with TypeScript, Stencil, and Day.js.
@@ -38,19 +38,19 @@ mhcalendar is built around easy **customization as a first-class feature**. You 
 ## Installation
 
 If you are using React, you might want to check out our official React component:
-👉 [**@mhcalendar/react**](https://github.com/mhcalendar/mhcalendar-react)
+👉 [**@mhcalendar/react**](https://www.npmjs.com/package/@mhcalendar/react)
 
 If you are building a Vanilla JS project, install the core package via your preferred package manager:
 
 ```bash
 # npm
-npm install mhcalendar-core
+npm install @mhcalendar/calendar
 
 # yarn
-yarn add mhcalendar-core
+yarn add @mhcalendar/calendar
 
 # pnpm
-pnpm add mhcalendar-core
+pnpm add @mhcalendar/calendar
 ```
 
 ---
@@ -60,9 +60,9 @@ pnpm add mhcalendar-core
 Import and initialize the web component in your app's entry file (e.g., `main.ts`):
 
 ```javascript
-import { defineCustomElements } from 'mhcalendar-core/loader';
+import { defineCustomElements } from '@mhcalendar/calendar/loader';
 
-// Registers the <mhcalendar> custom element in the browser
+// Registers the <mh-calendar> custom element in the browser
 defineCustomElements();
 ```
 
@@ -77,7 +77,7 @@ Example usage:
   </head>
   <body>
     <script type="module" src="/src/main.js"></script>
-    <mhcalendar id="my-calendar" />
+    <mh-calendar id="my-calendar"></mh-calendar>
     <script type="module">
       const mhcalendar = document.getElementById('my-calendar');
 
@@ -110,7 +110,7 @@ Contributions are welcome! If you'd like to report a bug, suggest a feature, or 
 
 ## Changelog
 
-See [CHANGELOG.md](./CHANGELOG.md) for a full list of changes between releases.
+See [CHANGELOG.md](https://github.com/mhcalendar/mhcalendar-mono/blob/main/CHANGELOG.md) for a full list of changes between releases.
 
 ## License
 

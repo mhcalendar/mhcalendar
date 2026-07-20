@@ -2,6 +2,13 @@
   "name": "@mhcalendar/react",
   "version": "0.2.3",
   "description": "React wrapper for @mhcalendar/calendar web components",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhcalendar/mhcalendar-mono.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/mhcalendar/mhcalendar-mono/tree/main/packages/react#readme",
+  "bugs": "https://github.com/mhcalendar/mhcalendar-mono/issues",
   "type": "module",
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",

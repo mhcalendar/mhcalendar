@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/mh-calendar-core"><img src="https://img.shields.io/npm/v/mh-calendar-core.svg?style=flat-square&color=blue" alt="NPM Version"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
-  <!-- <a href="https://github.com/mhcalendar/mhcalendar/actions"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar/ci.yml?style=flat-square" alt="CI Status"></a> -->
+  <a href="https://github.com/mhcalendar/mhcalendar-mono/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar-mono/ci.yml?style=flat-square" alt="CI Status"></a>
   <a href="https://bundlephobia.com/package/mhcalendar-core"><img src="https://img.shields.io/bundlephobia/minzip/mh-calendar-core?style=flat-square&color=green" alt="Bundle Size"></a>
 </p>
 

@@ -68,7 +68,12 @@ export class DateUtils {
     const { heightOfCalendarDay, showTimeTo, showTimeFrom } = store.state;
     const { headerMargin } = store;
 
-    if (!heightOfCalendarDay || !showTimeTo || !showTimeFrom) return dayToSet;
+    if (
+      !heightOfCalendarDay ||
+      typeof showTimeTo !== 'number' ||
+      typeof showTimeFrom !== 'number'
+    )
+      return dayToSet;
 
     const adjustedMousePosition = userTopPosition - headerMargin;
     const adjustedCalendarHeight = heightOfCalendarDay - headerMargin;

@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import stencil from '@stencil/eslint-plugin';
 import prettier from 'eslint-config-prettier';
+import { sharedRules } from '../../eslint.config.base.js';
 
 export default [
   {
@@ -26,27 +27,7 @@ export default [
     },
 
     rules: {
-      // --- core safety
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-empty-object-type': 'off',
-      '@typescript-eslint/no-unsafe-function-type': 'off',
-
-      // --- Stencil JSX fix (IMPORTANT)
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          varsIgnorePattern: '^h$|^_$',
-          argsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
-
-      'no-case-declarations': 'off',
-      'no-prototype-builtins': 'off',
-
-      'prefer-const': 'warn',
-
+      ...sharedRules,
       'react/react-in-jsx-scope': 'off',
     },
   },

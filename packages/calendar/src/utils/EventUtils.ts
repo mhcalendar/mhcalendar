@@ -23,7 +23,7 @@ export class EventUtils {
 
   static getTimeViewWindow(dateKey: string): { windowStart: number; windowEnd: number } | null {
     const { showTimeFrom, showTimeTo } = store.state;
-    if (!showTimeFrom || !showTimeTo) return null;
+    if (typeof showTimeFrom !== 'number' || typeof showTimeTo !== 'number') return null;
 
     const tz = store.mainTimezone;
     const windowStart = DateUtils.dateAtHourInTimezone(dateKey, showTimeFrom, 0, tz).getTime();

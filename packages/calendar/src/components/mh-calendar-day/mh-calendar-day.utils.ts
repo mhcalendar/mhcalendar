@@ -25,7 +25,7 @@ export class DayUtils {
     const { headerMargin, hoursRangeCal } = store;
     const { showTimeTo, showTimeFrom } = store.state;
 
-    if (!showTimeFrom || !showTimeTo) return;
+    if (typeof showTimeFrom !== 'number' || typeof showTimeTo !== 'number') return;
 
     const totalDisplayedMinutes = hoursRangeCal * MINUTES_IN_HOUR;
 

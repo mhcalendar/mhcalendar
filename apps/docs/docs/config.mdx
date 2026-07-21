@@ -1,0 +1,32 @@
+---
+title: Configuration
+sidebar_position: 2
+---
+
+# Configuration
+
+`mh-calendar` accepts configuration through the `config` prop.
+
+## Core options
+
+- `viewType`: `DAY | WEEK | MONTH | AGENDA | SHIFTPLAN`
+- `showTimeFrom` and `showTimeTo`
+- `allowEventDragging`
+- `allowEventResize`
+- `createEventOnClick`
+- `timezones`
+- `businessHours`
+
+## Example
+
+```ts
+const config = {
+  viewType: 'WEEK',
+  showTimeFrom: 8,
+  showTimeTo: 18,
+  allowEventDragging: true,
+  allowEventResize: true,
+};
+```
+
+Detailed option reference will be expanded in upcoming docs updates.

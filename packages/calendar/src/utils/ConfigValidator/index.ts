@@ -25,7 +25,12 @@ export class ConfigValidator {
       },
       {
         name: 'SHOW_TIME_HOURS',
-        validate: ({ showTimeFrom, showTimeTo }) => showTimeFrom !== 0 && showTimeTo !== 0,
+        validate: ({ showTimeFrom, showTimeTo }) =>
+          typeof showTimeFrom === 'number' &&
+          typeof showTimeTo === 'number' &&
+          showTimeFrom >= 0 &&
+          showTimeTo > showTimeFrom &&
+          showTimeTo <= 24,
         errorCode: ConfigErrorCodes.SHOW_TIME_HOURS,
       },
       {

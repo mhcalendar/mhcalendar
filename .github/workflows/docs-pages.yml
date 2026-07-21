@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - 'apps/docs/**'
+      - 'packages/calendar/**'
+      - 'packages/react/**'
       - '.github/workflows/docs-pages.yml'
   workflow_dispatch:
 

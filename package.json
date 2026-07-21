@@ -19,9 +19,13 @@
     "test": "lerna run test",
     "lint": "lerna run lint",
     "format": "lerna run format",
-    "clean": "lerna run clean --parallel"
+    "clean": "lerna run clean --parallel",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "@types/node": "^22.13.5",
     "lerna": "^9.0.7",
     "typescript": "^5.5.4",

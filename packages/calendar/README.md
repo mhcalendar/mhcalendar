@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@mhcalendar/calendar"><img src="https://img.shields.io/npm/v/@mhcalendar/calendar.svg?style=flat-square&color=blue" alt="NPM Version"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
-  <a href="https://github.com/mhcalendar/mhcalendar-mono/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar-mono/ci.yml?style=flat-square" alt="CI Status"></a>
+  <a href="https://github.com/mhcalendar/mhcalendar/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar/ci.yml?style=flat-square" alt="CI Status"></a>
   <a href="https://bundlephobia.com/package/@mhcalendar/calendar"><img src="https://img.shields.io/bundlephobia/minzip/@mhcalendar/calendar?style=flat-square&color=green" alt="Bundle Size"></a>
 </p>
 
@@ -110,7 +110,7 @@ Contributions are welcome! If you'd like to report a bug, suggest a feature, or 
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/mhcalendar/mhcalendar-mono/blob/main/CHANGELOG.md) for a full list of changes between releases.
+See [CHANGELOG.md](https://github.com/mhcalendar/mhcalendar/blob/main/CHANGELOG.md) for a full list of changes between releases.
 
 ## License
 

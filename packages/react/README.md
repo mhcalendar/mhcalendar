@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/@mhcalendar/react"><img src="https://img.shields.io/npm/v/@mhcalendar/react.svg?style=flat-square&color=blue" alt="NPM Version"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
-  <a href="https://github.com/mhcalendar/mhcalendar-mono/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar-mono/ci.yml?style=flat-square" alt="CI Status"></a>
+  <a href="https://github.com/mhcalendar/mhcalendar/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar/ci.yml?style=flat-square" alt="CI Status"></a>
   <a href="https://bundlephobia.com/package/@mhcalendar/react"><img src="https://img.shields.io/bundlephobia/minzip/@mhcalendar/react?style=flat-square&color=green" alt="Bundle Size"></a>
 </p>
 
@@ -16,7 +16,7 @@ highly customizable, full-sized event calendar built with TypeScript, Stencil, a
 
 This package is a thin, typed React binding around the `@mhcalendar/calendar` Web Component. All
 configuration options, events, and behavior are identical — see the
-[**@mhcalendar/calendar** README](https://github.com/mhcalendar/mhcalendar-mono/tree/main/packages/calendar#readme)
+[**@mhcalendar/calendar** README](https://github.com/mhcalendar/mhcalendar/tree/main/packages/calendar#readme)
 for the full feature list and configuration reference.
 
 > [!WARNING]
@@ -83,7 +83,7 @@ request, please open an issue first to discuss what you'd like to change.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/mhcalendar/mhcalendar-mono/blob/main/CHANGELOG.md) for a
+See [CHANGELOG.md](https://github.com/mhcalendar/mhcalendar/blob/main/CHANGELOG.md) for a
 full list of changes between releases.
 
 ## License

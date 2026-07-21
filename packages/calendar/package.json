@@ -4,11 +4,11 @@
   "description": "MH Calendar — Stencil web component",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mhcalendar/mhcalendar-mono.git",
+    "url": "https://github.com/mhcalendar/mhcalendar.git",
     "directory": "packages/calendar"
   },
-  "homepage": "https://github.com/mhcalendar/mhcalendar-mono/tree/main/packages/calendar#readme",
-  "bugs": "https://github.com/mhcalendar/mhcalendar-mono/issues",
+  "homepage": "https://github.com/mhcalendar/mhcalendar/tree/main/packages/calendar#readme",
+  "bugs": "https://github.com/mhcalendar/mhcalendar/issues",
   "type": "module",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",

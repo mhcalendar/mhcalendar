@@ -1,0 +1,119 @@
+---
+title: Styling
+sidebar_position: 3
+---
+
+import CalendarDemo from '@site/src/components/CalendarDemo';
+
+# Styling
+
+Styling is the calendar's headline feature: every component renders with `shadow: false` — there's
+no Shadow DOM boundary and no `::part()` selectors to learn. Everything is styled through
+`config.style`, either as CSS custom properties or as per-class inline overrides.
+
+## `config.style` shape
+
+```ts
+config.style = {
+  properties: {
+    /* CSS custom property overrides, see table below */
+  },
+  mhCalendar: {
+    /* plain CSS-in-JS for the .mhCalendar root class */
+  },
+  mhCalendarEventFull: {
+    /* ...for the full-size event class */
+  },
+  // any other CalendarClasses key
+};
+```
+
+`properties` is special-cased; every other top-level key in `style` must be a known class name
+(see the full list in [API Reference → Types](/docs/api-reference/types#css-classes)) and its
+value is a plain object of CSS properties (camelCase, like React's `style` prop) applied inline to
+elements with that class.
+
+## CSS custom properties (`style.properties`)
+
+Applied as inline custom properties (`--<key>`) on the `<mh-calendar>` host element itself, so they
+cascade to every internal component that consumes them via `var(--key)`.
+
+| Property | Default | Description |
+|---|---|---|
+| `mainBackgroundColor` | — | Calendar's overall background color. |
+| `fontColor` | — | Base text color. |
+| `fontFamily` | — | Base font family. |
+| `dateFontColor` | — | Color for date/day numbers. |
+| `bordersColor` | `#eaeaeaff` | All internal grid borders (time slots, day columns, header cells). |
+| `timeSlotWidth` | `70px` | Width of the hour-label column in Day/Week views. |
+| `viewHeaderHeight` | `70px` | Height of the day/week header row. |
+| `calendarNavigationHeight` | `20%` | Height of the top navigation bar. |
+| `navigationBackgroundColor` | — | Background of the top navigation bar. |
+| `buttonsColor` | — | Color of navigation buttons. |
+| `eventBackgroundColor` | `#00b536` | Default event background when an event has no own `color`. |
+| `eventHoverFilter` | `brightness(0.88)` | CSS `filter` applied to events on hover; set to `none` to disable. |
+| `eventResizeHandleColor` | inherits event color | Color of the resize-drag handle at an event's edge. |
+| `eventTimeLabelBg` | `#fff` | Background of the tooltip shown while resizing. |
+| `eventTimeLabelColor` | `#222` | Text color of the resize tooltip. |
+| `eventTimeDiffColor` | `#3578fa` | Color of the duration-diff label (e.g. "+15 min") in the resize tooltip. |
+| `monthEventHeight` | `20px` | Height of one event row in Month/Agenda/Shiftplan. |
+| `headerTodayBackgroundColor` | `#00b536` | Highlight color for the "today" cell. |
+| `holidayDateColor` | — | Color for holiday/highlighted dates. |
+| `currentTimeColor` | `#db372d` | Color of the current-time indicator line (and its label in Shiftplan). |
+| `nonBusinessHoursOverlayColor` | `rgba(0,0,0,0.03)` | Overlay tint on time slots outside `businessHours`. |
+
+```tsx
+const config = {
+  style: {
+    properties: {
+      eventBackgroundColor: '#1e3a8a',
+      bordersColor: '#cbd5e1',
+      currentTimeColor: '#e11d48',
+    },
+  },
+};
+```
+
+<CalendarDemo
+  config={{
+    viewType: 'WEEK',
+    showTimeFrom: 8,
+    showTimeTo: 18,
+    style: {
+      properties: {
+        eventBackgroundColor: '#1e3a8a',
+        bordersColor: '#cbd5e1',
+        currentTimeColor: '#e11d48',
+      },
+      mhCalendar: { backgroundColor: '#ffffff', color: '#1e293b' },
+    },
+  }}
+/>
+
+## Per-class overrides
+
+For anything the custom properties don't cover, target a class directly. The most common one is
+`mhCalendar` itself (the root element):
+
+```tsx
+const config = {
+  style: {
+    mhCalendar: { backgroundColor: '#ffffff', color: '#1e293b', fontFamily: "'Courier New', monospace" },
+    mhCalendarEventFull: { borderRadius: '6px' },
+  },
+};
+```
+
+## Choosing a base theme
+
+`config.theme` picks a starting point before your overrides apply: `'dark'` (default) or
+`'light'`. Any other string falls back to the dark theme.
+
+```tsx
+const config = { theme: 'light', style: { properties: { eventBackgroundColor: '#1e3a8a' } } };
+```
+
+## Next steps
+
+Reusing the same style object across multiple calendars, or shipping a named brand theme? See
+[Theming](/docs/guides/theming).

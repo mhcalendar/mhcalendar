@@ -28,7 +28,12 @@ const styleConfigs: Record<StyleVariant, ThemeConfig> = {
   bold: { style: boldTheme, config: { showTimeFrom: 6, showTimeTo: 20 } },
   scroll: {
     style: scrollTheme,
-    config: { showTimeFrom: 1, showTimeTo: 24, fixedHeight: '580px', virtualScrollHeight: '1800px' },
+    config: {
+      showTimeFrom: 1,
+      showTimeTo: 24,
+      fixedHeight: '580px',
+      virtualScrollHeight: '1800px',
+    },
   },
   timezone: {
     style: timezoneTheme,
@@ -77,7 +82,12 @@ function buildTimezoneEvents() {
     { id: 't1', title: 'LA Kickoff', startDate: makeDate(0, 9), endDate: makeDate(0, 10) },
     { id: 't2', title: 'NY All-hands', startDate: makeDate(1, 12), endDate: makeDate(1, 14) },
     { id: 't3', title: 'London Sync', startDate: makeDate(2, 8), endDate: makeDate(2, 9) },
-    { id: 't4', title: 'Cross-region Review', startDate: makeDate(2, 14), endDate: makeDate(2, 16) },
+    {
+      id: 't4',
+      title: 'Cross-region Review',
+      startDate: makeDate(2, 14),
+      endDate: makeDate(2, 16),
+    },
   ];
 }
 
@@ -119,7 +129,7 @@ export default function Home(): ReactNode {
   );
 
   return (
-    <Layout title="MH Calendar" description="Fully customizable scheduling component">
+    <Layout title="mhalendar" description="Fully customizable scheduling component">
       <main className="mh-landing">
         <nav className={navScrolled ? 'mh-nav scrolled' : 'mh-nav'}>
           <div className="container mh-nav-inner">
@@ -134,10 +144,13 @@ export default function Home(): ReactNode {
               <a href="#faq">FAQ</a>
             </div>
             <div className="mh-nav-cta">
-              <button className="mh-btn ghost" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+              <button
+                className="mh-btn ghost"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              >
                 {theme === 'dark' ? 'Light' : 'Dark'}
               </button>
-              <Link className="mh-btn primary" to="/docs/intro">
+              <Link className="mh-btn primary" to="/docs/introduction/">
                 Get started
               </Link>
             </div>
@@ -156,7 +169,9 @@ export default function Home(): ReactNode {
                 A full-sized, drag-and-drop calendar for React and Web Components. Built on Stencil,
                 themed with plain CSS variables.
               </p>
-              <div className="mh-install" id="install">npm i @mhcalendar/react</div>
+              <div className="mh-install" id="install">
+                npm i @mhcalendar/react
+              </div>
               <div className="mh-style-switcher">
                 {(Object.keys(styleConfigs) as StyleVariant[]).map((variant) => (
                   <button
@@ -170,7 +185,9 @@ export default function Home(): ReactNode {
                 ))}
               </div>
             </div>
-            <div className="mh-hero-demo">{mounted ? <MhCalendar config={config} events={activeEvents} /> : null}</div>
+            <div className="mh-hero-demo">
+              {mounted ? <MhCalendar config={config} events={activeEvents} /> : null}
+            </div>
           </div>
         </section>
 
@@ -191,9 +208,18 @@ export default function Home(): ReactNode {
             <h2>Every way your team needs to see time.</h2>
             <p>Switch views, style tokens, and behavior in one API surface.</p>
             <div className="mh-cards">
-              <article><h3>Week/Day</h3><p>Drag and drop with clear time-grid ergonomics.</p></article>
-              <article><h3>Month/Agenda</h3><p>High-density planning and readable list timeline.</p></article>
-              <article><h3>Shiftplan</h3><p>Resource scheduling with vertical team lanes.</p></article>
+              <article>
+                <h3>Week/Day</h3>
+                <p>Drag and drop with clear time-grid ergonomics.</p>
+              </article>
+              <article>
+                <h3>Month/Agenda</h3>
+                <p>High-density planning and readable list timeline.</p>
+              </article>
+              <article>
+                <h3>Shiftplan</h3>
+                <p>Resource scheduling with vertical team lanes.</p>
+              </article>
             </div>
           </div>
         </section>

@@ -1,0 +1,174 @@
+---
+title: Display hours
+sidebar_position: 1
+---
+
+# Display hours
+
+In every time based view, like the week view, you can control which time window gets displayed.
+It doesn't matter if you pick a small range or a much bigger one, the calendar always adapts to
+the size of its parent container, and each hour slot resizes proportionally to fit that space.
+
+## Basic usage
+
+You control the displayed hours with `showTimeFrom` and `showTimeTo`. Together they define the
+time range the calendar renders.
+
+Example config:
+
+```tsx
+<MhCalendar
+  config={{
+    showTimeFrom: 8,
+    showTimeTo: 18,
+  }}
+/>
+```
+
+- Both are plain numbers from 0 to 24.
+- `showTimeFrom: 0` is a valid start (midnight).
+- `showTimeTo: 24` is a valid end (midnight the next day).
+- `showTimeTo` must be strictly greater than `showTimeFrom`, otherwise config validation throws
+  immediately.
+
+<details>
+<summary>Try it!</summary>
+
+```jsx live noInline
+const CONFIG = { showTimeFrom: 8, showTimeTo: 16 };
+
+function Demo() {
+  return (
+    <div>
+      <MhCalendar config={CONFIG} />
+    </div>
+  );
+}
+
+render(<Demo />);
+```
+
+</details>
+
+## Hours interval
+
+The `hoursSlotInterval` option controls the visibility of hour labels in the time grid.
+
+This is useful when you want to display a time range (for example, from **08:00** to **16:00**) while showing only every second hour. Reducing the number of visible labels can improve readability without affecting the actual time range or calendar functionality.
+
+```tsx
+<MhCalendar
+  config={{
+    hoursSlotInterval: { hours: 2, minutes: 0 },
+  }}
+/>
+```
+
+<details>
+<summary>Try it!</summary>
+
+```jsx live noInline
+const CONFIG = { hoursSlotInterval: { hours: 2, minutes: 0 } };
+
+function Demo() {
+  return (
+    <div>
+      <MhCalendar config={CONFIG} />
+    </div>
+  );
+}
+
+render(<Demo />);
+```
+
+</details>
+
+## Slot Interval
+
+The `slotInterval` option defines the invisible snapping grid used when dragging and resizing events.
+
+Events are never moved completely freely. Instead, they snap to predefined time intervals, making it easier for users to align events to specific times such as every **15 minutes**, **30 minutes**, or **1 hour**.
+
+This behavior cannot be disabled, as the snapping grid is a core part of the interaction model. However, you can reduce the interval down to **1 minute** if you want the movement to feel almost unrestricted while still benefiting from precise alignment.
+
+```tsx
+<MhCalendar
+  config={{
+    slotInterval: { hours: 1, minutes: 0 },
+  }}
+/>
+```
+
+<details>
+<summary>Try it!</summary>
+
+```jsx live noInline
+const CONFIG = { slotInterval: { hours: 1, minutes: 0 } };
+
+function Demo() {
+  return (
+    <div>
+      <MhCalendar config={CONFIG} />
+    </div>
+  );
+}
+
+render(<Demo />);
+```
+
+</details>
+
+## Hour label format
+
+`hoursDisplayFormat` is a [Day.js format string](https://day.js.org/docs/en/display/format) applied
+to each label in the time gutter. Default is `'h A'` (e.g. `8 AM`), use `'HH:mm'` for 24-hour
+labels, or anything else Day.js accepts.
+
+```tsx
+const config = { hoursDisplayFormat: 'HH:mm' };
+```
+
+<details>
+<summary>Try it: combine slot granularity and label format</summary>
+
+```jsx live noInline
+const CONFIG = {
+  ...DEFAULT_CONFIG,
+  slotInterval: { hours: 0, minutes: 15 },
+  hoursSlotInterval: { hours: 1, minutes: 0 },
+  hoursDisplayFormat: 'HH:mm',
+};
+
+function Demo() {
+  return (
+    <div>
+      <Calendar config={CONFIG} />
+    </div>
+  );
+}
+
+render(<Demo />);
+```
+
+</details>
+
+## Rendering a very tall range
+
+Rendering the full 24 hours (or any tall range) at once means keeping that many time slots
+mounted. For a tall visible range, pair `showTimeFrom`/`showTimeTo` with a fixed viewport and
+virtual scrolling instead of letting the whole range render un-clipped:
+
+```tsx
+const config = {
+  viewType: 'WEEK',
+  showTimeFrom: 0,
+  showTimeTo: 24,
+  fixedHeight: '580px',
+  virtualScrollHeight: '1800px',
+};
+```
+
+- `fixedHeight`: the visible viewport height (what actually renders on screen, the rest scrolls).
+- `virtualScrollHeight`: the total scrollable height representing the full time range.
+- Both must be set together. Setting only one throws a validation error immediately, see
+  [API Reference → Types](/docs/api-reference/types#validation-errors).

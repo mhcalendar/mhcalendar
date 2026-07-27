@@ -1,0 +1,72 @@
+---
+title: Components
+sidebar_position: 1
+---
+
+# Components
+
+`@mhcalendar/react` exports exactly three React components, generated 1:1 from the Stencil
+package's public Web Components. None of them emit custom DOM events (see
+[Events](/docs/components/calendar/events)) — interaction surfaces through `config` callbacks.
+
+## `MhCalendar`
+
+Wraps `<mh-calendar>`, the main component.
+
+| Prop | Type | Description |
+|---|---|---|
+| `config` | `IMHCalendarFullOptions` | See [Props](/docs/components/calendar/props). |
+| `events` | `IMHCalendarEvent[]` | See [Events](/docs/components/calendar/events). |
+| `reactComponent` | `any` | Undocumented; don't set it. |
+
+**Method:** `getApi(): Promise<UserApi>` — call on the element instance (e.g. via a `ref`). See
+[`UserApi`](/docs/api-reference/types#userapi) and
+[Basic usage](/docs/components/calendar/basic-usage#reading-state-back-out-with-getapi).
+
+```tsx
+import { MhCalendar } from '@mhcalendar/react';
+
+<MhCalendar config={config} events={events} />;
+```
+
+## `MhViewSwitcher`
+
+Wraps `<mh-view-switcher>` — the view-switch buttons (or a `<select>` on narrow containers). Takes
+no props; it reads the active view and `avaliableViews` from the same internal store as its
+parent `<mh-calendar>`. Only useful if you're building a fully custom navigation layout and want
+just the view switcher in isolation.
+
+```tsx
+import { MhViewSwitcher } from '@mhcalendar/react';
+
+<MhViewSwitcher />;
+```
+
+## `MhCalendarMoreEventsIndicator`
+
+Wraps `<mh-calendar-more-events-indicator>` — renders the `"+N more"` overflow indicator used in
+Month/Shiftplan/Agenda views.
+
+| Prop | Type | Required |
+|---|---|---|
+| `hiddenCount` | `number` | Yes |
+
+```tsx
+import { MhCalendarMoreEventsIndicator } from '@mhcalendar/react';
+
+<MhCalendarMoreEventsIndicator hiddenCount={3} />;
+```
+
+## Vanilla JS custom elements
+
+The same three components are available as plain custom elements from `@mhcalendar/calendar`
+after calling `defineCustomElements()` — see [Quick Start](/docs/overview/quick-start#vanilla-js--web-component):
+
+- `<mh-calendar config={...} events={...}>` (set both as DOM properties, not attributes)
+- `<mh-view-switcher>`
+- `<mh-calendar-more-events-indicator hidden-count={...}>`
+
+Every other tag shipped by `@mhcalendar/calendar` (`mh-calendar-day`, `mh-calendar-month`,
+`mh-calendar-multi-view`, `mh-calendar-navigation`, `mh-calendar-modal`, `mh-calendar-event`, etc.)
+is an internal implementation detail rendered by `<mh-calendar>` itself — they're not meant to be
+used standalone and aren't covered by semver guarantees.

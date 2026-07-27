@@ -1,0 +1,81 @@
+---
+title: Props
+sidebar_position: 2
+---
+
+# Props
+
+`config` is a single object made of three merged layers — base behavior, multi-view/grid options,
+and week/shiftplan-specific options. In practice you just pass one flat object; the layers below
+exist to help you find the right field, not because you need to nest anything.
+
+### Typo heads-up
+
+:::info
+The real, current field name for restricting available views is **`avaliableViews`** (missing
+"il") — this isn't a typo in these docs, it's the actual API. Same with `avaliableViews`'s sibling
+fields below; every name here is copied from the shipped TypeScript types.
+:::
+
+## Base options
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `viewType` | `'DAY' \| 'WEEK' \| 'MONTH' \| 'AGENDA' \| 'SHIFTPLAN'` | `'AGENDA'` | The active view. |
+| `avaliableViews` | `string[]` | all views | Restricts which views the built-in view switcher offers. |
+| `startDate` | `Date \| string` | today | Initial anchor date shown on mount. |
+| `showDateSwitcher` | `boolean` | `true` | Shows the prev/next/today controls. |
+| `showViewTypeSwitcher` | `boolean` | `true` | Shows the view-switch buttons/select. |
+| `showCalendarNavigation` | `boolean` | `true` | Toggles the whole top navigation bar (date switcher + title + view switcher). |
+| `showViewHeader` | `boolean` | `true` | Shows the per-view header row (day names, dates). |
+| `allowEventDragging` | `boolean` | `true` | Enables drag-to-move for events. |
+| `createEventOnClick` | `boolean` | `false` | Clicking an empty slot creates a new event (fires `onEventCreated`). |
+| `fixedHeight` | `string` | — | Enables virtual scrolling; must be set together with `virtualScrollHeight`. See [Display hours](/docs/guides/display-hours#rendering-a-very-tall-range). |
+| `virtualScrollHeight` | `string` | — | Total scrollable height when `fixedHeight` is set. |
+| `theme` | `'dark' \| 'light' \| string` | `'dark'` | Base theme preset; anything other than `dark`/`light` falls back to the dark theme. |
+| `style` | `{ properties?, [className]: CSSinJS }` | `{}` | CSS custom properties (`properties`) plus per-class inline overrides keyed by class name, as siblings on the same object. See [Styling](/docs/guides/styling). |
+| `eventContent` | `(event) => any` | — | Custom render for full-size events. See [Customization](/docs/components/calendar/customization). |
+| `eventSmallContent` | `(event) => any` | — | Custom render for compact events (Month/Shiftplan/Agenda). |
+| `onEventClick` / `onRightEventClick` | `(event: IMHCalendarEvent) => void` | — | Left/right click on an event. |
+| `onDayClick` / `onRightDayClick` | `(day: IMHCalendarDayClickPayload) => void` | — | Left/right click on an empty day/slot. |
+| `onEventCreated` | `(event: IMHCalendarEvent) => void` | — | Fires after a new event is created via `createEventOnClick`. |
+| `onEventUpdated` | `(event: IMHCalendarEvent) => void` | — | Fires after a drag or resize completes. |
+
+## Multi-view (grid) options
+
+Apply to Day/Week/Month/Shiftplan's time-grid rendering.
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `showTimeFrom` | `number` | `8` | First visible hour (0–24). |
+| `showTimeTo` | `number` | `17` | Last visible hour; must be greater than `showTimeFrom`. |
+| `slotInterval` | `{ hours, minutes, visibleEvery? }` | `{ hours: 1, minutes: 0 }` | Grid row granularity. `minutes` must be divisible by 5. |
+| `hoursSlotInterval` | `{ hours, minutes }` | `{ hours: 1, minutes: 0 }` | Granularity of the hour-label column. |
+| `hoursDisplayFormat` | `string` | `'h A'` | Day.js format string for hour labels. |
+| `showAllDayTasks` | `boolean` | `true` | Shows the all-day event row. |
+| `allDayEventsHeight` | `number` | `100` | Pixel height of the all-day row. |
+| `makeAllDaysSticky` | `boolean` | `false` | Sticks the day header row on scroll. |
+| `minEventDuration` | `number` (minutes) | `15` | Minimum duration enforced when resizing. |
+| `allowEventResize` | `boolean` | `true` | Enables drag-to-resize on event edges. |
+| `hiddenDays` | `number[]` | `[]` | Days to hide, `0`=Sunday … `6`=Saturday. |
+| `businessHours` | `{ dayOfWeek?, date?, start, end }[]` | `[]` | One or more availability windows; matched by specific `date` > `dayOfWeek` > a default entry with neither. |
+| `blockBusinessHours` | `boolean` | `false` | Prevents dropping/resizing events outside business hours. |
+| `timezones` | `string[]` | `[]` | Up to 3 IANA timezone names; first is the main timezone. See [Timezones](/docs/guides/timezones). |
+| `timezoneLabel` | `string` | auto | Overrides the auto-generated main timezone label (e.g. `"CET (GMT+1)"`). |
+| `eventDisplayMode` | `'side-by-side' \| 'overlapping'` | `'side-by-side'` | How concurrent events lay out within a day column. |
+| `showTimeIndicator` | `boolean` | `true` | Shows the current-time red line. |
+
+## Week / Shiftplan options
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `resources` | `{ id: string; title: string }[]` | `[]` | Rows for the Shiftplan view; matched to events via `event.resourceId`. |
+| `shiftplanDays` | `number` | `7` | Number of days shown in the Shiftplan view. |
+| `customWeekView` | `boolean` | `false` | **Not implemented yet** — reserved for a future release. |
+| `showWeekends` | `boolean` | `true` | **Not implemented yet** — reserved for a future release. |
+
+## Validation
+
+Every `config` change is validated synchronously; invalid combinations throw immediately rather
+than failing silently at render time. See
+[API Reference → Types](/docs/api-reference/types#validation-errors) for the full list of checks.

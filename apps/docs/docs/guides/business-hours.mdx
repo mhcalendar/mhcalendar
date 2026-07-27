@@ -1,0 +1,94 @@
+---
+title: Business hours
+sidebar_position: 2
+---
+
+import CalendarDemo from '@site/src/components/CalendarDemo';
+
+# Business hours
+
+`businessHours` marks part of the [visible range](/docs/guides/display-hours) as "open" — hours
+outside it are grayed out in Day and Week views, and can optionally block drag-and-drop.
+
+## Basic usage
+
+```tsx
+const config = {
+  viewType: 'WEEK',
+  showTimeFrom: 6,
+  showTimeTo: 20,
+  businessHours: [
+    { dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }, // Monday–Friday
+    { dayOfWeek: [0, 6], start: 10, end: 14 }, // Weekend, shorter hours
+  ],
+};
+```
+
+<CalendarDemo
+  config={{
+    viewType: 'WEEK',
+    showTimeFrom: 6,
+    showTimeTo: 20,
+    showAllDayTasks: false,
+    businessHours: [
+      { dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 },
+      { dayOfWeek: [0, 6], start: 10, end: 14 },
+    ],
+  }}
+/>
+
+Each entry in the array is a `BusinessHoursConfig`:
+
+| Field | Type | Description |
+|---|---|---|
+| `dayOfWeek` | `number \| number[]` | `0` (Sunday) – `6` (Saturday). Omit to match any day not already matched by a more specific entry. |
+| `date` | `Date \| string` | A specific calendar date. Takes priority over `dayOfWeek` for that day. |
+| `start` | `number` | Opening hour (0–23). |
+| `end` | `number` | Closing hour (0–24). |
+
+## How a day's hours are resolved
+
+For each rendered day, the calendar walks the array once and takes the **first** match, in this
+priority order:
+
+1. An entry with a matching `date`.
+2. An entry with a matching `dayOfWeek`.
+3. An entry with neither `date` nor `dayOfWeek` — a default/fallback.
+
+```tsx
+const config = {
+  businessHours: [
+    { date: '2026-12-25', start: 0, end: 0 }, // closed for Christmas
+    { dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }, // Mon–Fri
+    { dayOfWeek: [0, 6], start: 10, end: 14 }, // weekend
+  ],
+};
+```
+
+If `businessHours` is left empty (the default), every hour is treated as open and no overlay is
+drawn.
+
+## Blocking drops outside business hours
+
+By default, dragging or resizing an event into non-business hours is allowed — the gray overlay is
+purely visual. Set `blockBusinessHours: true` to actually prevent it (all-day events are never
+blocked):
+
+```tsx
+const config = {
+  businessHours: [{ dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }],
+  blockBusinessHours: true,
+};
+```
+
+## Styling the overlay
+
+The overlay tint on non-business hours is controlled by the `nonBusinessHoursOverlayColor` CSS
+custom property (default `rgba(0, 0, 0, 0.03)`) — see
+[Styling → CSS custom properties](/docs/guides/styling#css-custom-properties-styleproperties).
+
+```tsx
+const config = {
+  style: { properties: { nonBusinessHoursOverlayColor: 'rgba(220, 38, 38, 0.06)' } },
+};
+```

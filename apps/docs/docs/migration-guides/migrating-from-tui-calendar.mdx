@@ -1,0 +1,79 @@
+---
+title: Migrating from TUI Calendar
+sidebar_position: 2
+---
+
+# Migrating from TUI Calendar
+
+TOAST UI Calendar (`@toast-ui/calendar` / `@toast-ui/react-calendar`) is instance/ref-driven — you
+call methods like `getInstance().createEvents()` and listen with `.on('clickEvent', ...)` — where
+mhalendar is a plain controlled config-and-events object. The biggest adjustment isn't option names,
+it's moving from imperative instance calls to passing `config`/`events` as props and reading updates
+back through callbacks.
+
+## Concept mapping
+
+| TUI Calendar | mhalendar | Notes |
+|---|---|---|
+| `view: 'month' \| 'week' \| 'day'` | `viewType: 'MONTH' \| 'WEEK' \| 'DAY'` | mhalendar adds `AGENDA` and `SHIFTPLAN`; TUI has no direct equivalent of either. |
+| `week.hourStart` / `week.hourEnd` | `showTimeFrom` / `showTimeTo` | See [Display hours](/docs/guides/display-hours). |
+| `calendars: [{ id, name, color, bgColor }]` | *(no direct equivalent)* | TUI's `calendars` are named categories events attach to via `calendarId`. mhalendar has no calendar-grouping concept — use `resources`/`resourceId` in `SHIFTPLAN` view if what you actually need is per-row grouping, or per-event `color` for categorical coloring. |
+| `events: [{ id, calendarId, title, start, end, isAllday }]` | `events: [{ id, title, startDate, endDate, allDay }]` | `start`/`end` → `startDate`/`endDate` (plain `Date` objects), `isAllday` → `allDay`. `calendarId` has no equivalent — see above. |
+| `calendar.createEvents([...])` (imperative) | pass a new array via the `events` prop | mhalendar is fully controlled: update your own state and re-render, rather than calling a method on an instance. |
+| `onClickEvent` | `onEventClick` | |
+| `onBeforeUpdateEvent` (drag/resize, cancelable) | `onEventUpdated` (already applied) | See gotcha below — TUI's `before*` hooks let you veto a change; mhalendar's don't. |
+| `onBeforeCreateEvent` (opens a creation popup) | `createEventOnClick: true` + `onEventCreated` | mhalendar creates a default-duration event directly on click; it has no built-in creation popup. |
+| *(no built-in "closed hours" concept)* | `businessHours` + `blockBusinessHours` | TUI only has one visible range (`hourStart`/`hourEnd`); mhalendar additionally lets you gray out and optionally block a sub-range of it. See [Business hours](/docs/guides/business-hours). |
+
+## Before / after
+
+```tsx
+// TUI Calendar
+<Calendar
+  ref={calendarRef}
+  height="800px"
+  view="week"
+  week={{ hourStart: 8, hourEnd: 18 }}
+  calendars={[{ id: 'cal1', name: 'Team', color: '#fff', backgroundColor: '#03bd9e' }]}
+  events={events}
+  onClickEvent={(e) => console.log(e.event.id)}
+  onBeforeUpdateEvent={(e) => calendarRef.current.getInstance().updateEvent(e.event.id, e.event.calendarId, e.changes)}
+/>
+```
+
+```tsx
+// mhalendar
+const [events, setEvents] = useState(initialEvents);
+
+const config = {
+  viewType: 'WEEK',
+  showTimeFrom: 8,
+  showTimeTo: 18,
+  onEventClick: (event) => console.log(event.id),
+  onEventUpdated: (updated) =>
+    setEvents((prev) => prev.map((e) => (e.id === updated.id ? updated : e))),
+};
+
+<MhCalendar config={config} events={events} />;
+```
+
+## Gotchas
+
+- **Controlled, not imperative.** There's no `getInstance().createEvents()` /
+  `.updateEvent()` / `.deleteEvent()` API to port — every change goes through your own state plus
+  the `events` prop, driven by `onEventCreated`/`onEventUpdated`. If your TUI integration leans
+  heavily on calling instance methods from outside the calendar (e.g. from a sidebar form), that
+  logic needs to move to "update state, let the prop re-render" instead.
+- **No cancel-before-apply.** TUI's `onBeforeUpdateEvent`/`onBeforeCreateEvent` fire *before* the
+  change is committed, letting you reject it. mhalendar's `onEventUpdated`/`onEventCreated` fire
+  *after* the interaction already computed the result — don't write it into your state if you want
+  to reject it, and re-render with the previous data.
+- **No `calendarId` grouping.** If you used multiple TUI `calendars` purely for color-coding, use
+  per-event `color` in mhalendar instead. If you used them for row-based grouping (one calendar per
+  team/person), that's closer to mhalendar's `SHIFTPLAN` view with `resources`/`resourceId`.
+- **Field renames.** `start`/`end` → `startDate`/`endDate`, `isAllday` → `allDay` — mechanical but
+  worth a bulk find-and-replace wherever you construct event objects.
+- **Styling.** TUI ships CSS variables and template functions for custom rendering; mhalendar has no
+  Shadow DOM and styles through `config.style` (CSS custom properties + per-class overrides) plus
+  `eventContent`/`eventSmallContent` for custom event rendering. See
+  [Styling](/docs/guides/styling) and [Customization](/docs/components/calendar/customization).

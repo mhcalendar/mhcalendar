@@ -1,0 +1,154 @@
+---
+title: Types
+sidebar_position: 2
+---
+
+# Types
+
+All of these are exported from `@mhcalendar/calendar` and re-exported from `@mhcalendar/react`
+(`IMHCalendarEvent`, `IMHCalendarViewType`, `IMHCalendarFullOptions`, `IMHCalendarDayClickPayload`,
+`UserApi`).
+
+## `IMHCalendarEvent`
+
+```ts
+interface IMHCalendarEvent {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  title?: string;
+  allDay?: boolean;
+  description?: string;
+  isHidden?: boolean;
+  color?: string;
+  resourceId?: string;
+  draggingToggle?: boolean;
+  [key: string]: unknown;
+}
+```
+
+See [Events](/docs/components/calendar/events) for how this is used.
+
+## `IMHCalendarFullOptions`
+
+The type of the `config` prop — an alias for `Partial<ICalendarWeekConfig>`, itself built from
+three merged interfaces:
+
+```
+ICalendarBaseConfig
+  → ICalendarMultiViewConfig extends ICalendarBaseConfig
+      → ICalendarWeekConfig extends ICalendarMultiViewConfig
+```
+
+There's no separate merged type beyond this — `IMHCalendarFullOptions` and
+`IMHCalendarWeekConfig` are literally the same alias. Every field across all three interfaces is
+documented as a flat table in [Props](/docs/components/calendar/props).
+
+## `IMHCalendarViewType`
+
+```ts
+enum IMHCalendarViewType {
+  DAY = 'DAY',
+  WEEK = 'WEEK',
+  MONTH = 'MONTH',
+  AGENDA = 'AGENDA',
+  SHIFTPLAN = 'SHIFTPLAN',
+}
+```
+
+## `EventDisplayMode`
+
+```ts
+enum EventDisplayMode {
+  SideBySide = 'side-by-side',
+  Overlapping = 'overlapping',
+}
+```
+
+Controls `config.eventDisplayMode` — how concurrent events lay out within a day column.
+
+## `IMHCalendarDayClickPayload`
+
+```ts
+type IMHCalendarDayClickPayload = {
+  date: Date;
+  resourceId?: string; // present for Shiftplan clicks
+};
+```
+
+Passed to `config.onDayClick` / `config.onRightDayClick`.
+
+## `IMHCalendarDateRange`
+
+```ts
+type IMHCalendarDateRange = {
+  fromDate?: Date;
+  toDate?: Date;
+};
+```
+
+The shape of `UserApi.calendarDateRange` (see below). A non-optional variant,
+`ICalendarDateRange`, is used internally and isn't part of the public surface.
+
+## `UserApi`
+
+The object returned by `getApi()` — a narrow proxy over the internal store. Only these members
+are reachable; nothing else on the internal store is exposed, and it's read-only where noted.
+
+| Member                                                  | Type                   | Notes                                                               |
+| ------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------- |
+| `calendarDateRange`                                     | `IMHCalendarDateRange` | Read-only. Setting it directly logs an error instead of applying.   |
+| `viewType`                                              | `IMHCalendarViewType`  | Read-only, same caveat as above.                                    |
+| `daysInRange`                                           | `number`               | **A value, not a function** — don't call it as `api.daysInRange()`. |
+| `getEventById(id: string)`                              | `IMHCalendarEvent[]`   |                                                                     |
+| `getEvents()`                                           | `IMHCalendarEvent[]`   |                                                                     |
+| `nextPeriod()`                                          | `void`                 |                                                                     |
+| `previousPeriod()`                                      | `void`                 |                                                                     |
+| `setToToday()`                                          | `void`                 |                                                                     |
+| `changeView(viewType: IMHCalendarViewType)`             | `void`                 |                                                                     |
+| `addEvent(event: IMHCalendarEvent)`                     | `void`                 |                                                                     |
+| `updateEvent(eventId: string, event: IMHCalendarEvent)` | `void`                 |                                                                     |
+| `removeEvent(eventId: string)`                          | `void`                 |                                                                     |
+
+```tsx
+const api = await calendarRef.current.getApi();
+api.nextPeriod();
+```
+
+## CSS classes
+
+The known class names accepted as keys under `config.style` (see
+[Styling](/docs/guides/styling#per-class-overrides)):
+
+```
+mhCalendar
+mhCalendarEvent, mhCalendarEventSmall, mhCalendarEventFull
+mhCalendarEventFull__content, mhCalendarEventFull__userEventContentHolder
+mhCalendarEventFull__content__title, mhCalendarEventFull__content__date
+mhCalendarHeader, mhCalendarHeader__date, mhCalendarHeader__today
+mhCalendarMonth
+mhCalendarMultiView, mhCalendarMultiView__holder
+mhCalendarNavigation__container, mhCalendarNavigation__viewSwitcher
+mhCalendarDay, mhCalendarDay_allDaysEventHolder, mhCalendarDay_dayDate
+mhCalendarDay__currentTime, mhCalendarDay__eventHolder, mhCalendarDay__eventsLeftIndicator
+mhCalendarDay__nonBusinessHours
+mhCalendarWeek__borders, mhCalendarWeek__border
+mhCalendarTimeSlots
+mhCalendarModal__content
+mhCalendarResizeEventHandler
+```
+
+Each key accepts a plain object of CSS properties (camelCase), applied inline.
+
+## Validation errors
+
+Every `config` change is validated synchronously; invalid input throws immediately.
+
+| Trigger                                                                    | Message                                                                                                          |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Only one of `fixedHeight`/`virtualScrollHeight` set                        | Both `fixedHeight` and `virtualScrollHeight` must be set for virtual scrolling to work.                          |
+| `showTimeFrom`/`showTimeTo` not both 0–24, or `showTimeTo <= showTimeFrom` | `showTimeFrom` and `showTimeTo` must be numbers between 0 and 24, with `showTimeTo` greater than `showTimeFrom`. |
+| `slotInterval`/`hoursSlotInterval` missing `hours`/`minutes`               | Need to have correct shape.                                                                                      |
+| `slotInterval.minutes`/`hoursSlotInterval.minutes` not divisible by 5      | Must be divisible by 5 (e.g. 0, 5, 10, 15, 30).                                                                  |
+| Invalid IANA string in `timezones`                                         | Timezones were given with wrong format. Use e.g. `"Europe/Warsaw"`.                                              |
+| More than 3 entries in `timezones` (warning only, doesn't throw)           | Truncated to the first 3, logged via `console.warn`.                                                             |

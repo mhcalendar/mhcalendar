@@ -1,0 +1,105 @@
+---
+title: Examples
+sidebar_position: 5
+---
+
+import CalendarDemo from '@site/src/components/CalendarDemo';
+
+# Examples
+
+Complete, copy-pasteable recipes. All of them assume:
+
+```tsx
+import { useState } from 'react';
+import { MhCalendar, type IMHCalendarEvent } from '@mhcalendar/react';
+```
+
+## Read-only month view
+
+The simplest possible setup — no drag, no resize, no creation.
+
+<CalendarDemo config={{ viewType: 'MONTH', allowEventDragging: false, allowEventResize: false }} />
+
+```tsx
+const config = {
+  viewType: 'MONTH',
+  allowEventDragging: false,
+  allowEventResize: false,
+  showCalendarNavigation: true,
+};
+
+<MhCalendar config={config} events={events} />;
+```
+
+## Interactive week planner (drag, resize, create)
+
+Persist every interaction back into React state — see
+[Events](/docs/components/calendar/events#interaction-callbacks) for why the callbacks alone
+aren't enough.
+
+```tsx
+function WeekPlanner() {
+  const [events, setEvents] = useState<IMHCalendarEvent[]>(INITIAL_EVENTS);
+
+  const config = {
+    viewType: 'WEEK',
+    showTimeFrom: 8,
+    showTimeTo: 18,
+    createEventOnClick: true,
+    allowEventDragging: true,
+    allowEventResize: true,
+    minEventDuration: 30,
+    onEventCreated: (event) => setEvents((prev) => [...prev, event]),
+    onEventUpdated: (updated) =>
+      setEvents((prev) => prev.map((e) => (e.id === updated.id ? updated : e))),
+  };
+
+  return <MhCalendar config={config} events={events} />;
+}
+```
+
+## Shiftplan (resource scheduling)
+
+Rows are resources, matched to events by `resourceId`.
+
+```tsx
+const config = {
+  viewType: 'SHIFTPLAN',
+  resources: [
+    { id: 'alice', title: 'Alice' },
+    { id: 'bob', title: 'Bob' },
+    { id: 'carol', title: 'Carol' },
+  ],
+  shiftplanDays: 7,
+};
+
+const events: IMHCalendarEvent[] = [
+  { id: 's1', resourceId: 'alice', title: 'Morning shift', startDate: /* ... */, endDate: /* ... */ },
+  { id: 's2', resourceId: 'bob', title: 'Afternoon shift', startDate: /* ... */, endDate: /* ... */ },
+];
+
+<MhCalendar config={config} events={events} />;
+```
+
+## Business hours with blocked drops
+
+```tsx
+const config = {
+  viewType: 'WEEK',
+  businessHours: [
+    { dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }, // Mon–Fri
+    { dayOfWeek: 6, start: 10, end: 14 }, // Saturday, shorter hours
+  ],
+  blockBusinessHours: true,
+};
+```
+
+`dayOfWeek` follows JS convention: `0` = Sunday … `6` = Saturday. A `date`-matched entry takes
+priority over a `dayOfWeek`-matched one for that specific day — see
+[Business hours](/docs/guides/business-hours) for the full priority rules.
+
+## More
+
+- [Display hours](/docs/guides/display-hours) — controlling the visible time range and rendering a very tall one.
+- [Timezones](/docs/guides/timezones) — a live multi-timezone example.
+- [Styling](/docs/guides/styling) and [Theming](/docs/guides/theming) — full visual customization.

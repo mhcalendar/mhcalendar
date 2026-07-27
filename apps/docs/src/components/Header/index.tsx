@@ -19,7 +19,7 @@ export function Header() {
           <div className="flex h-8 w-8 items-center justify-center border-2 border-foreground bg-foreground">
             <span className="font-mono text-sm font-bold text-background">{'MH'}</span>
           </div>
-          <span className="text-xl font-bold tracking-tight text-foreground">MH Calendar</span>
+          <span className="text-xl font-bold tracking-tight text-foreground">mhcalendar</span>
         </a>
 
         {/* Desktop nav */}

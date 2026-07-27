@@ -1,0 +1,41 @@
+---
+title: Introduction
+sidebar_position: 1
+---
+
+# Introduction
+
+mhalendar is a modern calendar component built for web applications that require flexibility without unnecessary complexity.
+
+Our goal is simple: provide one of the most customizable calendar components available while keeping the default setup intuitive. You should be able to install it, render it, and have a modern production-ready calendar in minutes.
+
+## Philosophy
+
+mhalendar was created after working with existing libraries that often forced developers to choose between flexibility and simplicity.
+
+Modern applications require components that integrate seamlessly with an existing design system instead of dictating one. Customization has been a core design principle since the beginning. Every feature is built with extensibility in mind, allowing you to adapt the calendar to your product rather than adapting your product to the calendar.
+
+Another important goal was framework independence.
+
+Instead of maintaining separate implementations for every framework, mhalendar is built with [Stencil](https://stenciljs.com/), which allows us to ship standards-based Web Components. This enables the same core component to work across frameworks while avoiding the complexity of maintaining multiple implementations.
+
+For date manipulation we use **Day.js** a lightweight, modern library with an excellent developer experience. Since Stencil is only a development dependency, **Day.js is the only runtime dependency** required by the calendar.
+
+## Architecture
+
+mhalendar is developed as a monorepo containing the core component, framework wrappers, documentation, and example applications.
+
+At the heart of the project is `@mhcalendar/calendar`, a framework-agnostic Web Component that can be used in any modern web application.
+
+To improve the developer experience, framework-specific wrappers are provided. At the moment, React is the first officially supported wrapper. It doesn't introduce any additional functionality. Wrapper makes integrating the core component into React applications more convenient.
+
+As the project evolves, additional framework wrappers may be added while keeping the same underlying implementation.
+
+- **[`@mhcalendar/calendar`](https://www.npmjs.com/package/@mhcalendar/calendar)** - the Web Component.
+- **[`@mhcalendar/react`](https://www.npmjs.com/package/@mhcalendar/react)** - the official React wrapper.
+
+## Project Status
+
+mhalendar is currently in **pre-1.0** (`0.2.x`).
+
+While the component is already usable, the public API may still evolve before reaching version `1.0`. We recommend pinning an exact package version and reviewing the [Changelog](/docs/changelog) before upgrading.

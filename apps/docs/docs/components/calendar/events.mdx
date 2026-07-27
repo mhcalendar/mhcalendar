@@ -1,0 +1,89 @@
+---
+title: Events
+sidebar_position: 3
+---
+
+# Events
+
+Two different things share the name "event" here — worth separating up front:
+
+1. **Calendar events** — the `IMHCalendarEvent` objects you pass via the `events` prop (a meeting,
+   a shift, an appointment).
+2. **Interaction callbacks** — how the calendar tells you something happened (a click, a drag, a
+   resize).
+
+There is no `addEventListener('mh-...', ...)` API and no Stencil `@Event()`/`CustomEvent` anywhere
+in this component. Every interaction is surfaced through plain callback functions on `config`.
+
+## The event shape — `IMHCalendarEvent`
+
+```ts
+interface IMHCalendarEvent {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  title?: string;
+  allDay?: boolean;
+  description?: string;
+  isHidden?: boolean;
+  color?: string;
+  resourceId?: string; // matches a Shiftplan resource's `id`
+  draggingToggle?: boolean;
+  [key: string]: unknown; // extra fields are allowed and passed through
+}
+```
+
+A multi-day event is duplicated across each date it spans internally for rendering — you don't
+need to split it yourself; pass one object with `startDate`/`endDate` and let the calendar handle
+the rest.
+
+## Interaction callbacks
+
+All of these live on `config`, next to your other options:
+
+| Callback | Fires when |
+|---|---|
+| `onEventClick(event)` | Left-click on an event. |
+| `onRightEventClick(event)` | Right-click (context menu) on an event. |
+| `onDayClick(day)` | Left-click on an empty day/slot. `day` is `{ date: Date; resourceId?: string }`. |
+| `onRightDayClick(day)` | Right-click on an empty day/slot. |
+| `onEventCreated(event)` | A new event was created by clicking an empty slot (requires `createEventOnClick: true`). |
+| `onEventUpdated(event)` | An existing event finished being dragged or resized. |
+
+**Important:** these callbacks tell you what happened — they don't mutate your data. The calendar
+never changes the `events` array you passed in. To actually persist a create/drag/resize, update
+your own state inside the callback:
+
+```tsx
+const [events, setEvents] = useState<IMHCalendarEvent[]>(INITIAL_EVENTS);
+
+const config = {
+  createEventOnClick: true,
+  allowEventDragging: true,
+  allowEventResize: true,
+  onEventCreated: (event) => setEvents((prev) => [...prev, event]),
+  onEventUpdated: (updated) =>
+    setEvents((prev) => prev.map((e) => (e.id === updated.id ? updated : e))),
+};
+
+<MhCalendar config={config} events={events} />;
+```
+
+If you skip this, drag/resize/create will visually animate but snap back — the calendar re-renders
+from whatever `events` array you continue to pass it.
+
+## Constraining interactions
+
+- `allowEventDragging` / `allowEventResize` (default `true`) — turn off drag or resize globally.
+- `minEventDuration` (minutes, default `15`) — the shortest an event can be resized to.
+- `blockBusinessHours` (default `false`) — prevents dropping or resizing an event outside the
+  configured `businessHours`.
+- `createEventOnClick` (default `false`) — must be explicitly enabled; without it, `onDayClick`
+  still fires but no event is created for you.
+
+## Imperative alternative: `getApi()`
+
+If you'd rather mutate events imperatively instead of reacting to callbacks, `getApi()` exposes
+`addEvent`, `updateEvent`, and `removeEvent` directly — see
+[Basic usage](/docs/components/calendar/basic-usage#reading-state-back-out-with-getapi) and
+[API Reference → Types](/docs/api-reference/types#userapi).

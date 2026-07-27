@@ -13,6 +13,8 @@
   --text-muted: #71717A;
   --accent: oklch(0.55 0.18 270);
   --accent-fg: #FFFFFF;
+  /* @mhcalendar/calendar's own default brand color (DEFAULT_THEME_COLOR), same in light/dark. */
+  --mh-brand: #8a79ff;
   --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
   --radius: 10px;
@@ -35,8 +37,18 @@
   --accent-fg: #0A0A0B;
 }
 
-.navbar,
-.footer {
+/* Docusaurus reuses `.alert--info` classes for every <details> block (our
+   collapsible live demos included) — scope to the `details` tag so real
+   :::info admonitions elsewhere keep Infima's default blue. */
+details.alert--info {
+  --ifm-alert-background-color: color-mix(in oklch, var(--mh-brand) 10%, var(--bg-elev));
+  --ifm-alert-background-color-highlight: color-mix(in oklch, var(--mh-brand) 20%, var(--bg-elev));
+  --ifm-alert-foreground-color: var(--text);
+  --ifm-alert-border-color: var(--mh-brand);
+}
+
+body:has(.mh-landing) .navbar,
+body:has(.mh-landing) .footer {
   display: none;
 }
 

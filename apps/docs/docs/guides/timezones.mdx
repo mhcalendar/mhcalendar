@@ -1,0 +1,80 @@
+---
+title: Timezones
+sidebar_position: 6
+---
+
+import CalendarDemo from '@site/src/components/CalendarDemo';
+
+# Timezones
+
+Multi-timezone display is one of mhalendar's flagship features — show up to three IANA
+timezones side by side, backed by Day.js's `timezone`/`utc` plugins.
+
+## Basic usage
+
+```tsx
+const config = {
+  viewType: 'WEEK',
+  timezones: ['America/Los_Angeles', 'America/New_York', 'Europe/London'],
+};
+```
+
+- `timezones` accepts IANA timezone names (e.g. `'Europe/Warsaw'`, not `'CET'` or a UTC offset).
+- The **first** entry in the array is treated as the main timezone — event positions in the grid
+  are calculated against it.
+- Any additional entries (up to 3 total) are shown for reference alongside the main column; they
+  don't change how events are stored or calculated, only how times are displayed.
+- If `timezones` is omitted entirely, the calendar falls back to the browser's own timezone
+  (`Intl.DateTimeFormat().resolvedOptions().timeZone`).
+
+<CalendarDemo
+  config={{
+    viewType: 'WEEK',
+    showTimeFrom: 7,
+    showTimeTo: 20,
+    showAllDayTasks: false,
+    timezones: ['America/Los_Angeles', 'America/New_York', 'Europe/London'],
+  }}
+  events={[
+    {
+      id: 't1',
+      title: 'LA Kickoff',
+      startDate: new Date(new Date().setHours(9, 0, 0, 0)),
+      endDate: new Date(new Date().setHours(10, 0, 0, 0)),
+    },
+    {
+      id: 't2',
+      title: 'NY All-hands',
+      startDate: new Date(new Date().setHours(12, 0, 0, 0)),
+      endDate: new Date(new Date().setHours(14, 0, 0, 0)),
+    },
+  ]}
+/>
+
+## Overriding the main timezone label
+
+By default, the main timezone's label is derived automatically (e.g. `"CET (GMT+1)"`). Override it
+with `timezoneLabel` if you'd rather show something else (a city name, an internal team name,
+etc.):
+
+```tsx
+const config = {
+  timezones: ['Europe/Warsaw', 'America/New_York'],
+  timezoneLabel: 'HQ',
+};
+```
+
+## Limits and validation
+
+- **Maximum 3 timezones.** Passing more logs a console warning and silently keeps only the first
+  three — it won't throw.
+- **Invalid timezone strings throw.** `dayjs().tz(tz)` validates every entry in `timezones`; a
+  typo like `'Europ/Warsaw'` throws immediately when `config` is set, rather than failing silently
+  at render time. See [API Reference → Types](/docs/api-reference/types#validation-errors).
+
+## Events themselves are timezone-agnostic
+
+`IMHCalendarEvent.startDate`/`endDate` are plain JS `Date` objects — timezone conversion for
+_display_ happens inside the calendar based on `config.timezones`. You don't need to pre-convert
+event times yourself; store them however your backend gives them to you (typically UTC) and let
+`timezones` handle the rest.

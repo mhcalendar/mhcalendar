@@ -1,0 +1,67 @@
+---
+title: Basic usage
+sidebar_position: 1
+---
+
+import CalendarDemo from '@site/src/components/CalendarDemo';
+
+# Basic usage
+
+The calendar is a single component — `<mh-calendar>` in plain HTML, `<MhCalendar>` in React — with
+two props you'll use constantly, and one you (probably) won't.
+
+| Prop | Type | Description |
+|---|---|---|
+| `config` | `IMHCalendarFullOptions` | View type, behavior toggles, styling, business hours — everything except the events themselves. See [Props](/docs/components/calendar/props). |
+| `events` | `IMHCalendarEvent[]` | The events to render. See [Events](/docs/components/calendar/events) for the shape and for how the calendar reports changes back to you. |
+| `reactComponent` | `any` | Present in the type signature but has no documented purpose — don't set it. |
+
+## Switching views
+
+`config.viewType` controls which view renders: `'DAY'`, `'WEEK'`, `'MONTH'`, `'AGENDA'`, or
+`'SHIFTPLAN'`. Users can also switch views themselves via the built-in navigation bar (toggle it
+with `showCalendarNavigation`) — restrict which views are offered with `config.avaliableViews`
+(yes, that's the real, current spelling in the API — see the note in
+[Props](/docs/components/calendar/props#typo-heads-up)).
+
+<CalendarDemo config={{ viewType: 'MONTH', showTimeFrom: 8, showTimeTo: 18 }} />
+
+```tsx
+<MhCalendar config={{ viewType: 'MONTH', avaliableViews: ['MONTH', 'WEEK', 'AGENDA'] }} events={events} />
+```
+
+## Reading state back out with `getApi()`
+
+`config` and `events` are one-way — they describe what the calendar should render. To read the
+calendar's *current* state (the visible date range, which view is active) or to imperatively
+navigate/mutate events, call the async `getApi()` method on the element instance:
+
+```tsx
+import { useRef, useEffect } from 'react';
+import { MhCalendar, type UserApi } from '@mhcalendar/react';
+
+function App() {
+  const calendarRef = useRef<HTMLElement & { getApi: () => Promise<UserApi> }>(null);
+
+  useEffect(() => {
+    calendarRef.current?.getApi().then((api: UserApi) => {
+      console.log(api.calendarDateRange, api.viewType);
+    });
+  }, []);
+
+  return <MhCalendar ref={calendarRef} config={config} events={events} />;
+}
+```
+
+Common calls: `api.nextPeriod()` / `api.previousPeriod()` / `api.setToToday()` to navigate,
+`api.changeView('WEEK')` to switch views programmatically, and `api.addEvent()` /
+`api.updateEvent(id, event)` / `api.removeEvent(id)` as an imperative alternative to updating the
+`events` prop yourself. Full method list in
+[API Reference → Types](/docs/api-reference/types#userapi).
+
+## Next steps
+
+- [Props](/docs/components/calendar/props) — every `config` field.
+- [Events](/docs/components/calendar/events) — the event shape and interaction callbacks.
+- [Customization](/docs/components/calendar/customization) — theming and custom render functions.
+- [Examples](/docs/components/calendar/examples) — complete, copy-pasteable recipes.

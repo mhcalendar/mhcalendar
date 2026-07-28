@@ -3,7 +3,7 @@ title: Theming
 sidebar_position: 4
 ---
 
-import CalendarDemo from '@site/src/components/CalendarDemo';
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
 
 # Theming
 
@@ -49,22 +49,7 @@ function App() {
 
 ## A minimal starter theme
 
-<CalendarDemo
-  config={{
-    viewType: 'WEEK',
-    showTimeFrom: 7,
-    showTimeTo: 20,
-    style: {
-      properties: {
-        eventBackgroundColor: '#16a34a',
-        bordersColor: '#d1fae5',
-        headerTodayBackgroundColor: '#f0fdf4',
-        currentTimeColor: '#16a34a',
-      },
-      mhCalendar: { backgroundColor: '#f0fdf4', color: '#14532d' },
-    },
-  }}
-/>
+<TryOnCodePen topic="theming" />
 
 ## Combining with `config.theme`
 

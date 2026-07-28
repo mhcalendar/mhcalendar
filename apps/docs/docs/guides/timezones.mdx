@@ -3,7 +3,7 @@ title: Timezones
 sidebar_position: 6
 ---
 
-import CalendarDemo from '@site/src/components/CalendarDemo';
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
 
 # Timezones
 
@@ -27,29 +27,7 @@ const config = {
 - If `timezones` is omitted entirely, the calendar falls back to the browser's own timezone
   (`Intl.DateTimeFormat().resolvedOptions().timeZone`).
 
-<CalendarDemo
-  config={{
-    viewType: 'WEEK',
-    showTimeFrom: 7,
-    showTimeTo: 20,
-    showAllDayTasks: false,
-    timezones: ['America/Los_Angeles', 'America/New_York', 'Europe/London'],
-  }}
-  events={[
-    {
-      id: 't1',
-      title: 'LA Kickoff',
-      startDate: new Date(new Date().setHours(9, 0, 0, 0)),
-      endDate: new Date(new Date().setHours(10, 0, 0, 0)),
-    },
-    {
-      id: 't2',
-      title: 'NY All-hands',
-      startDate: new Date(new Date().setHours(12, 0, 0, 0)),
-      endDate: new Date(new Date().setHours(14, 0, 0, 0)),
-    },
-  ]}
-/>
+<TryOnCodePen topic="timezones" />
 
 ## Overriding the main timezone label
 

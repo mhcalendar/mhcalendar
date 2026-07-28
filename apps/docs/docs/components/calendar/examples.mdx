@@ -3,7 +3,7 @@ title: Examples
 sidebar_position: 5
 ---
 
-import CalendarDemo from '@site/src/components/CalendarDemo';
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
 
 # Examples
 
@@ -17,8 +17,6 @@ import { MhCalendar, type IMHCalendarEvent } from '@mhcalendar/react';
 ## Read-only month view
 
 The simplest possible setup — no drag, no resize, no creation.
-
-<CalendarDemo config={{ viewType: 'MONTH', allowEventDragging: false, allowEventResize: false }} />
 
 ```tsx
 const config = {
@@ -36,6 +34,8 @@ const config = {
 Persist every interaction back into React state — see
 [Events](/docs/components/calendar/events#interaction-callbacks) for why the callbacks alone
 aren't enough.
+
+<TryOnCodePen topic="interactive-planner" />
 
 ```tsx
 function WeekPlanner() {
@@ -101,5 +101,5 @@ priority over a `dayOfWeek`-matched one for that specific day — see
 ## More
 
 - [Display hours](/docs/guides/display-hours) — controlling the visible time range and rendering a very tall one.
-- [Timezones](/docs/guides/timezones) — a live multi-timezone example.
+- [Timezones](/docs/guides/timezones) — a multi-timezone example.
 - [Styling](/docs/guides/styling) and [Theming](/docs/guides/theming) — full visual customization.

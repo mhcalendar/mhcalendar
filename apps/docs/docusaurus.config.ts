@@ -35,8 +35,6 @@ const config: Config = {
     locales: ['en'],
   },
 
-  themes: ['@docusaurus/theme-live-codeblock'],
-
   presets: [
     [
       'classic',

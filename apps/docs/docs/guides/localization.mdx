@@ -5,31 +5,4 @@ sidebar_position: 5
 
 # Localization
 
-Read this before assuming there's a `locale` prop — there isn't one yet.
-
-## Current state
-
-mhalendar doesn't currently expose a language/locale option. Built-in labels — day names, month
-names, the "+N more" overflow indicator, the "Today" button — are rendered via
-[Day.js](https://day.js.org/) with its default English locale, and are not configurable. Calling
-`dayjs.locale('pl')` (or any other locale) in your own app has no effect on the calendar, since it
-doesn't read the global Day.js locale.
-
-What **is** configurable today:
-
-- **Date/time formatting** — `config.hoursDisplayFormat` (a Day.js format string, default `'h A'`)
-  controls how hour labels are rendered, e.g. `'HH:mm'` for 24-hour time.
-- **Your own event text** — `title`, `description`, and any extra fields on `IMHCalendarEvent` are
-  whatever strings you pass in; render them in any language you like via
-  [`eventContent`/`eventSmallContent`](/docs/props/event-content).
-- **Timezone-aware time display** — see [Timezones](/docs/guides/timezones), a separate concern
-  from language localization.
-
-## Workaround for now
-
-If you need translated event content, that's already fully in your control — put translated
-strings on your event objects or in a custom `eventContent` renderer. If you need translated
-day/month names or UI labels (Today, view names), there's currently no supported way to do this
-without forking the component; this is a known gap, not an oversight, and full i18n support (a
-`locale` config option backed by Day.js locales) is a reasonable feature request — check the
-[Changelog](/docs/changelog) or open an issue if you need it.
+This page is a work in progress — docs for localization are still being written.

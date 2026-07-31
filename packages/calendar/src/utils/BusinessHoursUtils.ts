@@ -12,10 +12,6 @@ import { store } from '../store/mh-calendar-store';
 
 export class BusinessHoursUtils {
   /**
-   * Converts a Date to minutes since midnight (0-1439)
-   */
-
-  /**
    * Converts business hours (start/end) to minutes since midnight
    */
   private static businessHoursToMinutes(businessHours: { start: number; end: number }): {
@@ -226,14 +222,8 @@ export class BusinessHoursUtils {
       return true;
     }
 
-    const startTimeInMinutes = DateUtils.dateToMinutesInTimezone(
-      startDate,
-      store.mainTimezone,
-    );
-    const endTimeInMinutes = DateUtils.dateToMinutesInTimezone(
-      endDate,
-      store.mainTimezone,
-    );
+    const startTimeInMinutes = DateUtils.dateToMinutesInTimezone(startDate, store.mainTimezone);
+    const endTimeInMinutes = DateUtils.dateToMinutesInTimezone(endDate, store.mainTimezone);
 
     // Check if entire event is within business hours
     return this.isTimeRangeWithinBusinessHours(

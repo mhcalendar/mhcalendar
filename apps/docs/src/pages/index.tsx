@@ -129,7 +129,7 @@ export default function Home(): ReactNode {
   );
 
   return (
-    <Layout title="mhalendar" description="Fully customizable scheduling component">
+    <Layout title="mhcalendar" description="Fully customizable scheduling component">
       <main className="mh-landing">
         <nav className={navScrolled ? 'mh-nav scrolled' : 'mh-nav'}>
           <div className="container mh-nav-inner">

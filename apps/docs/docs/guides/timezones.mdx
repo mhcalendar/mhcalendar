@@ -12,6 +12,8 @@ no matter where the person looking at the calendar is physically located, events
 in the right position on the grid — the calendar does the conversion math for you instead of
 leaving it to your app.
 
+<TryOnCodePen topic="timezones" />
+
 ## Default: your local timezone, nothing to configure
 
 Out of the box, the calendar renders in the timezone of whoever is viewing it — the browser's own
@@ -36,8 +38,6 @@ const config = {
 (`'CET'`) or raw UTC offsets (`'+01:00'`) — an invalid or misspelled name (e.g. `'Europ/Warsaw'`)
 throws immediately when `config` is set, rather than failing silently later. The first entry in the
 array is the **main** timezone: event positions in the grid are calculated against it.
-
-<TryOnCodePen topic="timezones" />
 
 ## Showing several timezones at once
 

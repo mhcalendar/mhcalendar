@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { MINUTES_IN_HOUR } from '../components/mh-calendar-day/mh-calendar-day.const';
+import { MILLISECONDS_IN_MINUTE } from '../components/mh-calendar-day/mh-calendar-day.const';
 import { DEFAULT_THEME, THEMES } from '../const/default-theme';
 import { ConfigValidator } from '../utils/ConfigValidator';
 import { DateUtils } from '../utils/DateUtils';
@@ -90,7 +90,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       'createEventOnClick',
       'resources',
       'shiftplanDays',
-      'avaliableViews',
+      'availableViews',
     ] as const;
 
     for (const key of configKeys) {
@@ -214,7 +214,9 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
 
     const startDate = DateUtils.getExactDateBasedOnUserPosition(topPosition, date);
     const eventDurationInMinutes = this.calculateEventDuration(state.draggedEvent);
-    const endDate = new Date(startDate.getTime() + eventDurationInMinutes * MINUTES_IN_HOUR * 1000);
+    const endDate = new Date(
+      startDate.getTime() + eventDurationInMinutes * MILLISECONDS_IN_MINUTE,
+    );
 
     if (state.blockBusinessHours && !isAllDay && state.draggedEvent.allDay) {
       const isWithinBusinessHours = BusinessHoursUtils.isEventWithinBusinessHours(

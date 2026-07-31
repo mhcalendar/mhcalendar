@@ -13,7 +13,6 @@ import TryOnCodePen from '@site/src/components/TryOnCodePen';
 |---|---|---|
 | `config` | `IMHCalendarFullOptions` | View type, behavior toggles, styling, business hours — everything except the events themselves. Documented field-by-field below. |
 | `events` | `IMHCalendarEvent[]` | The events to render. See [Events](/docs/props/events). |
-| `reactComponent` | `any` | Present in the type signature but has no documented purpose — don't set it. |
 
 `config` is a single flat object, merged internally from three layers (base behavior,
 multi-view/grid options, week/shiftplan-specific options) — you never nest anything, just pass one
@@ -22,22 +21,14 @@ object with whichever fields you need.
 <TryOnCodePen topic="basic-usage" />
 
 ```tsx
-<MhCalendar config={{ viewType: 'MONTH', avaliableViews: ['MONTH', 'WEEK', 'AGENDA'] }} events={events} />
+<MhCalendar config={{ viewType: 'MONTH', availableViews: ['MONTH', 'WEEK', 'AGENDA'] }} events={events} />
 ```
-
-### Typo heads-up
-
-:::info
-The real, current field name for restricting available views is **`avaliableViews`** (missing
-"il") — this isn't a typo in these docs, it's the actual API. Every field name on this page and its
-children is copied from the shipped TypeScript types.
-:::
 
 ## Every `config` field
 
 ### Behavior & navigation
 
-- [View type & available views](/docs/props/view-type) — `viewType`, `avaliableViews`
+- [View type & available views](/docs/props/view-type) — `viewType`, `availableViews`
 - [Start date](/docs/props/start-date) — `startDate`
 - [Navigation visibility](/docs/props/navigation-visibility) — `showDateSwitcher`, `showViewTypeSwitcher`, `showCalendarNavigation`, `showViewHeader`
 - [Dragging & resizing](/docs/props/event-drag-resize) — `allowEventDragging`, `allowEventResize`, `minEventDuration`

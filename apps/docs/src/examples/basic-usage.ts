@@ -11,7 +11,7 @@ const basicUsage: CodePenExample = {
   const calendar = document.getElementById('calendar');
   calendar.config = {
     viewType: 'MONTH',
-    avaliableViews: ['MONTH', 'WEEK', 'AGENDA'],
+    availableViews: ['MONTH', 'WEEK', 'AGENDA'],
     showTimeFrom: 8,
     showTimeTo: 18,
   };

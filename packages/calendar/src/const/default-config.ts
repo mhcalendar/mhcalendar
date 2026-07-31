@@ -24,7 +24,7 @@ export const DEFAULT_CALENDAR_CONFIG: IMHCalendarConfigBase = {
   allowEventDragging: true,
   showViewHeader: true,
   createEventOnClick: false,
-  avaliableViews: undefined,
+  availableViews: undefined,
 };
 
 export const DEFAULT_WEEK_VIEW_CONFIG: IMHCalendarWeekConfig = {

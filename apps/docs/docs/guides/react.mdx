@@ -1,0 +1,65 @@
+---
+title: React
+sidebar_position: 7
+---
+
+# Reading state with `getApi()`
+
+[`config`](/docs/props/overview) and [`events`](/docs/props/events) are one-way — they describe
+what the calendar should render. To read the calendar's _current_ state (the visible date range,
+which view is active) or to imperatively navigate/mutate events, call the async `getApi()` method
+on the element instance:
+
+```tsx
+import { useRef, useEffect } from 'react';
+import { MhCalendar, type UserApi } from '@mhcalendar/react';
+
+function App() {
+  const calendarRef = useRef<HTMLElement & { getApi: () => Promise<UserApi> }>(null);
+
+  useEffect(() => {
+    calendarRef.current?.getApi().then((api: UserApi) => {
+      console.log(api.calendarDateRange, api.viewType);
+    });
+  }, []);
+
+  return <MhCalendar ref={calendarRef} config={config} events={events} />;
+}
+```
+
+## `UserApi`
+
+The object returned by `getApi()` — a narrow, read-only-where-noted proxy over the internal store.
+Only these members are reachable.
+
+| Member                                                  | Type                   | Notes                                                               |
+| ------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------- |
+| `calendarDateRange`                                     | `IMHCalendarDateRange` | Read-only. Setting it directly logs an error instead of applying.   |
+| `viewType`                                              | `IMHCalendarViewType`  | Read-only, same caveat as above.                                    |
+| `daysInRange`                                           | `number`               | **A value, not a function** — don't call it as `api.daysInRange()`. |
+| `getEventById(id: string)`                              | `IMHCalendarEvent[]`   |                                                                     |
+| `getEvents()`                                           | `IMHCalendarEvent[]`   |                                                                     |
+| `nextPeriod()`                                          | `void`                 |                                                                     |
+| `previousPeriod()`                                      | `void`                 |                                                                     |
+| `setToToday()`                                          | `void`                 |                                                                     |
+| `changeView(viewType: IMHCalendarViewType)`             | `void`                 |                                                                     |
+| `addEvent(event: IMHCalendarEvent)`                     | `void`                 |                                                                     |
+| `updateEvent(eventId: string, event: IMHCalendarEvent)` | `void`                 |                                                                     |
+| `removeEvent(eventId: string)`                          | `void`                 |                                                                     |
+
+```tsx
+const api = await calendarRef.current.getApi();
+api.nextPeriod();
+```
+
+`IMHCalendarDateRange` is `{ fromDate?: Date; toDate?: Date }`.
+
+## When to use this vs. callbacks
+
+Callbacks (see [Click callbacks](/docs/props/click-callbacks) and
+[Create & update callbacks](/docs/props/event-lifecycle)) are the reactive path — the calendar
+tells you when something happens. `getApi()` is the imperative path — you ask the calendar for its
+state, or push a change to it directly (`addEvent`/`updateEvent`/`removeEvent`) instead of updating
+your own `events` state and re-rendering. Most apps only need callbacks; reach for `getApi()` when
+you need to navigate the calendar from outside (e.g. a "next week" button in your own toolbar) or
+read its state for something unrelated to rendering.

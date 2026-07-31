@@ -1,0 +1,37 @@
+---
+title: onEventCreated & onEventUpdated
+sidebar_position: 13
+---
+
+# `onEventCreated` / `onEventUpdated`
+
+| Prop | Type | Fires when |
+|---|---|---|
+| `onEventCreated` | `(event: IMHCalendarEvent) => void` | A new event was created by clicking an empty slot (requires [`createEventOnClick: true`](/docs/props/create-event-on-click)). |
+| `onEventUpdated` | `(event: IMHCalendarEvent) => void` | An existing event finished being dragged or resized (see [`allowEventDragging`/`allowEventResize`](/docs/props/event-drag-resize)). |
+
+**Important:** these callbacks tell you what happened — they don't mutate your data. The calendar
+never changes the [`events`](/docs/props/events) array you passed in. To actually persist a
+create/drag/resize, update your own state inside the callback:
+
+```tsx
+const [events, setEvents] = useState<IMHCalendarEvent[]>(INITIAL_EVENTS);
+
+const config = {
+  createEventOnClick: true,
+  allowEventDragging: true,
+  allowEventResize: true,
+  onEventCreated: (event) => setEvents((prev) => [...prev, event]),
+  onEventUpdated: (updated) =>
+    setEvents((prev) => prev.map((e) => (e.id === updated.id ? updated : e))),
+};
+
+<MhCalendar config={config} events={events} />;
+```
+
+If you skip this, drag/resize/create will visually animate but snap back — the calendar re-renders
+from whatever `events` array you continue to pass it.
+
+If you'd rather mutate events imperatively than react to these callbacks, `getApi()` exposes
+`addEvent`/`updateEvent`/`removeEvent` directly — see
+[Reading state with `getApi()`](/docs/guides/reading-state).

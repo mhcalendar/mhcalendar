@@ -7,69 +7,50 @@ import TryOnCodePen from '@site/src/components/TryOnCodePen';
 
 # Theming
 
-There's no built-in theme registry or provider — a "theme" in mhalendar is just a plain object
-you build once and reuse, following the same `config.style` shape from [Styling](/docs/guides/styling).
-This guide shows the pattern this documentation site itself uses for its live demos.
-
-## Defining a theme object
-
-```ts
-// themes/corporate.ts
-export const corporateTheme = {
-  properties: {
-    eventBackgroundColor: '#1e3a8a',
-    bordersColor: '#cbd5e1',
-    headerTodayBackgroundColor: '#fff1f2',
-    currentTimeColor: '#e11d48',
-    eventTimeLabelBg: '#172554',
-    eventTimeLabelColor: '#bfdbfe',
-  },
-  mhCalendar: { backgroundColor: '#ffffff', color: '#1e293b' },
-};
-```
-
-```tsx
-import { corporateTheme } from './themes/corporate';
-
-<MhCalendar config={{ viewType: 'WEEK', style: corporateTheme }} events={events} />;
-```
-
-Because it's just data, you can keep a small set of named themes and switch between them at
-runtime — e.g. a light/dark toggle, or a per-tenant brand theme in a multi-tenant product:
-
-```tsx
-const THEMES = { corporate: corporateTheme, dark: darkTheme, minimal: minimalTheme };
-
-function App() {
-  const [themeName, setThemeName] = useState<keyof typeof THEMES>('corporate');
-  const config = useMemo(() => ({ viewType: 'WEEK', style: THEMES[themeName] }), [themeName]);
-  return <MhCalendar config={config} events={events} />;
-}
-```
-
-## A minimal starter theme
+mhcalendar does not include a complex theme registry or provider by design, keeping the core production bundle lightweight with only essential layout styles. Instead, themes are simply plain objects built using the exact same API available to you. For your convenience, we provide ready-to-use light and dark presets out of the box that you can easily apply.
 
 <TryOnCodePen topic="theming" />
 
-## Combining with `config.theme`
+## Built-in light & dark themes
 
-`config.theme: 'light' | 'dark'` picks the base defaults your theme object's overrides are layered
-on top of — pick whichever base is closer to your target look before overriding individual
-properties, so you override fewer of them.
-
-## Tying it to your app's own theme (light/dark mode)
-
-The calendar's `theme`/`style` are independent from any app-level theme switcher (e.g. a
-`data-theme` attribute on `<html>`) you may already have for the rest of your UI. If you support
-light/dark mode, drive the calendar's `style` from the same state instead of two separate toggles:
+mhcalendar ships with two built-in themes out of the box `light` and `dark`. These aren't a separate mechanism: they're just predefined `style.properties` presets using the exact same `config.style` API described on this page, applied as the base before any overrides of your own are layered on top.
 
 ```tsx
-const config = useMemo(
-  () => ({
-    viewType: 'WEEK',
-    theme: appTheme,
-    style: appTheme === 'dark' ? darkTheme : corporateTheme,
-  }),
-  [appTheme],
-);
+<MhCalendar config={{ theme: 'light' }} events={events} />
+```
+
+## Defining a theme object
+
+Theme object combines CSS properties and CSS-in-JS to give you full control over your calendar's styling. You can quickly customize the component using the extensive list of built-in properties, or target specific classes directly inline when you need deeper design control or need to override existing rules with the highest priority. You can find more information about styling in specified Style category.
+
+```tsx
+<MhCalendar
+  config={{
+    style: {
+      properties: {
+        eventBackgroundColor: '#1e3a8a',
+        bordersColor: '#cbd5e1',
+        headerTodayBackgroundColor: '#fff1f2',
+        currentTimeColor: '#e11d48',
+        eventTimeLabelBg: '#172554',
+        eventTimeLabelColor: '#bfdbfe',
+      },
+      mhCalendar: { backgroundColor: '#ffffff', color: '#1e293b' },
+    },
+  }}
+/>
+```
+
+## Toggling themes
+
+Because themes are just objects, you can toggle them. For example, you can keep a small set of named themes and switch between them at
+runtime, e.g. a light/dark toggle
+
+```tsx
+const THEMES = { light: corporateTheme, dark: darkTheme };
+
+function App() {
+  const [themeName, setThemeName] = useState<keyof typeof THEMES>('light');
+  return <MhCalendar config={{ viewType: 'WEEK', style: THEMES[themeName] }} events={events} />;
+}
 ```

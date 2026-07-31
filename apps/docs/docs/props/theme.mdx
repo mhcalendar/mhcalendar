@@ -1,0 +1,19 @@
+---
+title: theme
+sidebar_position: 9
+---
+
+# `theme`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `theme` | `'dark' \| 'light' \| string` | `'dark'` | Base theme preset; anything other than `dark`/`light` falls back to the dark theme. |
+
+Picks the base defaults your [`style`](/docs/props/style) overrides are layered on top of.
+
+```tsx
+const config = { theme: 'light', style: { properties: { eventBackgroundColor: '#1e3a8a' } } };
+```
+
+See [Styling](/docs/styling) for the full property reference and
+[Theming](/docs/guides/theming) for packaging overrides into a reusable, named theme.

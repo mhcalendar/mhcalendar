@@ -83,20 +83,9 @@ import { defineCustomElements } from '@mhcalendar/calendar/loader';
 defineCustomElements();
 
 const calendar = document.querySelector('mh-calendar');
-calendar.config = {
-  /* ... */
-};
-calendar.events = [
-  /* ... */
-];
+calendar.config = {/* ... */};
+calendar.events = [/* ... */];
 ```
 
 `config` and `events` are set as **DOM properties** (`calendar.config = ...`), not HTML attributes
 — objects and arrays can't round-trip through attribute strings.
-
-## Next steps
-
-- [Basic usage](/docs/components/calendar/basic-usage) — views, the `config`/`events` props in
-  detail, reading data back out via `getApi()`.
-- [Styling](/docs/guides/styling) — the calendar's biggest differentiator.
-- [Timezones](/docs/guides/timezones) — showing up to three IANA timezones side by side.

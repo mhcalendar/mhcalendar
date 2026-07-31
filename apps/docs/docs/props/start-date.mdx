@@ -1,0 +1,14 @@
+---
+title: startDate
+sidebar_position: 4
+---
+
+# `startDate`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `startDate` | `Date \| string` | today | Initial anchor date shown on mount. |
+
+Only read once, on mount — it's the initial date, not a controlled value. To navigate
+programmatically afterwards (next/previous period, jump to today), use `getApi()` instead; see
+[Reading state with `getApi()`](/docs/guides/reading-state).

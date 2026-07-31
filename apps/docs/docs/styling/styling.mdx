@@ -29,9 +29,8 @@ config.style = {
 ```
 
 `properties` is special-cased; every other top-level key in `style` must be a known class name
-(see the full list in [API Reference → Types](/docs/api-reference/types#css-classes)) and its
-value is a plain object of CSS properties (camelCase, like React's `style` prop) applied inline to
-elements with that class.
+(see the full list below) and its value is a plain object of CSS properties (camelCase, like
+React's `style` prop) applied inline to elements with that class.
 
 ## CSS custom properties (`style.properties`)
 
@@ -88,6 +87,26 @@ const config = {
     mhCalendarEventFull: { borderRadius: '6px' },
   },
 };
+```
+
+### Known class names
+
+```
+mhCalendar
+mhCalendarEvent, mhCalendarEventSmall, mhCalendarEventFull
+mhCalendarEventFull__content, mhCalendarEventFull__userEventContentHolder
+mhCalendarEventFull__content__title, mhCalendarEventFull__content__date
+mhCalendarHeader, mhCalendarHeader__date, mhCalendarHeader__today
+mhCalendarMonth
+mhCalendarMultiView, mhCalendarMultiView__holder
+mhCalendarNavigation__container, mhCalendarNavigation__viewSwitcher
+mhCalendarDay, mhCalendarDay_allDaysEventHolder, mhCalendarDay_dayDate
+mhCalendarDay__currentTime, mhCalendarDay__eventHolder, mhCalendarDay__eventsLeftIndicator
+mhCalendarDay__nonBusinessHours
+mhCalendarWeek__borders, mhCalendarWeek__border
+mhCalendarTimeSlots
+mhCalendarModal__content
+mhCalendarResizeEventHandler
 ```
 
 ## Choosing a base theme

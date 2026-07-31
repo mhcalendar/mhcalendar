@@ -1,0 +1,29 @@
+---
+title: allowEventDragging & allowEventResize
+sidebar_position: 6
+---
+
+# `allowEventDragging` / `allowEventResize` / `minEventDuration`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `allowEventDragging` | `boolean` | `true` | Enables drag-to-move for events. |
+| `allowEventResize` | `boolean` | `true` | Enables drag-to-resize on event edges. |
+| `minEventDuration` | `number` (minutes) | `15` | Minimum duration enforced when resizing. |
+
+```tsx
+const config = {
+  allowEventDragging: true,
+  allowEventResize: true,
+  minEventDuration: 30,
+};
+```
+
+**Important:** these props only control whether the interaction is *allowed* — they don't persist
+the result. Drag/resize fires `onEventUpdated`, and the calendar never mutates the `events` array
+you passed in. If you don't update your own state inside that callback, the change visually
+animates and then snaps back on the next render. See
+[Create & update callbacks](/docs/props/event-lifecycle).
+
+Dragging/resizing into a blocked time range is a separate concern — see
+[Business hours](/docs/props/business-hours).

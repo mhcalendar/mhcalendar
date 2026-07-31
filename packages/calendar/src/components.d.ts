@@ -22,7 +22,6 @@ export namespace Components {
          */
         "events": IMHCalendarEvent[];
         "getApi": () => Promise<UserApi>;
-        "reactComponent": any;
     }
     interface MhCalendarAgendaView {
     }
@@ -286,7 +285,6 @@ declare namespace LocalJSX {
           * @default []
          */
         "events"?: IMHCalendarEvent[];
-        "reactComponent"?: any;
     }
     interface MhCalendarAgendaView {
     }
@@ -387,9 +385,6 @@ declare namespace LocalJSX {
     interface MhViewSwitcher {
     }
 
-    interface MhCalendarAttributes {
-        "reactComponent": string;
-    }
     interface MhCalendarDayAttributes {
         "showCurrentDate": boolean;
     }
@@ -431,7 +426,7 @@ declare namespace LocalJSX {
     }
 
     interface IntrinsicElements {
-        "mh-calendar": Omit<MhCalendar, keyof MhCalendarAttributes> & { [K in keyof MhCalendar & keyof MhCalendarAttributes]?: MhCalendar[K] } & { [K in keyof MhCalendar & keyof MhCalendarAttributes as `attr:${K}`]?: MhCalendarAttributes[K] } & { [K in keyof MhCalendar & keyof MhCalendarAttributes as `prop:${K}`]?: MhCalendar[K] };
+        "mh-calendar": MhCalendar;
         "mh-calendar-agenda-view": MhCalendarAgendaView;
         "mh-calendar-day": Omit<MhCalendarDay, keyof MhCalendarDayAttributes> & { [K in keyof MhCalendarDay & keyof MhCalendarDayAttributes]?: MhCalendarDay[K] } & { [K in keyof MhCalendarDay & keyof MhCalendarDayAttributes as `attr:${K}`]?: MhCalendarDayAttributes[K] } & { [K in keyof MhCalendarDay & keyof MhCalendarDayAttributes as `prop:${K}`]?: MhCalendarDay[K] };
         "mh-calendar-day-all-day-events-holder": Omit<MhCalendarDayAllDayEventsHolder, keyof MhCalendarDayAllDayEventsHolderAttributes> & { [K in keyof MhCalendarDayAllDayEventsHolder & keyof MhCalendarDayAllDayEventsHolderAttributes]?: MhCalendarDayAllDayEventsHolder[K] } & { [K in keyof MhCalendarDayAllDayEventsHolder & keyof MhCalendarDayAllDayEventsHolderAttributes as `attr:${K}`]?: MhCalendarDayAllDayEventsHolderAttributes[K] } & { [K in keyof MhCalendarDayAllDayEventsHolder & keyof MhCalendarDayAllDayEventsHolderAttributes as `prop:${K}`]?: MhCalendarDayAllDayEventsHolder[K] } & OneOf<"showCurrentDate", MhCalendarDayAllDayEventsHolder["showCurrentDate"], MhCalendarDayAllDayEventsHolderAttributes["showCurrentDate"]>;

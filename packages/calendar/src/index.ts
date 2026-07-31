@@ -1,11 +1,8 @@
 /**
- * @fileoverview entry point for your component library
+ * @fileoverview Public entry point for @mhcalendar/calendar.
  *
- * This is the entry point for your component library. Use this file to export utilities,
- * constants or data structure that accompany your components.
- *
- * DO NOT use this file to export your components. Instead, use the recommended approaches
- * to consume components of this package as outlined in the `README.md`.
+ * Exports the types and utilities needed to consume the mh-calendar component.
+ * Components themselves are not exported here — consume them as outlined in the `README.md`.
  */
 
 export * from './types/enums';

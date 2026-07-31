@@ -1,4 +1,4 @@
-import { Component, Element, Method, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Method, Prop, Watch, h } from '@stencil/core';
 import { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from '../../types';
 import { DEFAULT_WEEK_VIEW_CONFIG } from '../../const/default-config';
 import { store, storeState } from '../../store/mh-calendar-store';
@@ -14,10 +14,7 @@ export class MHCalendar {
   @Element() el: HTMLElement | null = null;
 
   @Prop() config: IMHCalendarFullOptions = {};
-  @Prop() reactComponent: any;
   @Prop() events: IMHCalendarEvent[] = [];
-
-  @State() svgContent: string = '';
 
   @Method()
   async getApi(): Promise<UserApi> {

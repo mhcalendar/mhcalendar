@@ -3,17 +3,11 @@ import { useEffect, useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { MhCalendar } from '@mhcalendar/react';
-import {
-  boldTheme,
-  corporateTheme,
-  darkTheme,
-  minimalTheme,
-  scrollTheme,
-  timezoneTheme,
-} from '../theme-config/calendarThemes';
+import { boldTheme, corporateTheme, minimalTheme } from '../theme-config/calendarThemes';
 
-type StyleVariant = 'corporate' | 'minimal' | 'dark' | 'bold' | 'scroll' | 'timezone';
+type StyleVariant = 'light' | 'dark' | 'corporate' | 'minimal' | 'bold';
 
 type ThemeConfig = {
   style: Record<string, unknown>;
@@ -22,29 +16,11 @@ type ThemeConfig = {
 };
 
 const styleConfigs: Record<StyleVariant, ThemeConfig> = {
+  light: { style: {}, config: { theme: 'light', showTimeFrom: 8, showTimeTo: 18 } },
+  dark: { style: {}, config: { theme: 'dark', showTimeFrom: 8, showTimeTo: 18 } },
   corporate: { style: corporateTheme, config: { showTimeFrom: 8, showTimeTo: 18 } },
   minimal: { style: minimalTheme, config: { showTimeFrom: 9, showTimeTo: 17 } },
-  dark: { style: darkTheme, config: { showTimeFrom: 7, showTimeTo: 22 } },
   bold: { style: boldTheme, config: { showTimeFrom: 6, showTimeTo: 20 } },
-  scroll: {
-    style: scrollTheme,
-    config: {
-      showTimeFrom: 1,
-      showTimeTo: 24,
-      fixedHeight: '580px',
-      virtualScrollHeight: '1800px',
-    },
-  },
-  timezone: {
-    style: timezoneTheme,
-    config: {
-      showTimeFrom: 7,
-      showTimeTo: 20,
-      showAllDayTasks: false,
-      timezones: ['America/Los_Angeles', 'America/New_York', 'Europe/London'],
-    },
-    events: buildTimezoneEvents(),
-  },
 };
 
 function getWeekDates() {
@@ -76,22 +52,9 @@ function buildEvents() {
   ];
 }
 
-function buildTimezoneEvents() {
-  const { makeDate } = getWeekDates();
-  return [
-    { id: 't1', title: 'LA Kickoff', startDate: makeDate(0, 9), endDate: makeDate(0, 10) },
-    { id: 't2', title: 'NY All-hands', startDate: makeDate(1, 12), endDate: makeDate(1, 14) },
-    { id: 't3', title: 'London Sync', startDate: makeDate(2, 8), endDate: makeDate(2, 9) },
-    {
-      id: 't4',
-      title: 'Cross-region Review',
-      startDate: makeDate(2, 14),
-      endDate: makeDate(2, 16),
-    },
-  ];
-}
-
 export default function Home(): ReactNode {
+  const { siteConfig } = useDocusaurusContext();
+  const reactPackageVersion = siteConfig.customFields?.reactPackageVersion as string;
   const markUrl = useBaseUrl('/img/mh-mark.png');
   const [activeStyle, setActiveStyle] = useState<StyleVariant>('corporate');
   const [mounted, setMounted] = useState(false);
@@ -161,7 +124,7 @@ export default function Home(): ReactNode {
           <div className="mh-hero-grid-bg" />
           <div className="container mh-hero-inner">
             <div className="mh-hero-copy">
-              <span className="mh-eyebrow">v1.4 - Shiftplan view is here</span>
+              <span className="mh-eyebrow">v{reactPackageVersion}</span>
               <h1>
                 The calendar component you stop forking <span>theming.</span>
               </h1>

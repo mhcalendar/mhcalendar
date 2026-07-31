@@ -22,18 +22,6 @@ export const corporateTheme: Record<string, any> = {
   mhCalendar: { backgroundColor: '#ffffff', color: '#1e293b' },
 };
 
-export const darkTheme: Record<string, any> = {
-  properties: {
-    eventBackgroundColor: '#5E6AD2',
-    bordersColor: '#1E1E25',
-    headerTodayBackgroundColor: '#5E6AD220',
-    currentTimeColor: '#F2994A',
-    eventTimeLabelBg: '#4A54C0',
-    eventTimeLabelColor: '#FFFFFF',
-  },
-  mhCalendar: { backgroundColor: '#0B0B0F', color: '#E8E8EE' },
-};
-
 export const minimalTheme: Record<string, any> = {
   properties: {
     eventBackgroundColor: '#dbeafe',
@@ -46,26 +34,3 @@ export const minimalTheme: Record<string, any> = {
   mhCalendar: { backgroundColor: '#f8fafc', color: '#1e293b' },
 };
 
-export const scrollTheme: Record<string, any> = {
-  properties: {
-    eventBackgroundColor: '#dcfce7',
-    bordersColor: '#d1fae5',
-    headerTodayBackgroundColor: '#f0fdf4',
-    currentTimeColor: '#16a34a',
-    eventTimeLabelBg: '#bbf7d0',
-    eventTimeLabelColor: '#14532d',
-  },
-  mhCalendar: { backgroundColor: '#f0fdf4', color: '#14532d' },
-};
-
-export const timezoneTheme: Record<string, any> = {
-  properties: {
-    eventBackgroundColor: '#1e3a5f',
-    bordersColor: '#1e293b',
-    headerTodayBackgroundColor: '#0f2a4a',
-    currentTimeColor: '#38bdf8',
-    eventTimeLabelBg: '#0c4a6e',
-    eventTimeLabelColor: '#bae6fd',
-  },
-  mhCalendar: { backgroundColor: '#0f172a', color: '#e2e8f0' },
-};

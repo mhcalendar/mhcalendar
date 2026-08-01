@@ -4,7 +4,8 @@ import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { MhCalendar } from '@mhcalendar/react';
+import { useColorMode } from '@docusaurus/theme-common';
+import { IMHCalendarFullOptions, IMHCalendarViewType, MhCalendar } from '@mhcalendar/react';
 import { boldTheme, corporateTheme, minimalTheme } from '../theme-config/calendarThemes';
 
 type StyleVariant = 'light' | 'dark' | 'corporate' | 'minimal' | 'bold';
@@ -50,12 +51,104 @@ const INTEGRATIONS: { name: string; color?: string; path: string }[] = [
   },
 ];
 
+const FEATURES: { title: string; description: string }[] = [
+  {
+    title: 'Drag and drop scheduling',
+    description:
+      'Move events between days and time slots, resize them, or drag to create new ones directly on the grid.',
+  },
+  {
+    title: 'Five views in one component',
+    description: 'Week, day, month, agenda, and shiftplan. Switch between them with a single prop.',
+  },
+  {
+    title: 'Multi timezone support',
+    description:
+      'Show events across multiple timezones side by side, with each timezone rendered as its own column.',
+  },
+  {
+    title: 'Theming with CSS variables',
+    description:
+      'Restyle colors, spacing, and fonts through plain CSS custom properties. No proprietary theming API.',
+  },
+];
+
+const CTA_SECTIONS: {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  description: string;
+  ctaLabel: string;
+  href: string;
+  external?: boolean;
+  reverse?: boolean;
+}[] = [
+  {
+    id: 'docs',
+    eyebrow: 'Documentation',
+    heading: 'Dive deeper in the docs.',
+    description: 'Every prop, view, and theming option, explained with live examples.',
+    ctaLabel: 'Read the docs',
+    href: '/docs/introduction/',
+  },
+  {
+    id: 'npm',
+    eyebrow: 'npm',
+    heading: 'Install it from npm.',
+    description:
+      'Published as @mhcalendar/calendar and @mhcalendar/react. Add it to your project with one command.',
+    ctaLabel: 'View on npm',
+    href: 'https://www.npmjs.com/package/@mhcalendar/react',
+    external: true,
+    reverse: true,
+  },
+  {
+    id: 'community',
+    eyebrow: 'Open Source',
+    heading: 'Built in the open.',
+    description: 'MIT licensed. Browse the code, open an issue, or join the community on GitHub.',
+    ctaLabel: 'View on GitHub',
+    href: 'https://github.com/mhcalendar/mhcalendar',
+    external: true,
+  },
+];
+
+const FAQS: { question: string; answer: string }[] = [
+  {
+    question: 'Is mhcalendar free to use?',
+    answer:
+      "Yes. It's open source under the MIT license, for personal and commercial projects alike.",
+  },
+  {
+    question: 'Does it work outside of React?',
+    answer:
+      'Yes. The core, @mhcalendar/calendar, is a framework-agnostic Web Component. @mhcalendar/react is a thin wrapper around it.',
+  },
+  {
+    question: 'How do I customize the styling?',
+    answer:
+      'Through plain CSS custom properties, or the style prop for deeper overrides. No proprietary theming API to learn.',
+  },
+  {
+    question: 'Which views are supported?',
+    answer: 'Week, day, month, agenda, and shiftplan, switchable with a single prop.',
+  },
+  {
+    question: 'Is TypeScript supported?',
+    answer: 'Yes. Both packages are written in TypeScript and ship full type definitions.',
+  },
+  {
+    question: 'Where do I report bugs or request features?',
+    answer: 'Open an issue on GitHub. The repository is linked in the Open Source section above.',
+  },
+];
+
 const styleConfigs: Record<StyleVariant, ThemeConfig> = {
-  light: { style: {}, config: { theme: 'light', showTimeFrom: 8, showTimeTo: 18 } },
-  dark: { style: {}, config: { theme: 'dark', showTimeFrom: 8, showTimeTo: 18 } },
-  corporate: { style: corporateTheme, config: { showTimeFrom: 8, showTimeTo: 18 } },
-  minimal: { style: minimalTheme, config: { showTimeFrom: 9, showTimeTo: 17 } },
-  bold: { style: boldTheme, config: { showTimeFrom: 6, showTimeTo: 20 } },
+  light: { style: {}, config: { theme: 'light' } },
+  dark: { style: {}, config: { theme: 'dark' } },
+  corporate: { style: corporateTheme, config: {} },
+  minimal: { style: minimalTheme, config: {} },
+  bold: { style: boldTheme, config: {} },
 };
 
 function getWeekDates() {
@@ -83,8 +176,43 @@ function buildEvents() {
     { id: '3', title: 'Customer call', startDate: makeDate(2, 9), endDate: makeDate(2, 10) },
     { id: '4', title: 'Pair on theming', startDate: makeDate(2, 14), endDate: makeDate(2, 15) },
     { id: '5', title: 'Release sync', startDate: makeDate(3, 13), endDate: makeDate(3, 15) },
-    { id: '6', title: 'Demo prep', startDate: makeDate(4, 11), endDate: makeDate(4, 12) },
+    { id: '6', title: 'Demo prep', startDate: makeDate(4, 11), endDate: makeDate(4, 1~2) },
   ];
+}
+
+function ThemeToggle(): ReactNode {
+  const { colorMode, setColorMode } = useColorMode();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return (
+    <button
+      className="mh-theme-toggle"
+      type="button"
+      onClick={() => setColorMode(colorMode === 'dark' ? 'light' : 'dark')}
+      title={colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+    >
+      {mounted && colorMode === 'dark' ? (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"
+          />
+        </svg>
+      ) : mounted ? (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"
+          />
+        </svg>
+      ) : null}
+    </button>
+  );
 }
 
 export default function Home(): ReactNode {
@@ -94,7 +222,6 @@ export default function Home(): ReactNode {
   const [activeStyle, setActiveStyle] = useState<StyleVariant>('corporate');
   const [mounted, setMounted] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
     setMounted(true);
@@ -107,19 +234,17 @@ export default function Home(): ReactNode {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
   const defaultEvents = useMemo(() => buildEvents(), []);
   const activeEvents = styleConfigs[activeStyle].events ?? defaultEvents;
-  const config = useMemo(
+  const config: IMHCalendarFullOptions = useMemo(
     () => ({
-      viewType: 'WEEK',
+      viewType: 'WEEK' as IMHCalendarViewType,
       showCalendarNavigation: false,
       allowEventDragging: false,
-      showTimeFrom: 8,
+      showTimeFrom: 12,
       showTimeTo: 18,
+      showAllDayTasks: false,
+      theme: 'dark',
       ...styleConfigs[activeStyle].config,
       style: styleConfigs[activeStyle].style,
     }),
@@ -136,26 +261,22 @@ export default function Home(): ReactNode {
               <span>mhcalendar</span>
             </a>
             <div className="mh-nav-links">
-              <a href="#views">Views</a>
-              <a href="#theming">Theming</a>
-              <a href="#install">Install</a>
+              <a href="#features">Features</a>
+              <a href="#stack">Works with</a>
+              <a href="#docs">Docs</a>
+              <a href="#npm">npm</a>
+              <a href="#community">Community</a>
               <a href="#faq">FAQ</a>
             </div>
             <div className="mh-nav-cta">
-              <button
-                className="mh-btn ghost"
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              >
-                {theme === 'dark' ? 'Light' : 'Dark'}
-              </button>
+              <ThemeToggle />
               <Link className="mh-btn primary" to="/docs/introduction/">
-                Get started
+                Docs
               </Link>
             </div>
           </div>
         </nav>
-
-        <section className="mh-hero" id="top">
+        <section className="mh-hero mh-bg-a" id="top">
           <div className="mh-hero-grid-bg" />
           <div className="container mh-hero-inner">
             <div className="mh-hero-copy">
@@ -164,9 +285,7 @@ export default function Home(): ReactNode {
                 A full-sized, drag-and-drop calendar for <span>React and Web Components</span>.
               </h1>
               <p>Written in TypeScript and styled with plain CSS custom properties.</p>
-              <div className="mh-install" id="install">
-                npm i @mhcalendar/react
-              </div>
+              <div className="mh-install">npm i @mhcalendar/react</div>
               <div className="mh-style-switcher">
                 {(Object.keys(styleConfigs) as StyleVariant[]).map((variant) => (
                   <button
@@ -185,8 +304,34 @@ export default function Home(): ReactNode {
             </div>
           </div>
         </section>
-
-        <section className="mh-integrations" id="views">
+        Every way your team needs to see time. Switch views, style tokens, and behavior in one API
+        surface.
+        <section className="mh-features mh-bg-b" id="features">
+          <div className="container">
+            <span className="mh-eyebrow">Features</span>
+            <h2>What you get out of the box.</h2>
+            <p className="mh-features-intro">
+              The core features teams reach for most, no extra configuration needed.
+            </p>
+            <div className="mh-feature-list">
+              {FEATURES.map((feature, index) => (
+                <div
+                  key={feature.title}
+                  className={
+                    index % 2 === 1 ? 'mh-feature-row mh-feature-row-reverse' : 'mh-feature-row'
+                  }
+                >
+                  <div className="mh-feature-text">
+                    <h3>{feature.title}</h3>
+                    <p>{feature.description}</p>
+                  </div>
+                  <div className="mh-feature-media" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+        <section className="mh-integrations mh-bg-a" id="stack">
           <div className="container">
             <span className="mh-eyebrow">Works with</span>
             <h2>Drop it into the stack you already have.</h2>
@@ -210,32 +355,47 @@ export default function Home(): ReactNode {
             </div>
           </div>
         </section>
-
-        <section className="mh-sections" id="theming">
-          <div className="container">
-            <h2>Every way your team needs to see time.</h2>
-            <p>Switch views, style tokens, and behavior in one API surface.</p>
-            <div className="mh-cards">
-              <article>
-                <h3>Week/Day</h3>
-                <p>Drag and drop with clear time-grid ergonomics.</p>
-              </article>
-              <article>
-                <h3>Month/Agenda</h3>
-                <p>High-density planning and readable list timeline.</p>
-              </article>
-              <article>
-                <h3>Shiftplan</h3>
-                <p>Resource scheduling with vertical team lanes.</p>
-              </article>
+        {CTA_SECTIONS.map((cta, index) => (
+          <section
+            key={cta.id}
+            id={cta.id}
+            className={
+              'mh-cta' +
+              (index % 2 === 0 ? ' mh-bg-b' : ' mh-bg-a') +
+              (cta.reverse ? ' mh-cta-reverse' : '')
+            }
+          >
+            <div className="container mh-cta-inner">
+              <div className="mh-cta-text">
+                <span className="mh-eyebrow">{cta.eyebrow}</span>
+                <h2>{cta.heading}</h2>
+                <p>{cta.description}</p>
+                {cta.external ? (
+                  <a className="mh-btn primary" href={cta.href} target="_blank" rel="noreferrer">
+                    {cta.ctaLabel}
+                  </a>
+                ) : (
+                  <Link className="mh-btn primary" to={cta.href}>
+                    {cta.ctaLabel}
+                  </Link>
+                )}
+              </div>
+              <div className="mh-cta-media" />
             </div>
-          </div>
-        </section>
-
-        <section className="mh-faq" id="faq">
+          </section>
+        ))}
+        <section className="mh-faq mh-bg-a" id="faq">
           <div className="container">
-            <h2>FAQ</h2>
-            <p>Need examples? Check docs and full API in the sidebar.</p>
+            <span className="mh-eyebrow">FAQ</span>
+            <h2>Questions, answered.</h2>
+            <div className="mh-faq-list">
+              {FAQS.map((faq) => (
+                <details key={faq.question} className="mh-faq-item">
+                  <summary>{faq.question}</summary>
+                  <p>{faq.answer}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </section>
       </main>

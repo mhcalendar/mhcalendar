@@ -3,19 +3,20 @@
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 
-  --bg: #FBFAF8;
-  --bg-elev: #FFFFFF;
-  --bg-soft: #F4F2EE;
-  --surface: #FFFFFF;
-  --border: #E8E5E0;
-  --border-strong: #D6D2CB;
-  --text: #18181B;
-  --text-muted: #71717A;
+  --bg: #fbfaf8;
+  --bg-elev: #ffffff;
+  --bg-soft: #f4f2ee;
+  --surface: #ffffff;
+  --border: #e8e5e0;
+  --border-strong: #d6d2cb;
+  --text: #18181b;
+  --text-muted: #71717a;
   --accent: oklch(0.55 0.18 270);
-  --accent-fg: #FFFFFF;
+  --accent-fg: #ffffff;
   /* @mhcalendar/calendar's own default brand color (DEFAULT_THEME_COLOR), same in light/dark. */
   --mh-brand: #8a79ff;
-  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-sans:
+    'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
   --radius: 10px;
   --radius-lg: 14px;
@@ -25,16 +26,16 @@
   --ifm-color-primary: #25c2a0;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 
-  --bg: #0A0A0B;
+  --bg: #0a0a0b;
   --bg-elev: #131316;
-  --bg-soft: #18181B;
+  --bg-soft: #18181b;
   --surface: #131316;
-  --border: #27272A;
-  --border-strong: #3F3F46;
-  --text: #FAFAF9;
-  --text-muted: #A1A1AA;
+  --border: #27272a;
+  --border-strong: #3f3f46;
+  --text: #fafaf9;
+  --text-muted: #a1a1aa;
   --accent: oklch(0.72 0.16 270);
-  --accent-fg: #0A0A0B;
+  --accent-fg: #0a0a0b;
 }
 
 /* Docusaurus reuses `.alert--info` classes for every <details> block (our
@@ -145,10 +146,26 @@ body {
   text-decoration: none;
 }
 
-.mh-btn.ghost {
+.mh-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
   background: transparent;
   color: var(--text);
-  border-color: var(--border);
+  cursor: pointer;
+}
+
+.mh-theme-toggle:hover {
+  background: var(--bg-soft);
+}
+
+.mh-theme-toggle svg {
+  width: 20px;
+  height: 20px;
 }
 
 .mh-btn.primary {
@@ -166,8 +183,16 @@ body {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(to right, color-mix(in oklch, var(--text) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklch, var(--text) 5%, transparent) 1px, transparent 1px);
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--text) 5%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--text) 5%, transparent) 1px,
+      transparent 1px
+    );
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 30%, transparent 80%);
 }
@@ -248,22 +273,35 @@ body {
 
 .mh-hero-demo {
   height: 780px;
+  padding: 10px;
+  border-radius: 20px;
+  background: #131314;
 }
 
-.mh-integrations {
-  padding: 90px 0;
+.mh-bg-a {
+  background: var(--bg);
+}
+
+.mh-bg-b {
   background: var(--bg-soft);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
 
-.mh-sections,
+.mh-features {
+  padding: 90px 0;
+}
+
+.mh-integrations {
+  padding: 90px 0;
+}
+
 .mh-faq {
   padding: 90px 0;
 }
 
+.mh-features h2,
 .mh-integrations h2,
-.mh-sections h2,
 .mh-faq h2 {
   margin: 0;
   font-size: clamp(28px, 3.6vw, 44px);
@@ -271,19 +309,62 @@ body {
   letter-spacing: -0.035em;
 }
 
-.mh-integrations h2 {
+.mh-features h2,
+.mh-integrations h2,
+.mh-faq h2 {
   margin-top: 14px;
 }
 
+.mh-features p,
 .mh-integrations p,
-.mh-sections p,
 .mh-faq p {
   color: var(--text-muted);
 }
 
+.mh-features-intro,
 .mh-integrations p {
   margin: 12px 0 0;
   max-width: 480px;
+}
+
+.mh-feature-list {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 72px;
+}
+
+.mh-feature-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 48px;
+}
+
+.mh-feature-row-reverse .mh-feature-text {
+  order: 2;
+}
+
+.mh-feature-row-reverse .mh-feature-media {
+  order: 1;
+}
+
+.mh-feature-text h3 {
+  margin: 0 0 12px;
+  font-size: clamp(20px, 2.2vw, 26px);
+  letter-spacing: -0.02em;
+}
+
+.mh-feature-text p {
+  margin: 0;
+  max-width: 440px;
+}
+
+.mh-feature-media {
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-strong);
+  background: var(--bg-elev);
 }
 
 .mh-integrations-grid {
@@ -325,22 +406,84 @@ body {
   color: var(--text);
 }
 
-.mh-cards {
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+.mh-cta {
+  padding: 90px 0;
 }
 
-.mh-cards article {
-  background: var(--surface);
+.mh-cta-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 48px;
+}
+
+.mh-cta-reverse .mh-cta-text {
+  order: 2;
+}
+
+.mh-cta-reverse .mh-cta-media {
+  order: 1;
+}
+
+.mh-cta-text h2 {
+  margin: 14px 0 0;
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.mh-cta-text p {
+  margin: 12px 0 24px;
+  max-width: 420px;
+  color: var(--text-muted);
+}
+
+.mh-cta-media {
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border-strong);
+  background: var(--bg-elev);
+}
+
+.mh-faq-list {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 720px;
+}
+
+.mh-faq-item {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 18px 20px;
+  background: var(--surface);
 }
 
-.mh-cards h3 {
-  margin: 0 0 10px;
+.mh-faq-item summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  list-style: none;
+}
+
+.mh-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.mh-faq-item summary::after {
+  content: '+';
+  float: right;
+  color: var(--text-muted);
+}
+
+.mh-faq-item[open] summary::after {
+  content: '\2212';
+}
+
+.mh-faq-item p {
+  margin: 12px 0 0;
 }
 
 @media (max-width: 960px) {
@@ -357,7 +500,23 @@ body {
     gap: 26px;
   }
 
-  .mh-cards {
+  .mh-feature-row {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .mh-feature-row-reverse .mh-feature-text,
+  .mh-feature-row-reverse .mh-feature-media {
+    order: initial;
+  }
+
+  .mh-cta-inner {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .mh-cta-reverse .mh-cta-text,
+  .mh-cta-reverse .mh-cta-media {
+    order: initial;
   }
 }

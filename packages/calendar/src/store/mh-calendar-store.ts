@@ -52,6 +52,13 @@ export class MHCalendarStore extends MHCalendarActions {
     return this.hoursRangeCal / slotDivider;
   }
 
+  get calendarHourHeight(): number | undefined {
+    if (!this.state.heightOfCalendarDay || !this.state.hoursSlotInterval) return undefined;
+    const hourLabelsCount = DaysGenerator.generateSlotHours(this.state.hoursSlotInterval).length;
+    if (!hourLabelsCount) return undefined;
+    return this.state.heightOfCalendarDay / hourLabelsCount;
+  }
+
   get mainTimezone(): string {
     return this.state.timezones?.[0] || Intl.DateTimeFormat().resolvedOptions().timeZone;
   }

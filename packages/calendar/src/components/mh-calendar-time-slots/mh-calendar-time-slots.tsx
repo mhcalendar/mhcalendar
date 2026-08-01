@@ -1,4 +1,4 @@
-import { Component, Element, h, State, Watch } from '@stencil/core';
+import { Component, Element, h } from '@stencil/core';
 import { store, storeState } from '../../store/mh-calendar-store';
 import { DaysGenerator } from '../../utils/DaysGenerator';
 import { TimezoneUtils } from '../../utils/TimezoneUtils';
@@ -11,46 +11,28 @@ import dayjs from 'dayjs';
 export class MHCalendarTimeSlots {
   @Element() MHCalendarTimeSlotsElement: any;
 
-  @State() currentTimeFrom?: Date;
-  @State() amountOfPrintedSlots?: number;
-  @State() amountOfPrintedHoursSlots?: string[];
+  private amountOfPrintedSlots = 0;
+  private amountOfPrintedHoursSlots: string[] = [];
 
-  private storeUnsubscribers: (() => void)[] = [];
-
-  connectedCallback() {
-    this.currentTimeFrom = storeState.calendarDateRange.fromDate;
-
-    if (!storeState.slotInterval || !storeState.hoursSlotInterval) return;
+  componentWillRender() {
+    if (!storeState.slotInterval || !storeState.hoursSlotInterval) {
+      this.amountOfPrintedSlots = 0;
+      this.amountOfPrintedHoursSlots = [];
+      return;
+    }
 
     const userSlotDivider =
       (storeState.slotInterval.hours * 60 + storeState.slotInterval.minutes) / 60;
 
-    const userHourSlotDivider = DaysGenerator.generateSlotHours(storeState.hoursSlotInterval);
-
     this.amountOfPrintedSlots = store.hoursRangeCal / userSlotDivider;
-
-    this.amountOfPrintedHoursSlots = userHourSlotDivider;
-
-    this.storeUnsubscribers.push(
-      store.onChange('calendarDateRange', () => {
-        if (storeState.calendarDateRange.fromDate) {
-          this.currentTimeFrom = storeState.calendarDateRange.fromDate;
-        }
-      }),
-    );
+    this.amountOfPrintedHoursSlots = DaysGenerator.generateSlotHours(storeState.hoursSlotInterval);
   }
 
-  disconnectedCallback() {
-    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
-    this.storeUnsubscribers = [];
+  componentDidRender() {
+    this.updateCssVariables();
   }
 
-  componentDidLoad() {
-    this.generateTimeSlots();
-  }
-
-  @Watch('currentTimeFrom')
-  private generateTimeSlots() {
+  private updateCssVariables() {
     const { headerMargin } = store;
 
     this.MHCalendarTimeSlotsElement.style.setProperty(
@@ -58,7 +40,7 @@ export class MHCalendarTimeSlots {
       `calc((100% - ${headerMargin}px) / ${this.amountOfPrintedSlots})`,
     );
 
-    if (this.amountOfPrintedHoursSlots) {
+    if (this.amountOfPrintedHoursSlots.length) {
       const hourLabels = this.amountOfPrintedHoursSlots.map((h) => parseInt(h));
       const hourInterval = hourLabels.length > 1 ? hourLabels[1] - hourLabels[0] : 1;
       const totalHourIntervals = (hourLabels[hourLabels.length - 1] - hourLabels[0]) / hourInterval;
@@ -66,11 +48,6 @@ export class MHCalendarTimeSlots {
         '--time-slots-length',
         `calc((100% - ${headerMargin}px) / ${totalHourIntervals + 1})`,
       );
-    }
-
-    if (storeState.heightOfCalendarDay && this.amountOfPrintedHoursSlots?.length) {
-      storeState.heightOfCalendarHour =
-        storeState.heightOfCalendarDay / this.amountOfPrintedHoursSlots.length;
     }
   }
 
@@ -99,7 +76,7 @@ export class MHCalendarTimeSlots {
     const visibleEvery = storeState.slotInterval.visibleEvery ?? 1;
 
     // Render slots
-    return Array.from({ length: this.amountOfPrintedSlots ?? 0 }).map((_, index) => {
+    return Array.from({ length: this.amountOfPrintedSlots }).map((_, index) => {
       const slotTime = calculateSlotTime(index);
       const displayTime = shouldShowTime(slotTime);
       const slotTimeMinutes = startTimeMinutes + slotDurationMinutes * index;
@@ -120,7 +97,7 @@ export class MHCalendarTimeSlots {
 
       // Format main timezone time
       // Use main timezone if specified, otherwise use browser default
-      const referenceDate = this.currentTimeFrom || new Date();
+      const referenceDate = storeState.calendarDateRange.fromDate || new Date();
       const dateString = dayjs(referenceDate).format('YYYY-MM-DD');
 
       const formattedMainTime = dayjs

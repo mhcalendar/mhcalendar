@@ -7,7 +7,7 @@ import { IMHCalendarFullOptions, IMHCalendarViewType, MhCalendar } from '@mhcale
 import { boldTheme, corporateTheme, minimalTheme } from '../theme-config/calendarThemes';
 import ThemeToggle from '../components/ThemeToggle';
 
-type StyleVariant = 'light' | 'dark' | 'corporate' | 'minimal' | 'bold';
+type StyleVariant = 'light' | 'dark' | 'corporate' | 'minimal' | 'bold' | 'custom';
 
 type ThemeConfig = {
   style: Record<string, unknown>;
@@ -21,6 +21,7 @@ const styleConfigs: Record<StyleVariant, ThemeConfig> = {
   corporate: { style: corporateTheme, config: {} },
   minimal: { style: minimalTheme, config: {} },
   bold: { style: boldTheme, config: {} },
+  custom: { style: {}, config: {} },
 };
 
 function getWeekDates() {
@@ -80,6 +81,8 @@ export default function TryPage(): ReactNode {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeStyle, setActiveStyle] = useState<StyleVariant>('corporate');
   const [mounted, setMounted] = useState(false);
+  const [customTimeFrom, setCustomTimeFrom] = useState(12);
+  const [customTimeTo, setCustomTimeTo] = useState(18);
 
   useEffect(() => {
     setMounted(true);
@@ -92,14 +95,14 @@ export default function TryPage(): ReactNode {
       viewType: 'WEEK' as IMHCalendarViewType,
       showCalendarNavigation: false,
       allowEventDragging: true,
-      showTimeFrom: 12,
-      showTimeTo: 18,
+      showTimeFrom: customTimeFrom,
+      showTimeTo: customTimeTo,
       showAllDayTasks: false,
       theme: 'dark',
       ...styleConfigs[activeStyle].config,
       style: styleConfigs[activeStyle].style,
     }),
-    [activeStyle],
+    [activeStyle, customTimeFrom, customTimeTo],
   );
 
   return (
@@ -107,28 +110,55 @@ export default function TryPage(): ReactNode {
       <div className="mh-demo">
         <aside className={sidebarOpen ? 'mh-demo-sidebar open' : 'mh-demo-sidebar'}>
           <div className="mh-demo-sidebar-inner">
-            <Link className="mh-logo" to="/">
-              <img src={markUrl} alt="mh logo" />
-              <span>mhcalendar</span>
-            </Link>
-            <div className="mh-demo-sidebar-section">
-              <span className="mh-demo-sidebar-label">Appearance</span>
+            <div className="mh-demo-sidebar-header">
+              <Link className="mh-logo" to="/">
+                <img src={markUrl} alt="mh logo" />
+                <span>mhcalendar</span>
+              </Link>
               <ThemeToggle />
             </div>
             <div className="mh-demo-sidebar-section">
               <span className="mh-demo-sidebar-label">Calendar theme</span>
-              <div className="mh-style-switcher mh-style-switcher-vertical">
+              <select
+                className="mh-style-select"
+                value={activeStyle}
+                onChange={(event) => setActiveStyle(event.target.value as StyleVariant)}
+              >
                 {(Object.keys(styleConfigs) as StyleVariant[]).map((variant) => (
-                  <button
-                    key={variant}
-                    type="button"
-                    className={variant === activeStyle ? 'active' : ''}
-                    onClick={() => setActiveStyle(variant)}
-                  >
+                  <option key={variant} value={variant}>
                     {variant}
-                  </button>
+                  </option>
                 ))}
-              </div>
+              </select>
+            </div>
+            <div className="mh-demo-sidebar-section">
+              <span className="mh-demo-sidebar-label">Config</span>
+              <label className="mh-demo-config-field">
+                <span>Time from</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={23}
+                  value={customTimeFrom}
+                  onChange={(event) => {
+                    setCustomTimeFrom(Number(event.target.value));
+                    setActiveStyle('custom');
+                  }}
+                />
+              </label>
+              <label className="mh-demo-config-field">
+                <span>Time to</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={23}
+                  value={customTimeTo}
+                  onChange={(event) => {
+                    setCustomTimeTo(Number(event.target.value));
+                    setActiveStyle('custom');
+                  }}
+                />
+              </label>
             </div>
           </div>
         </aside>

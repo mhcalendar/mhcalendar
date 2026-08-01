@@ -49,7 +49,9 @@ details.alert--info {
 }
 
 body:has(.mh-landing) .navbar,
-body:has(.mh-landing) .footer {
+body:has(.mh-landing) .footer,
+body:has(.mh-demo) .navbar,
+body:has(.mh-demo) .footer {
   display: none;
 }
 
@@ -168,6 +170,25 @@ body {
   height: 20px;
 }
 
+.mh-github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--text);
+}
+
+.mh-github-link:hover {
+  background: var(--bg-soft);
+}
+
+.mh-github-link svg {
+  width: 20px;
+  height: 20px;
+}
+
 .mh-btn.primary {
   background: var(--text);
   color: var(--bg);
@@ -199,7 +220,7 @@ body {
 
 .mh-hero-inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 56px;
   align-items: center;
   position: relative;
@@ -214,6 +235,24 @@ body {
 
 .mh-hero-copy h1 span {
   color: var(--accent);
+}
+
+.mh-rotating-word {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.4em;
+  vertical-align: top;
+}
+
+.mh-rotating-word-track {
+  display: flex;
+  flex-direction: column;
+}
+
+.mh-rotating-word-item {
+  height: 1.4em;
+  display: flex;
+  align-items: center;
 }
 
 .mh-eyebrow {
@@ -239,14 +278,54 @@ body {
   max-width: 540px;
 }
 
+.mh-install-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .mh-install {
   display: inline-flex;
+  align-items: center;
   padding: 8px 12px;
   border: 1px solid var(--border);
   border-radius: 10px;
   font-family: var(--font-mono);
   font-size: 13px;
   background: var(--bg-elev);
+}
+
+.mh-install code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+.mh-install-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elev);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.mh-install-copy:hover {
+  background: var(--bg-soft);
+  color: var(--text);
+}
+
+.mh-install-copy svg {
+  width: 15px;
+  height: 15px;
 }
 
 .mh-style-switcher {
@@ -271,11 +350,8 @@ body {
   color: var(--bg);
 }
 
-.mh-hero-demo {
-  height: 780px;
-  padding: 10px;
-  border-radius: 20px;
-  background: #131314;
+.mh-hero-actions {
+  margin-top: 24px;
 }
 
 .mh-bg-a {
@@ -484,6 +560,81 @@ body {
 
 .mh-faq-item p {
   margin: 12px 0 0;
+}
+
+.mh-demo {
+  display: flex;
+  height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.mh-demo-sidebar {
+  width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--bg-elev);
+  transition: width 0.18s ease;
+}
+
+.mh-demo-sidebar.open {
+  width: 260px;
+  border-right: 1px solid var(--border);
+}
+
+.mh-demo-sidebar-inner {
+  width: 260px;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.mh-demo-sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mh-demo-sidebar-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.mh-style-switcher-vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.mh-style-switcher-vertical button {
+  text-align: left;
+}
+
+.mh-demo-sidebar-toggle {
+  flex-shrink: 0;
+  width: 26px;
+  border: none;
+  border-right: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.mh-demo-sidebar-toggle:hover {
+  background: var(--bg-soft);
+  color: var(--text);
+}
+
+.mh-demo-main {
+  flex: 1;
+  min-width: 0;
+  padding: 16px;
 }
 
 @media (max-width: 960px) {

@@ -1,25 +1,10 @@
 import type { ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { useColorMode } from '@docusaurus/theme-common';
-import {
-  IMHCalendarFullOptions,
-  IMHCalendarViewType,
-  MhCalendar,
-  MhCalendarEvents,
-} from '@mhcalendar/react';
-import { boldTheme, corporateTheme, minimalTheme } from '../theme-config/calendarThemes';
-
-type StyleVariant = 'light' | 'dark' | 'corporate' | 'minimal' | 'bold';
-
-type ThemeConfig = {
-  style: Record<string, unknown>;
-  config?: Record<string, unknown>;
-  events?: ReturnType<typeof buildEvents>;
-};
+import ThemeToggle from '../components/ThemeToggle';
 
 // Official brand marks (path data from simple-icons, CC0), each with its brand color.
 // Next.js's mark is monochrome black/white in the source, so it uses currentColor to
@@ -148,98 +133,122 @@ const FAQS: { question: string; answer: string }[] = [
   },
 ];
 
-const styleConfigs: Record<StyleVariant, ThemeConfig> = {
-  light: { style: {}, config: { theme: 'light' } },
-  dark: { style: {}, config: { theme: 'dark' } },
-  corporate: { style: corporateTheme, config: {} },
-  minimal: { style: minimalTheme, config: {} },
-  bold: { style: boldTheme, config: {} },
-};
+const ROTATING_WORDS: { label: string; color: string }[] = [
+  { label: 'React', color: '#61DAFB' },
+  { label: 'Vue', color: '#42B883' },
+  { label: 'Angular', color: '#DD0031' },
+  { label: 'Mobile', color: '#8A79FF' },
+];
 
-function getWeekDates() {
-  const now = new Date();
-  const day = now.getDay();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1));
-  monday.setHours(0, 0, 0, 0);
+function RotatingWord(): ReactNode {
+  const idCounterRef = useRef(0);
+  const makeItem = (word: (typeof ROTATING_WORDS)[number]) => ({
+    ...word,
+    id: idCounterRef.current++,
+  });
 
-  const makeDate = (dayOffset: number, hour: number, minutes = 0) => {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + dayOffset);
-    d.setHours(hour, minutes, 0, 0);
-    return d;
-  };
-
-  return { makeDate };
-}
-
-function buildEvents() {
-  const { makeDate } = getWeekDates();
-  return [
-    {
-      id: '1',
-      title: 'Design review',
-      startDate: makeDate(0, 12),
-      endDate: makeDate(0, 13),
-      color: '#F87171',
-    },
-    {
-      id: '2',
-      title: 'Standup',
-      color: '#EC4899',
-      startDate: makeDate(1, 13),
-      endDate: makeDate(1, 14),
-    },
-    {
-      id: '3',
-      title: 'Customer call',
-      startDate: makeDate(2, 9),
-      endDate: makeDate(2, 10),
-      color: '#22C55E',
-    },
-    { id: '4', title: 'Pair on theming', startDate: makeDate(2, 14), endDate: makeDate(2, 16) },
-    {
-      id: '5',
-      title: 'Release sync',
-      color: '#3B82F6',
-      startDate: makeDate(3, 15),
-      endDate: makeDate(3, 18),
-    },
-  ];
-}
-
-function ThemeToggle(): ReactNode {
-  const { colorMode, setColorMode } = useColorMode();
-  const [mounted, setMounted] = useState(false);
+  const cursorRef = useRef(2 % ROTATING_WORDS.length);
+  const trackRef = useRef<HTMLSpanElement>(null);
+  const [words, setWords] = useState(() => [
+    makeItem(ROTATING_WORDS[0]),
+    makeItem(ROTATING_WORDS[1]),
+  ]);
+  const [sliding, setSliding] = useState(false);
+  const [suspendTransition, setSuspendTransition] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const id = setInterval(() => setSliding(true), 2200);
+    return () => clearInterval(id);
   }, []);
 
+  // Forces a reflow so the disabled transition is committed before it gets
+  // re-enabled, otherwise the browser can animate the instant reset below.
+  useLayoutEffect(() => {
+    if (!suspendTransition || !trackRef.current) {
+      return;
+    }
+    void trackRef.current.getBoundingClientRect();
+    setSuspendTransition(false);
+  }, [suspendTransition]);
+
+  const handleTransitionEnd = () => {
+    setWords((prev) => {
+      const nextWord = makeItem(ROTATING_WORDS[cursorRef.current]);
+      cursorRef.current = (cursorRef.current + 1) % ROTATING_WORDS.length;
+      return [prev[1], nextWord];
+    });
+    setSuspendTransition(true);
+    setSliding(false);
+  };
+
   return (
-    <button
-      className="mh-theme-toggle"
-      type="button"
-      onClick={() => setColorMode(colorMode === 'dark' ? 'light' : 'dark')}
-      title={colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      aria-label={colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-    >
-      {mounted && colorMode === 'dark' ? (
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            fill="currentColor"
-            d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"
-          />
-        </svg>
-      ) : mounted ? (
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            fill="currentColor"
-            d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"
-          />
-        </svg>
-      ) : null}
-    </button>
+    <span className="mh-rotating-word">
+      <span
+        className="mh-rotating-word-track"
+        ref={trackRef}
+        onTransitionEnd={handleTransitionEnd}
+        style={{
+          transform: sliding ? 'translateY(-1.4em)' : 'translateY(0)',
+          transition: suspendTransition ? 'none' : 'transform 0.5s cubic-bezier(0.65, 0, 0.35, 1)',
+        }}
+      >
+        {words.map((word) => (
+          <span className="mh-rotating-word-item" style={{ color: word.color }} key={word.id}>
+            {word.label}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+function InstallCommand(): ReactNode {
+  const command = 'npm i @mhcalendar/react';
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(command);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+  return (
+    <div className="mh-install-group">
+      <div className="mh-install">
+        <code>{command}</code>
+      </div>
+      <button
+        type="button"
+        className="mh-install-copy"
+        onClick={handleCopy}
+        title="Copy to clipboard"
+        aria-label="Copy install command"
+      >
+        {copied ? (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M20 6 9 17l-5-5"
+            />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 9h10v10H9z M5 15V5h10"
+            />
+          </svg>
+        )}
+      </button>
+    </div>
   );
 }
 
@@ -247,13 +256,7 @@ export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
   const reactPackageVersion = siteConfig.customFields?.reactPackageVersion as string;
   const markUrl = useBaseUrl('/img/mh-mark.png');
-  const [activeStyle, setActiveStyle] = useState<StyleVariant>('corporate');
-  const [mounted, setMounted] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setNavScrolled(window.scrollY > 8);
@@ -261,23 +264,6 @@ export default function Home(): ReactNode {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  const defaultEvents = useMemo(() => buildEvents(), []);
-  const activeEvents = styleConfigs[activeStyle].events ?? defaultEvents;
-  const config: IMHCalendarFullOptions = useMemo(
-    () => ({
-      viewType: 'WEEK' as IMHCalendarViewType,
-      showCalendarNavigation: false,
-      allowEventDragging: true,
-      showTimeFrom: 12,
-      showTimeTo: 18,
-      showAllDayTasks: false,
-      theme: 'dark',
-      ...styleConfigs[activeStyle].config,
-      style: styleConfigs[activeStyle].style,
-    }),
-    [activeStyle],
-  );
 
   return (
     <Layout title="mhcalendar" description="Fully customizable scheduling component">
@@ -301,6 +287,21 @@ export default function Home(): ReactNode {
               <Link className="mh-btn primary" to="/docs/introduction/">
                 Docs
               </Link>
+              <a
+                className="mh-github-link"
+                href="https://github.com/mhcalendar/mhcalendar"
+                target="_blank"
+                rel="noreferrer"
+                title="View on GitHub"
+                aria-label="View on GitHub"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    fill="currentColor"
+                    d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58 0-.29-.01-1.04-.02-2.04-3.34.72-4.04-1.61-4.04-1.61-.55-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.02 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22 0 1.6-.02 2.89-.02 3.29 0 .32.22.7.83.58A12 12 0 0 0 12 .5z"
+                  />
+                </svg>
+              </a>
             </div>
           </div>
         </nav>
@@ -310,30 +311,23 @@ export default function Home(): ReactNode {
             <div className="mh-hero-copy">
               <span className="mh-eyebrow">v{reactPackageVersion}</span>
               <h1>
-                A full-sized, drag-and-drop calendar for <span>React and Web Components</span>.
+                A modern calendar solution for
+                <br />
+                <RotatingWord />
               </h1>
-              <p>Written in TypeScript and styled with plain CSS custom properties.</p>
-              <div className="mh-install">npm i @mhcalendar/react</div>
-              <div className="mh-style-switcher">
-                {(Object.keys(styleConfigs) as StyleVariant[]).map((variant) => (
-                  <button
-                    key={variant}
-                    type="button"
-                    className={variant === activeStyle ? 'active' : ''}
-                    onClick={() => setActiveStyle(variant)}
-                  >
-                    {variant}
-                  </button>
-                ))}
+              <p>
+                A full-sized, drag-and-drop calendar for React and Web Components, written in
+                TypeScript.
+              </p>
+              <InstallCommand />
+              <div className="mh-hero-actions">
+                <Link className="mh-btn primary" to="/try">
+                  Try it!
+                </Link>
               </div>
-            </div>
-            <div className="mh-hero-demo">
-              {mounted ? <MhCalendar config={config} events={activeEvents} /> : null}
             </div>
           </div>
         </section>
-        Every way your team needs to see time. Switch views, style tokens, and behavior in one API
-        surface.
         <section className="mh-features mh-bg-b" id="features">
           <div className="container">
             <span className="mh-eyebrow">Features</span>

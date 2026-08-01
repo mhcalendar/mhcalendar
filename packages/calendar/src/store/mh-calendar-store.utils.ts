@@ -37,25 +37,28 @@ export class MHCalendarStoreUtils {
     fromDate: Date,
     shiftplanDays: number = 7,
   ): ICalendarDateRange {
+    const anchorDate = new Date(fromDate);
+    anchorDate.setHours(0, 0, 0, 0);
+
     switch (viewType) {
       case IMHCalendarViewType.MONTH: {
-        const year = fromDate.getFullYear();
-        const month = fromDate.getMonth();
+        const year = anchorDate.getFullYear();
+        const month = anchorDate.getMonth();
         return { fromDate: new Date(year, month, 1), toDate: new Date(year, month + 1, 0) };
       }
       case IMHCalendarViewType.WEEK:
       case IMHCalendarViewType.AGENDA: {
-        const { fromDate: weekFrom, toDate: weekTo } = this.getDatesForWeekView(fromDate);
+        const { fromDate: weekFrom, toDate: weekTo } = this.getDatesForWeekView(anchorDate);
         return { fromDate: weekFrom, toDate: weekTo };
       }
       case IMHCalendarViewType.SHIFTPLAN: {
-        const to = new Date(fromDate);
-        to.setDate(fromDate.getDate() + shiftplanDays - 1);
-        return { fromDate, toDate: to };
+        const to = new Date(anchorDate);
+        to.setDate(anchorDate.getDate() + shiftplanDays - 1);
+        return { fromDate: anchorDate, toDate: to };
       }
       case IMHCalendarViewType.DAY:
       default:
-        return { fromDate, toDate: fromDate };
+        return { fromDate: anchorDate, toDate: anchorDate };
     }
   }
 

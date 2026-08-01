@@ -559,17 +559,18 @@ body {
 }
 
 .mh-demo-sidebar.open {
-  width: 260px;
+  width: 300px;
   border-right: 1px solid var(--border);
 }
 
 .mh-demo-sidebar-inner {
-  width: 260px;
+  width: 300px;
   height: 100%;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
+  overflow-y: auto;
 }
 
 .mh-demo-sidebar-header {
@@ -637,6 +638,98 @@ body {
 .mh-demo-sidebar-toggle:hover {
   background: var(--bg-soft);
   color: var(--text);
+}
+
+.mh-demo-sidebar-group {
+  border: none;
+  padding: 0;
+}
+
+.mh-demo-sidebar-group summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.mh-demo-sidebar-group summary::-webkit-details-marker {
+  display: none;
+}
+
+.mh-demo-sidebar-group summary::before {
+  content: '▸';
+  display: inline-block;
+  width: 10px;
+  margin-right: 6px;
+  font-size: 10px;
+  transition: transform 0.15s ease;
+}
+
+.mh-demo-sidebar-group[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.mh-demo-sidebar-group-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.mh-demo-checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.mh-demo-checkbox-field input {
+  cursor: pointer;
+}
+
+.mh-demo-config-field select {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 13px;
+  background: var(--bg-elev);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.mh-demo-config-field input[type='text'],
+.mh-demo-config-field input[type='date'] {
+  width: 110px;
+}
+
+.mh-demo-day-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mh-demo-day-chip {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  background: var(--bg-elev);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.mh-demo-day-chip.active {
+  background: var(--text);
+  color: var(--bg-elev);
+  border-color: var(--text);
+}
+
+.mh-demo-sidebar-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0.8;
+  line-height: 1.4;
 }
 
 .mh-demo-main {

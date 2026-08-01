@@ -114,7 +114,7 @@ mh-calendar-day {
 }
 
 /* Fix for month view: prevent event holders from causing height changes */
-.mhCalendarDay__eventHolder {
+mh-calendar-month .mhCalendarDay__eventHolder {
   min-height: 0;
   max-height: fit-content;
 }

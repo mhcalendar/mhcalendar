@@ -5,7 +5,12 @@ import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { useColorMode } from '@docusaurus/theme-common';
-import { IMHCalendarFullOptions, IMHCalendarViewType, MhCalendar } from '@mhcalendar/react';
+import {
+  IMHCalendarFullOptions,
+  IMHCalendarViewType,
+  MhCalendar,
+  MhCalendarEvents,
+} from '@mhcalendar/react';
 import { boldTheme, corporateTheme, minimalTheme } from '../theme-config/calendarThemes';
 
 type StyleVariant = 'light' | 'dark' | 'corporate' | 'minimal' | 'bold';
@@ -171,12 +176,35 @@ function getWeekDates() {
 function buildEvents() {
   const { makeDate } = getWeekDates();
   return [
-    { id: '1', title: 'Design review', startDate: makeDate(0, 9), endDate: makeDate(0, 11) },
-    { id: '2', title: 'Standup', startDate: makeDate(1, 10), endDate: makeDate(1, 11) },
-    { id: '3', title: 'Customer call', startDate: makeDate(2, 9), endDate: makeDate(2, 10) },
-    { id: '4', title: 'Pair on theming', startDate: makeDate(2, 14), endDate: makeDate(2, 15) },
-    { id: '5', title: 'Release sync', startDate: makeDate(3, 13), endDate: makeDate(3, 15) },
-    { id: '6', title: 'Demo prep', startDate: makeDate(4, 11), endDate: makeDate(4, 1~2) },
+    {
+      id: '1',
+      title: 'Design review',
+      startDate: makeDate(0, 12),
+      endDate: makeDate(0, 13),
+      color: '#F87171',
+    },
+    {
+      id: '2',
+      title: 'Standup',
+      color: '#EC4899',
+      startDate: makeDate(1, 13),
+      endDate: makeDate(1, 14),
+    },
+    {
+      id: '3',
+      title: 'Customer call',
+      startDate: makeDate(2, 9),
+      endDate: makeDate(2, 10),
+      color: '#22C55E',
+    },
+    { id: '4', title: 'Pair on theming', startDate: makeDate(2, 14), endDate: makeDate(2, 16) },
+    {
+      id: '5',
+      title: 'Release sync',
+      color: '#3B82F6',
+      startDate: makeDate(3, 15),
+      endDate: makeDate(3, 18),
+    },
   ];
 }
 
@@ -240,7 +268,7 @@ export default function Home(): ReactNode {
     () => ({
       viewType: 'WEEK' as IMHCalendarViewType,
       showCalendarNavigation: false,
-      allowEventDragging: false,
+      allowEventDragging: true,
       showTimeFrom: 12,
       showTimeTo: 18,
       showAllDayTasks: false,

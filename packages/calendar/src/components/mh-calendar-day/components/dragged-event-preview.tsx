@@ -19,6 +19,14 @@ export class DraggedEventPreview {
       return null;
     }
 
+    const draggedDates = EventRenderer.getDraggedEventPreviewDates(
+      this.dragDropState.isDraggedOver,
+      this.day,
+    );
+    const previewEvent = draggedDates
+      ? { ...storeState.draggedEvent, startDate: draggedDates.newStartDate, endDate: draggedDates.newEndDate }
+      : storeState.draggedEvent;
+
     return (
       <div
         class={`mhCalendarDay__eventHolder ${this.dragDropState.isDraggedOverBlocked ? 'mhCalendarDay__eventHolder--blocked' : ''}`}
@@ -34,7 +42,7 @@ export class DraggedEventPreview {
         }}
       >
         <mh-calendar-event
-          event={storeState.draggedEvent ?? undefined}
+          event={previewEvent}
           dayHeight={this.calendarDayElementHeight}
           eventTopPosition={this.dragDropState.isDraggedOver}
           dayOfRendering={this.day}

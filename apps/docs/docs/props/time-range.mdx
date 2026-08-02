@@ -1,0 +1,19 @@
+---
+title: showTimeFrom & showTimeTo
+sidebar_position: 14
+---
+
+# `showTimeFrom` / `showTimeTo`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `showTimeFrom` | `number` | `8` | First visible hour (0–24). |
+| `showTimeTo` | `number` | `17` | Last visible hour; must be greater than `showTimeFrom`. |
+
+```tsx
+<MhCalendar config={{ showTimeFrom: 8, showTimeTo: 18 }} events={events} />
+```
+
+`showTimeTo` must be strictly greater than `showTimeFrom`, otherwise config validation throws
+immediately. See [Display hours](/docs/guides/display-hours) for a full walkthrough, including
+rendering a very tall range with [`fixedHeight`/`virtualScrollHeight`](/docs/props/virtual-scroll).

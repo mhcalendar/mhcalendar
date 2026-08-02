@@ -1,0 +1,86 @@
+---
+title: Business hours
+sidebar_position: 2
+---
+
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
+
+# Business hours
+
+Defines the active time window for event placement. When set, areas outside this range are visually disabled (shaded gray by default). Useful for constraining event creation within a broader displayed time range (e.g., displaying 8:00 - 18:00, but allowing events only between 10:00 - 16:00).
+
+<TryOnCodePen topic="business-hours" />
+
+## Basic usage
+
+```tsx
+<MhCalendar
+  config={{
+    businessHours: [
+      { dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }, // Monday–Friday
+      { dayOfWeek: [0, 6], start: 10, end: 14 }, // Weekend, shorter hours
+    ],
+  }}
+/>
+```
+
+Each entry in the array is a `BusinessHoursConfig`:
+
+| Field       | Type                 | Description                                                                                        |
+| ----------- | -------------------- | -------------------------------------------------------------------------------------------------- |
+| `dayOfWeek` | `number \| number[]` | `0` (Sunday) - `6` (Saturday). Omit to match any day not already matched by a more specific entry. |
+| `date`      | `Date \| string`     | A specific calendar date. Takes priority over `dayOfWeek` for that day.                            |
+| `start`     | `number`             | Opening hour (0 - 23).                                                                             |
+| `end`       | `number`             | Closing hour (0 - 24).                                                                             |
+
+## How Business Hours Are Resolved
+
+The businessHours option allows you to set both recurring weekly schedules (using dayOfWeek) and specific date overrides (using date).
+
+For any given day, the calendar evaluates the businessHours array from top to bottom and applies the first matching entry based on the following priority order:
+
+Specific Date (date) - Takes highest priority. Overrides any recurring weekly rules for that specific calendar day.
+
+Day of Week (dayOfWeek) - Matches recurring days of the week (0 for Sunday through 6 for Saturday).
+
+```tsx
+<MhCalendar
+  config={{
+    businessHours: [
+      { date: '2026-12-24', start: 10, end: 14 }, // Early closure on Christmas Eve
+      { dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }, // Mon–Fri
+      { dayOfWeek: [0, 6], start: 10, end: 14 }, // weekend
+    ],
+  }}
+/>
+```
+
+## Blocking drops outside business hours
+
+By default, dragging or resizing an event into non-business hours is allowed. The gray overlay is
+purely visual. Set `blockBusinessHours: true` to actually prevent it
+
+```tsx
+<MhCalendar
+  config={{
+    businessHours: [
+      businessHours: [{ dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }],
+      blockBusinessHours: true,
+    ],
+  }}
+/>
+```
+
+## Styling the overlay
+
+The overlay tint on non-business hours is controlled by the `nonBusinessHoursOverlayColor` CSS
+custom property - see
+[Styling → CSS custom properties](/docs/styling#css-custom-properties-styleproperties).
+
+```tsx
+<MhCalendar
+  config={{
+    style: { properties: { nonBusinessHoursOverlayColor: 'rgba(220, 38, 38, 0.06)' } },
+  }}
+/>
+```

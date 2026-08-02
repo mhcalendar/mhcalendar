@@ -1,0 +1,75 @@
+---
+title: Timezones
+sidebar_position: 6
+---
+
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
+
+# Timezones
+
+mhcalendar correctly handles the relationship between different timezones. It's designed so that
+no matter where the person looking at the calendar is physically located, events are always placed
+in the right position on the grid — the calendar does the conversion math for you instead of
+leaving it to your app.
+
+<TryOnCodePen topic="timezones" />
+
+## Default: your local timezone, nothing to configure
+
+Out of the box, the calendar renders in the timezone of whoever is viewing it — the browser's own
+timezone (`Intl.DateTimeFormat().resolvedOptions().timeZone`). If you don't set anything, events
+line up correctly for each viewer automatically; there's no setup required for the common case.
+
+## Overriding it: pin a specific timezone
+
+If you need the calendar to show a specific timezone instead of the viewer's local one — for
+example a shared team calendar that should always read in company time — set it explicitly via
+`config.timezones`:
+
+```tsx
+const config = {
+  timezones: ['Europe/Warsaw'],
+};
+```
+
+`timezones` takes an array of **IANA timezone names** — identifiers like `'Europe/Warsaw'`,
+`'America/New_York'`, or `'Asia/Tokyo'` (the `Area/Location` format used by the
+[IANA Time Zone Database](https://www.iana.org/time-zones)). It does **not** accept abbreviations
+(`'CET'`) or raw UTC offsets (`'+01:00'`) — an invalid or misspelled name (e.g. `'Europ/Warsaw'`)
+throws immediately when `config` is set, rather than failing silently later. The first entry in the
+array is the **main** timezone: event positions in the grid are calculated against it.
+
+## Showing several timezones at once
+
+Multi-timezone display is one of mhcalendar's flagship features — you can show up to **three** IANA
+timezones side by side, backed by Day.js's `timezone`/`utc` plugins:
+
+```tsx
+const config = {
+  viewType: 'WEEK',
+  timezones: ['America/Los_Angeles', 'America/New_York', 'Europe/London'],
+};
+```
+
+Only the first entry (the main timezone) affects where events are positioned; the additional
+entries are shown for reference alongside the main column and only change how times are
+_displayed_, not how they're stored or calculated. Passing more than three entries doesn't throw —
+it logs a `console.warn` and silently keeps only the first three.
+
+By default, the main timezone's label is derived automatically (e.g. `"CET (GMT+1)"`). Override it
+with `timezoneLabel` if you'd rather show something else (a city name, an internal team name,
+etc.):
+
+```tsx
+const config = {
+  timezones: ['Europe/Warsaw', 'America/New_York'],
+  timezoneLabel: 'HQ',
+};
+```
+
+## Events themselves are timezone-agnostic
+
+`IMHCalendarEvent.startDate`/`endDate` are plain JS `Date` objects — timezone conversion for
+_display_ happens inside the calendar based on `config.timezones`. You don't need to pre-convert
+event times yourself; store them however your backend gives them to you (typically UTC) and let
+`timezones` handle the rest.

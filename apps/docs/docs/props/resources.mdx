@@ -1,0 +1,28 @@
+---
+title: resources
+sidebar_position: 23
+---
+
+# `resources`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `resources` | `{ id: string; title: string }[]` | `[]` | Rows for the Shiftplan view; matched to events via `event.resourceId`. |
+
+```tsx
+const config = {
+  viewType: 'SHIFTPLAN',
+  resources: [
+    { id: 'alice', title: 'Alice' },
+    { id: 'bob', title: 'Bob' },
+  ],
+};
+
+const events: IMHCalendarEvent[] = [
+  { id: 's1', resourceId: 'alice', title: 'Morning shift', startDate, endDate },
+];
+```
+
+`resourceId` on an event (see [Events](/docs/props/events)) is also read by
+[`onDayClick`/`onRightDayClick`](/docs/props/click-callbacks)'s payload when clicking an empty
+Shiftplan cell.

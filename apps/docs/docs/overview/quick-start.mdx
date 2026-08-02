@@ -1,0 +1,91 @@
+---
+title: Quick Start
+sidebar_position: 2
+---
+
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
+
+# Quick Start
+
+## React
+
+```tsx
+import { useState } from 'react';
+import { MhCalendar, type IMHCalendarEvent, type IMHCalendarViewType } from '@mhcalendar/react';
+
+const CONFIG = {
+  viewType: 'MONTH' as IMHCalendarViewType,
+  showTimeFrom: 8,
+  showTimeTo: 18,
+  showAllDayTasks: true,
+  allowEventDragging: true,
+  allowEventResize: true,
+};
+
+const EVENTS: IMHCalendarEvent[] = [
+  {
+    id: 'event-1',
+    title: 'Team Meeting',
+    startDate: new Date(new Date().setHours(10, 0, 0, 0)),
+    endDate: new Date(new Date().setHours(11, 0, 0, 0)),
+  },
+];
+
+function App() {
+  const [events, setEvents] = useState(EVENTS);
+  return <MhCalendar config={CONFIG} events={events} />;
+}
+```
+
+That's it — `@mhcalendar/react` registers the underlying Web Component for you, so no extra setup
+is needed. Keep `events` in React state (or wherever your data lives) and pass an updated array
+back down whenever something changes; the calendar itself never mutates your data.
+
+<TryOnCodePen topic="quick-start" />
+
+## Vanilla JS / Web Component
+
+```html
+<script type="module">
+  import { defineCustomElements } from 'https://esm.sh/@mhcalendar/calendar/loader';
+  defineCustomElements();
+</script>
+
+<mh-calendar id="calendar"></mh-calendar>
+
+<script type="module">
+  const calendar = document.getElementById('calendar');
+  calendar.config = {
+    viewType: 'MONTH',
+    showTimeFrom: 8,
+    showTimeTo: 18,
+  };
+  calendar.events = [
+    {
+      id: 'event-1',
+      title: 'Team Meeting',
+      startDate: new Date(new Date().setHours(10, 0, 0, 0)),
+      endDate: new Date(new Date().setHours(11, 0, 0, 0)),
+    },
+  ];
+</script>
+```
+
+With a bundler, install the package instead of using a CDN URL:
+
+```bash
+npm install @mhcalendar/calendar
+```
+
+```ts
+import { defineCustomElements } from '@mhcalendar/calendar/loader';
+
+defineCustomElements();
+
+const calendar = document.querySelector('mh-calendar');
+calendar.config = {/* ... */};
+calendar.events = [/* ... */];
+```
+
+`config` and `events` are set as **DOM properties** (`calendar.config = ...`), not HTML attributes
+— objects and arrays can't round-trip through attribute strings.

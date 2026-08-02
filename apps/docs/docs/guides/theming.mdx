@@ -1,0 +1,56 @@
+---
+title: Theming
+sidebar_position: 4
+---
+
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
+
+# Theming
+
+mhcalendar does not include a complex theme registry or provider by design, keeping the core production bundle lightweight with only essential layout styles. Instead, themes are simply plain objects built using the exact same API available to you. For your convenience, we provide ready-to-use light and dark presets out of the box that you can easily apply.
+
+<TryOnCodePen topic="theming" />
+
+## Built-in light & dark themes
+
+mhcalendar ships with two built-in themes out of the box `light` and `dark`. These aren't a separate mechanism: they're just predefined `style.properties` presets using the exact same `config.style` API described on this page, applied as the base before any overrides of your own are layered on top.
+
+```tsx
+<MhCalendar config={{ theme: 'light' }} events={events} />
+```
+
+## Defining a theme object
+
+Theme object combines CSS properties and CSS-in-JS to give you full control over your calendar's styling. You can quickly customize the component using the extensive list of built-in properties, or target specific classes directly inline when you need deeper design control or need to override existing rules with the highest priority. You can find more information about styling in specified Style category.
+
+```tsx
+<MhCalendar
+  config={{
+    style: {
+      properties: {
+        eventBackgroundColor: '#1e3a8a',
+        bordersColor: '#cbd5e1',
+        headerTodayBackgroundColor: '#fff1f2',
+        currentTimeColor: '#e11d48',
+        eventTimeLabelBg: '#172554',
+        eventTimeLabelColor: '#bfdbfe',
+      },
+      mhCalendar: { backgroundColor: '#ffffff', color: '#1e293b' },
+    },
+  }}
+/>
+```
+
+## Toggling themes
+
+Because themes are just objects, you can toggle them. For example, you can keep a small set of named themes and switch between them at
+runtime, e.g. a light/dark toggle
+
+```tsx
+const THEMES = { light: corporateTheme, dark: darkTheme };
+
+function App() {
+  const [themeName, setThemeName] = useState<keyof typeof THEMES>('light');
+  return <MhCalendar config={{ viewType: 'WEEK', style: THEMES[themeName] }} events={events} />;
+}
+```

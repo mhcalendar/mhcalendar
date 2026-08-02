@@ -1,0 +1,33 @@
+---
+title: Click callbacks
+sidebar_position: 12
+---
+
+# `onEventClick` / `onRightEventClick` / `onDayClick` / `onRightDayClick`
+
+| Prop | Type | Fires when |
+|---|---|---|
+| `onEventClick` | `(event: IMHCalendarEvent) => void` | Left-click on an event. |
+| `onRightEventClick` | `(event: IMHCalendarEvent) => void` | Right-click (context menu) on an event. |
+| `onDayClick` | `(day: IMHCalendarDayClickPayload) => void` | Left-click on an empty day/slot. |
+| `onRightDayClick` | `(day: IMHCalendarDayClickPayload) => void` | Right-click on an empty day/slot. |
+
+`IMHCalendarDayClickPayload`:
+
+```ts
+type IMHCalendarDayClickPayload = {
+  date: Date;
+  resourceId?: string; // present for Shiftplan clicks
+};
+```
+
+`onDayClick` fires on every empty-slot click regardless of
+[`createEventOnClick`](/docs/props/create-event-on-click) — it doesn't create an event by itself,
+it just tells you where the click happened.
+
+```tsx
+const config = {
+  onEventClick: (event) => openDetails(event.id),
+  onDayClick: (day) => console.log(day.date, day.resourceId),
+};
+```

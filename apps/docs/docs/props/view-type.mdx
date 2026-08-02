@@ -1,0 +1,19 @@
+---
+title: viewType & availableViews
+sidebar_position: 3
+---
+
+# `viewType` / `availableViews`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `viewType` | `'DAY' \| 'WEEK' \| 'MONTH' \| 'AGENDA' \| 'SHIFTPLAN'` | `'AGENDA'` | The active view. |
+| `availableViews` | `string[]` | all views | Restricts which views the built-in view switcher offers. |
+
+`viewType` controls which view renders. Users can also switch views themselves via the built-in
+navigation bar (toggle it with [`showCalendarNavigation`](/docs/props/navigation-visibility)) —
+restrict which views are offered with `availableViews`.
+
+```tsx
+<MhCalendar config={{ viewType: 'MONTH', availableViews: ['MONTH', 'WEEK', 'AGENDA'] }} events={events} />
+```

@@ -7,7 +7,7 @@ export const MIN_EVENT_DURATION_MINUTES = 15;
 export const DEFAULT_CALENDAR_CONFIG: IMHCalendarConfigBase = {
   theme: 'light',
   style: undefined,
-  viewType: IMHCalendarViewType.AGENDA,
+  viewType: IMHCalendarViewType.WEEK,
   fixedHeight: undefined,
   virtualScrollHeight: undefined,
   eventContent: undefined,
@@ -24,7 +24,7 @@ export const DEFAULT_CALENDAR_CONFIG: IMHCalendarConfigBase = {
   allowEventDragging: true,
   showViewHeader: true,
   createEventOnClick: false,
-  avaliableViews: undefined,
+  availableViews: undefined,
 };
 
 export const DEFAULT_WEEK_VIEW_CONFIG: IMHCalendarWeekConfig = {

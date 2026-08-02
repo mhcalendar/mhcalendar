@@ -1,0 +1,41 @@
+---
+title: Changelog
+sidebar_position: 5
+---
+
+# Changelog
+
+`@mhcalendar/calendar` and `@mhcalendar/react` are versioned and released together (via
+[Changesets](https://github.com/changesets/changesets)) — they always ship at the same version
+number. Full, auto-generated changelogs live alongside each package's source:
+
+- [`packages/calendar/CHANGELOG.md`](https://github.com/mhcalendar/mhcalendar/blob/main/packages/calendar/CHANGELOG.md)
+- [`packages/react/CHANGELOG.md`](https://github.com/mhcalendar/mhcalendar/blob/main/packages/react/CHANGELOG.md)
+- [GitHub Releases](https://github.com/mhcalendar/mhcalendar/releases) (tagged per package, per version)
+
+This page is a hand-curated summary for readability — treat the files above as the source of
+truth if anything here looks out of date.
+
+## 0.2.4
+
+First real release shipped through the automated Changesets → npm (Trusted Publishing) pipeline.
+Patch release, no breaking changes.
+
+**`@mhcalendar/calendar`**
+- Fixed a falsy-check bug where `showTimeFrom`/`showTimeTo: 0` (midnight) was treated as
+  "not configured," silently breaking the time grid, business-hours overlay, and drag & drop
+  positioning.
+- Fixed an XSS vulnerability in the event modal by escaping event `title`/`description` before
+  interpolating them into HTML.
+- Scoped the base CSS reset from an unscoped `*` selector to `mh-calendar, mh-calendar *`, so it
+  no longer leaks out and affects the host page.
+- Bumped the default `viewHeaderHeight` from `60px` to `70px` to prevent content clipping.
+
+**`@mhcalendar/react`**
+- Fixed `MhCalendarMoreEventsIndicator` missing a type for its `hiddenCount` prop.
+- Fixed an ESM resolution issue by using an explicit `.js` extension in an internal re-export.
+
+## Before 0.2.4
+
+Pre-dates the Changesets-based release pipeline; not individually tracked here. `0.2.3` is the
+version 0.2.4 diffs against above.

@@ -1,0 +1,19 @@
+---
+title: fixedHeight & virtualScrollHeight
+sidebar_position: 8
+---
+
+# `fixedHeight` / `virtualScrollHeight`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `fixedHeight` | `string` | — | Enables virtual scrolling; must be set together with `virtualScrollHeight`. |
+| `virtualScrollHeight` | `string` | — | Total scrollable height when `fixedHeight` is set. |
+
+Both must be set together — setting only one throws immediately when `config` is applied:
+
+> Both `fixedHeight` and `virtualScrollHeight` must be set for virtual scrolling to work.
+
+Useful for rendering a very tall time range (e.g. midnight to midnight) without paying the render
+cost of every slot up front. See [Display hours](/docs/guides/display-hours) for more on
+controlling the displayed range.

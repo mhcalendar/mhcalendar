@@ -33,8 +33,8 @@ export class MhViewSwitcher {
   render() {
     const currentView = storeState.viewType;
     const viewTypes = Object.values(IMHCalendarViewType) as IMHCalendarViewType[];
-    const filteredViewTypes = storeState.avaliableViews
-      ? viewTypes.filter((viewType) => storeState.avaliableViews?.includes(viewType))
+    const filteredViewTypes = storeState.availableViews
+      ? viewTypes.filter((viewType) => storeState.availableViews?.includes(viewType))
       : viewTypes;
 
     if (this.isCompact) {

@@ -1,0 +1,88 @@
+---
+title: Display hours
+sidebar_position: 1
+---
+
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
+
+# Display hours
+
+In every time based view, like the week view, you can control which time window gets displayed.
+It doesn't matter if you pick a small range or a much bigger one, the calendar always adapts to
+the size of its parent container, and each hour slot resizes proportionally to fit that space.
+
+<TryOnCodePen topic="display-hours" />
+
+## Basic usage
+
+You control the displayed hours with `showTimeFrom` and `showTimeTo`. Together they define the
+time range the calendar renders.
+
+Example config:
+
+```tsx
+<MhCalendar
+  config={{
+    showTimeFrom: 8,
+    showTimeTo: 18,
+  }}
+/>
+```
+
+| Field          | Type     | Description                                                                    |
+| -------------- | -------- | ------------------------------------------------------------------------------- |
+| `showTimeFrom` | `number` | Start of the displayed range, 0–24. `0` is a valid start (midnight).             |
+| `showTimeTo`   | `number` | End of the displayed range, 0–24. `24` is a valid end (midnight the next day).   |
+
+`showTimeTo` must be strictly greater than `showTimeFrom`, otherwise config validation throws
+immediately.
+
+## Hours interval
+
+The `hoursSlotInterval` option controls the visibility of hour labels in the time grid.
+
+This is useful when you want to display a time range (for example, from **08:00** to **16:00**) while showing only every second hour. Reducing the number of visible labels can improve readability without affecting the actual time range or calendar functionality.
+
+```tsx
+<MhCalendar
+  config={{
+    hoursSlotInterval: { hours: 2, minutes: 0 },
+  }}
+/>
+```
+
+## Slot Interval
+
+The `slotInterval` option defines the invisible snapping grid used when dragging and resizing events.
+
+Events are never moved completely freely. Instead, they snap to predefined time intervals, making it easier for users to align events to specific times such as every **15 minutes**, **30 minutes**, or **1 hour**.
+
+This behavior cannot be disabled, as the snapping grid is a core part of the interaction model. However, you can reduce the interval down to **1 minute** if you want the movement to feel almost unrestricted while still benefiting from precise alignment.
+
+```tsx
+<MhCalendar
+  config={{
+    slotInterval: { hours: 1, minutes: 0 },
+  }}
+/>
+```
+
+## Hour label format
+
+`hoursDisplayFormat` is a [Day.js format string](https://day.js.org/docs/en/display/format) applied
+to each label in the time gutter. Default is `'h A'` (e.g. `8 AM`), use `'HH:mm'` for 24-hour
+labels, or anything else Day.js accepts.
+
+```tsx
+const config = { hoursDisplayFormat: 'HH:mm' };
+```
+
+Combining slot granularity and label format:
+
+```tsx
+const config = {
+  slotInterval: { hours: 0, minutes: 15 },
+  hoursSlotInterval: { hours: 1, minutes: 0 },
+  hoursDisplayFormat: 'HH:mm',
+};
+```

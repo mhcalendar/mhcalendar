@@ -1,0 +1,43 @@
+---
+title: events
+sidebar_position: 2
+---
+
+# `events`
+
+`events: IMHCalendarEvent[]` is the second top-level prop on `<MhCalendar>` — the list of events to
+render.
+
+```ts
+interface IMHCalendarEvent {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  title?: string;
+  allDay?: boolean;
+  description?: string;
+  isHidden?: boolean;
+  color?: string;
+  resourceId?: string; // matches a Shiftplan resource's `id`, see Resources
+  draggingToggle?: boolean;
+  [key: string]: unknown; // extra fields are allowed and passed through
+}
+```
+
+A multi-day event is duplicated across each date it spans internally for rendering — you don't
+need to split it yourself; pass one object with `startDate`/`endDate` and let the calendar handle
+the rest.
+
+This prop is one-way: the calendar never mutates the array you pass in. Creating, dragging, or
+resizing an event fires a callback (see [Click callbacks](/docs/props/click-callbacks) and
+[Create & update callbacks](/docs/props/event-lifecycle)) instead of changing your data directly —
+persist the change yourself and pass an updated array back down.
+
+```tsx
+const [events, setEvents] = useState<IMHCalendarEvent[]>(INITIAL_EVENTS);
+
+<MhCalendar config={config} events={events} />;
+```
+
+If you'd rather mutate events imperatively instead of reacting to callbacks, `getApi()` exposes
+`addEvent`, `updateEvent`, and `removeEvent` directly.

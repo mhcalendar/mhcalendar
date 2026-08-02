@@ -4,6 +4,31 @@ import { DateUtils } from './DateUtils';
 import { store, storeState } from '../store/mh-calendar-store';
 
 export class EventRenderer {
+  /**
+   * Recalculates the dragged event's start/end based on the current drag position,
+   * preserving its original duration. Shared by the preview's position/size styling
+   * and by the event content itself, so the displayed time label stays in sync with
+   * where the event is currently hovering instead of showing its pre-drag time.
+   */
+  static getDraggedEventPreviewDates(
+    isDraggedOver: number | null,
+    day: Date | undefined,
+  ): { newStartDate: Date; newEndDate: Date } | null {
+    const draggedEvent = storeState.draggedEvent;
+    if (!draggedEvent || !day || isDraggedOver === null) {
+      return null;
+    }
+
+    const newStartDate = DateUtils.getExactDateBasedOnUserPosition(isDraggedOver, day);
+
+    const eventDurationInMinutes =
+      (draggedEvent.endDate.getTime() - draggedEvent.startDate.getTime()) / (1000 * 60);
+
+    const newEndDate = new Date(newStartDate.getTime() + eventDurationInMinutes * 60 * 1000);
+
+    return { newStartDate, newEndDate };
+  }
+
   static getEventHolderStyle(
     eventTopPosition: number,
     positionStyle: any,
@@ -56,15 +81,11 @@ export class EventRenderer {
         return {};
       }
 
-      // Calculate the new start date based on current drag position on this day
-      const newStartDate = DateUtils.getExactDateBasedOnUserPosition(isDraggedOver, day);
-
-      // Calculate event duration in minutes from original event
-      const eventDurationInMinutes =
-        (draggedEvent.endDate.getTime() - draggedEvent.startDate.getTime()) / (1000 * 60);
-
-      // Calculate new end date based on new start date and original duration
-      const newEndDate = new Date(newStartDate.getTime() + eventDurationInMinutes * 60 * 1000);
+      const draggedDates = this.getDraggedEventPreviewDates(isDraggedOver, day);
+      if (!draggedDates) {
+        return {};
+      }
+      const { newStartDate, newEndDate } = draggedDates;
 
       // Calculate height using full event duration (not clamped to visible time window)
       const { showTimeFrom = 10, showTimeTo = 24 } = store.state;

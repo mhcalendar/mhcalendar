@@ -10,62 +10,43 @@ export const boldTheme: Record<string, any> = {
   mhCalendar: { backgroundColor: '#FFDD00', fontFamily: "'Courier New', monospace" },
 };
 
+// Modeled after Microsoft Teams' dark calendar view: deep purple-grey
+// background, indigo event blocks, and the Teams brand purple for accents.
 export const corporateTheme: Record<string, any> = {
   properties: {
-    eventBackgroundColor: '#1e3a8a',
-    bordersColor: '#cbd5e1',
-    headerTodayBackgroundColor: '#fff1f2',
-    currentTimeColor: '#e11d48',
-    eventTimeLabelBg: '#172554',
-    eventTimeLabelColor: '#bfdbfe',
+    mainBackgroundColor: '#201F28',
+    navigationBackgroundColor: '#252430',
+    eventBackgroundColor: '#3B3A56',
+    bordersColor: '#3A3A46',
+    headerTodayBackgroundColor: '#6264A7',
+    currentTimeColor: '#7B83EB',
+    eventTimeLabelBg: '#2A2938',
+    eventTimeLabelColor: '#E1E1E6',
+    eventTimeDiffColor: '#7B83EB',
+    fontColor: '#E1E1E6',
+    dateFontColor: '#8B8B9E',
+    buttonsColor: '#5B5FC7',
+    holidayDateColor: '#E1E1E6',
   },
-  mhCalendar: { backgroundColor: '#ffffff', color: '#1e293b' },
 };
 
-export const darkTheme: Record<string, any> = {
-  properties: {
-    eventBackgroundColor: '#5E6AD2',
-    bordersColor: '#1E1E25',
-    headerTodayBackgroundColor: '#5E6AD220',
-    currentTimeColor: '#F2994A',
-    eventTimeLabelBg: '#4A54C0',
-    eventTimeLabelColor: '#FFFFFF',
-  },
-  mhCalendar: { backgroundColor: '#0B0B0F', color: '#E8E8EE' },
-};
-
+// Modeled after Google Calendar's light view: white background, thin grey
+// grid lines, Google blue events, and the Google red current-time indicator.
 export const minimalTheme: Record<string, any> = {
   properties: {
-    eventBackgroundColor: '#dbeafe',
-    bordersColor: '#e2e8f0',
-    headerTodayBackgroundColor: '#eff6ff',
-    currentTimeColor: '#3b82f6',
-    eventTimeLabelBg: '#bfdbfe',
-    eventTimeLabelColor: '#1e40af',
+    mainBackgroundColor: '#ffffff',
+    navigationBackgroundColor: '#ffffff',
+    eventBackgroundColor: '#1a73e8',
+    bordersColor: '#e0e0e0',
+    headerTodayBackgroundColor: '#1a73e8',
+    currentTimeColor: '#ea4335',
+    eventTimeLabelBg: '#ffffff',
+    eventTimeLabelColor: '#3c4043',
+    eventTimeDiffColor: '#1a73e8',
+    fontColor: '#3c4043',
+    dateFontColor: '#70757a',
+    buttonsColor: '#f1f3f4',
+    holidayDateColor: '#d93025',
   },
-  mhCalendar: { backgroundColor: '#f8fafc', color: '#1e293b' },
 };
 
-export const scrollTheme: Record<string, any> = {
-  properties: {
-    eventBackgroundColor: '#dcfce7',
-    bordersColor: '#d1fae5',
-    headerTodayBackgroundColor: '#f0fdf4',
-    currentTimeColor: '#16a34a',
-    eventTimeLabelBg: '#bbf7d0',
-    eventTimeLabelColor: '#14532d',
-  },
-  mhCalendar: { backgroundColor: '#f0fdf4', color: '#14532d' },
-};
-
-export const timezoneTheme: Record<string, any> = {
-  properties: {
-    eventBackgroundColor: '#1e3a5f',
-    bordersColor: '#1e293b',
-    headerTodayBackgroundColor: '#0f2a4a',
-    currentTimeColor: '#38bdf8',
-    eventTimeLabelBg: '#0c4a6e',
-    eventTimeLabelColor: '#bae6fd',
-  },
-  mhCalendar: { backgroundColor: '#0f172a', color: '#e2e8f0' },
-};

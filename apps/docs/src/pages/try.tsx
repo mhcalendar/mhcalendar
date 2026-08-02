@@ -3,7 +3,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import { IMHCalendarEvent, IMHCalendarFullOptions, IMHCalendarViewType, MhCalendar } from '@mhcalendar/react';
+import {
+  IMHCalendarEvent,
+  IMHCalendarFullOptions,
+  IMHCalendarViewType,
+  MhCalendar,
+} from '@mhcalendar/react';
 import { boldTheme, corporateTheme, minimalTheme } from '../theme-config/calendarThemes';
 import ThemeToggle from '../components/ThemeToggle';
 
@@ -65,26 +70,71 @@ type PropertyField = { key: string; label: string; type: 'color' | 'text'; place
 
 const PROPERTY_FIELDS: PropertyField[] = [
   { key: 'eventBackgroundColor', label: 'Event background', type: 'color', placeholder: '#8a79ff' },
-  { key: 'headerTodayBackgroundColor', label: 'Today highlight', type: 'color', placeholder: '#8a79ff' },
-  { key: 'currentTimeColor', label: 'Current time indicator', type: 'color', placeholder: '#db372d' },
+  {
+    key: 'headerTodayBackgroundColor',
+    label: 'Today highlight',
+    type: 'color',
+    placeholder: '#8a79ff',
+  },
+  {
+    key: 'currentTimeColor',
+    label: 'Current time indicator',
+    type: 'color',
+    placeholder: '#db372d',
+  },
   { key: 'bordersColor', label: 'Grid borders', type: 'color', placeholder: '#2a2a36' },
   { key: 'eventResizeHandleColor', label: 'Resize handle', type: 'color', placeholder: '#8a79ff' },
-  { key: 'eventTimeLabelBg', label: 'Resize tooltip background', type: 'color', placeholder: '#ffffff' },
-  { key: 'eventTimeLabelColor', label: 'Resize tooltip text', type: 'color', placeholder: '#222222' },
-  { key: 'eventTimeDiffColor', label: 'Duration diff label', type: 'color', placeholder: '#3578fa' },
+  {
+    key: 'eventTimeLabelBg',
+    label: 'Resize tooltip background',
+    type: 'color',
+    placeholder: '#ffffff',
+  },
+  {
+    key: 'eventTimeLabelColor',
+    label: 'Resize tooltip text',
+    type: 'color',
+    placeholder: '#222222',
+  },
+  {
+    key: 'eventTimeDiffColor',
+    label: 'Duration diff label',
+    type: 'color',
+    placeholder: '#3578fa',
+  },
   { key: 'mainBackgroundColor', label: 'Main background', type: 'color', placeholder: '#131314' },
-  { key: 'navigationBackgroundColor', label: 'Navigation background', type: 'color', placeholder: '#1b1b1b' },
+  {
+    key: 'navigationBackgroundColor',
+    label: 'Navigation background',
+    type: 'color',
+    placeholder: '#1b1b1b',
+  },
   { key: 'fontColor', label: 'Font color', type: 'color', placeholder: '#d4d4d4' },
   { key: 'dateFontColor', label: 'Date font color', type: 'color', placeholder: '#82828e' },
   { key: 'buttonsColor', label: 'Buttons color', type: 'color', placeholder: '#232323' },
   { key: 'holidayDateColor', label: 'Holiday date color', type: 'color', placeholder: '#8a2929' },
-  { key: 'nonBusinessHoursOverlayColor', label: 'Non-business hours overlay', type: 'text', placeholder: 'rgba(0, 0, 0, 0.03)' },
+  {
+    key: 'nonBusinessHoursOverlayColor',
+    label: 'Non-business hours overlay',
+    type: 'text',
+    placeholder: 'rgba(0, 0, 0, 0.03)',
+  },
   { key: 'fontFamily', label: 'Font family', type: 'text', placeholder: 'system-ui' },
-  { key: 'eventHoverFilter', label: 'Event hover filter', type: 'text', placeholder: 'brightness(0.88)' },
+  {
+    key: 'eventHoverFilter',
+    label: 'Event hover filter',
+    type: 'text',
+    placeholder: 'brightness(0.88)',
+  },
   { key: 'timeSlotWidth', label: 'Time column width', type: 'text', placeholder: '60px' },
   { key: 'viewHeaderHeight', label: 'View header height', type: 'text', placeholder: '70px' },
   { key: 'monthEventHeight', label: 'Month event height', type: 'text', placeholder: '20px' },
-  { key: 'calendarNavigationHeight', label: 'Navigation bar height', type: 'text', placeholder: '80px' },
+  {
+    key: 'calendarNavigationHeight',
+    label: 'Navigation bar height',
+    type: 'text',
+    placeholder: '80px',
+  },
 ];
 
 const MAIN_BACKGROUND_PROPERTY_FIELD = PROPERTY_FIELDS.find(
@@ -113,7 +163,9 @@ const LIGHT_PROPERTY_DEFAULTS: Record<string, string> = {
 
 function getPropertyThemeDefault(property: PropertyField, activeStyle: StyleVariant): string {
   const baseDefaults = activeStyle === 'light' ? LIGHT_PROPERTY_DEFAULTS : DARK_PROPERTY_DEFAULTS;
-  const themeProperties = (styleConfigs[activeStyle].style as { properties?: Record<string, string> }).properties;
+  const themeProperties = (
+    styleConfigs[activeStyle].style as { properties?: Record<string, string> }
+  ).properties;
   return themeProperties?.[property.key] ?? baseDefaults[property.key] ?? property.placeholder;
 }
 
@@ -170,7 +222,7 @@ const DEFAULT_FORM_STATE: DemoFormState = {
   availableViews: [],
   showDateSwitcher: true,
   showViewTypeSwitcher: true,
-  showCalendarNavigation: false,
+  showCalendarNavigation: true,
   showViewHeader: true,
   timeFrom: 12,
   timeTo: 18,
@@ -242,13 +294,11 @@ function buildEvents() {
       title: 'Design review',
       startDate: makeDate(0, 12),
       endDate: makeDate(0, 13),
-      color: '#F87171',
       resourceId: 'resource-1',
     },
     {
       id: '2',
       title: 'Standup',
-      color: '#EC4899',
       startDate: makeDate(1, 13),
       endDate: makeDate(1, 14),
       resourceId: 'resource-2',
@@ -258,7 +308,6 @@ function buildEvents() {
       title: 'Customer call',
       startDate: makeDate(2, 9),
       endDate: makeDate(2, 10),
-      color: '#22C55E',
       resourceId: 'resource-3',
     },
     {
@@ -271,7 +320,6 @@ function buildEvents() {
     {
       id: '5',
       title: 'Release sync',
-      color: '#3B82F6',
       startDate: makeDate(3, 15),
       endDate: makeDate(3, 18),
       resourceId: 'resource-1',
@@ -289,7 +337,6 @@ function buildEvents() {
       title: 'Afternoon shift',
       startDate: makeShiftplanDate(0, 13),
       endDate: makeShiftplanDate(0, 17),
-      color: '#06B6D4',
       resourceId: 'resource-2',
     },
     {
@@ -297,7 +344,6 @@ function buildEvents() {
       title: 'Evening shift',
       startDate: makeShiftplanDate(1, 14),
       endDate: makeShiftplanDate(1, 18),
-      color: '#8B5CF6',
       resourceId: 'resource-3',
     },
     {
@@ -305,7 +351,6 @@ function buildEvents() {
       title: 'Warehouse check',
       startDate: makeShiftplanDate(2, 9),
       endDate: makeShiftplanDate(2, 11),
-      color: '#10B981',
       resourceId: 'resource-4',
     },
   ];
@@ -358,7 +403,9 @@ export default function TryPage(): ReactNode {
   const [events, setEvents] = useState<IMHCalendarEvent[]>(() => buildEvents());
 
   const handleEventUpdated = useCallback((updated: IMHCalendarEvent) => {
-    setEvents((prev) => prev.map((event) => (event.id === updated.id ? { ...event, ...updated } : event)));
+    setEvents((prev) =>
+      prev.map((event) => (event.id === updated.id ? { ...event, ...updated } : event)),
+    );
   }, []);
 
   const handleEventCreated = useCallback((created: IMHCalendarEvent) => {
@@ -372,13 +419,10 @@ export default function TryPage(): ReactNode {
 
     const timezones = [form.timezoneMain, form.timezoneRef2, form.timezoneRef3].filter(Boolean);
 
-    const resources =
-      form.viewType === 'SHIFTPLAN'
-        ? Array.from({ length: form.shiftplanResourceCount }, (_, index) => ({
-            id: `resource-${index + 1}`,
-            title: `Resource ${index + 1}`,
-          }))
-        : [];
+    const resources = Array.from({ length: form.shiftplanResourceCount }, (_, index) => ({
+      id: `resource-${index + 1}`,
+      title: `Resource ${index + 1}`,
+    }));
 
     const baseStyle = styleConfigs[activeStyle].style as Record<string, unknown>;
     const propertyOverrides = Object.fromEntries(
@@ -430,12 +474,18 @@ export default function TryPage(): ReactNode {
   }, [form, activeStyle, handleEventUpdated, handleEventCreated]);
 
   const mainBackgroundColor = useMemo(
-    () => form.properties.mainBackgroundColor || getPropertyThemeDefault(MAIN_BACKGROUND_PROPERTY_FIELD, activeStyle),
+    () =>
+      form.properties.mainBackgroundColor ||
+      getPropertyThemeDefault(MAIN_BACKGROUND_PROPERTY_FIELD, activeStyle),
     [form.properties, activeStyle],
   );
 
   const handleCopyConfig = () => {
-    const { onEventUpdated: _onEventUpdated, onEventCreated: _onEventCreated, ...serializableConfig } = config;
+    const {
+      onEventUpdated: _onEventUpdated,
+      onEventCreated: _onEventCreated,
+      ...serializableConfig
+    } = config;
     navigator.clipboard.writeText(JSON.stringify(serializableConfig, null, 2));
     setConfigCopied(true);
     setTimeout(() => setConfigCopied(false), 1500);
@@ -498,10 +548,18 @@ export default function TryPage(): ReactNode {
                 Below you can check how each option affects the calendar.
               </span>
               <div className="mh-demo-config-actions">
-                <button type="button" className="mh-demo-btn mh-demo-btn-outline" onClick={handleSaveConfig}>
+                <button
+                  type="button"
+                  className="mh-demo-btn mh-demo-btn-outline"
+                  onClick={handleSaveConfig}
+                >
                   {configSaved ? 'Saved!' : 'Save config'}
                 </button>
-                <button type="button" className="mh-demo-btn mh-demo-btn-filled" onClick={handleCopyConfig}>
+                <button
+                  type="button"
+                  className="mh-demo-btn mh-demo-btn-filled"
+                  onClick={handleCopyConfig}
+                >
                   {configCopied ? 'Copied!' : 'Copy config'}
                 </button>
               </div>
@@ -605,7 +663,9 @@ export default function TryPage(): ReactNode {
                   <span>Slot interval</span>
                   <select
                     value={form.slotIntervalMinutes}
-                    onChange={(event) => setField('slotIntervalMinutes', Number(event.target.value))}
+                    onChange={(event) =>
+                      setField('slotIntervalMinutes', Number(event.target.value))
+                    }
                   >
                     {SLOT_INTERVALS.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -732,7 +792,9 @@ export default function TryPage(): ReactNode {
                       key={day.value}
                       type="button"
                       className={
-                        form.hiddenDays.includes(day.value) ? 'mh-demo-day-chip active' : 'mh-demo-day-chip'
+                        form.hiddenDays.includes(day.value)
+                          ? 'mh-demo-day-chip active'
+                          : 'mh-demo-day-chip'
                       }
                       onClick={() => toggleListValue('hiddenDays', day.value)}
                     >
@@ -740,7 +802,9 @@ export default function TryPage(): ReactNode {
                     </button>
                   ))}
                 </div>
-                <span className="mh-demo-sidebar-hint">Tap a day to hide it from week/day view.</span>
+                <span className="mh-demo-sidebar-hint">
+                  Tap a day to hide it from week/day view.
+                </span>
               </div>
             </details>
 
@@ -748,8 +812,8 @@ export default function TryPage(): ReactNode {
               <summary className="mh-demo-sidebar-label">Properties</summary>
               <div className="mh-demo-sidebar-group-body">
                 <span className="mh-demo-sidebar-hint">
-                  Overrides the CSS properties exposed by the selected theme. Clear a field to fall back to
-                  the theme default.
+                  Overrides the CSS properties exposed by the selected theme. Clear a field to fall
+                  back to the theme default.
                 </span>
                 {PROPERTY_FIELDS.map((property) => {
                   const themeValue = getPropertyThemeDefault(property, activeStyle);
@@ -809,7 +873,9 @@ export default function TryPage(): ReactNode {
                         min={0}
                         max={23}
                         value={form.businessHoursStart}
-                        onChange={(event) => setField('businessHoursStart', Number(event.target.value))}
+                        onChange={(event) =>
+                          setField('businessHoursStart', Number(event.target.value))
+                        }
                       />
                     </label>
                     <label className="mh-demo-config-field">
@@ -819,7 +885,9 @@ export default function TryPage(): ReactNode {
                         min={1}
                         max={24}
                         value={form.businessHoursEnd}
-                        onChange={(event) => setField('businessHoursEnd', Number(event.target.value))}
+                        onChange={(event) =>
+                          setField('businessHoursEnd', Number(event.target.value))
+                        }
                       />
                     </label>
                   </>
@@ -963,7 +1031,10 @@ export default function TryPage(): ReactNode {
         </button>
         <main className="mh-demo-main">
           {mounted ? (
-            <div className="mh-demo-calendar-wrapper" style={{ backgroundColor: mainBackgroundColor }}>
+            <div
+              className="mh-demo-calendar-wrapper"
+              style={{ backgroundColor: mainBackgroundColor }}
+            >
               <MhCalendar config={config} events={events} />
             </div>
           ) : null}

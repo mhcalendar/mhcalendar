@@ -199,6 +199,7 @@ export default function TryPage(): ReactNode {
   const [activeStyle, setActiveStyle] = useState<StyleVariant>('corporate');
   const [mounted, setMounted] = useState(false);
   const [form, setForm] = useState<DemoFormState>(DEFAULT_FORM_STATE);
+  const [configCopied, setConfigCopied] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -282,6 +283,13 @@ export default function TryPage(): ReactNode {
     };
   }, [form, activeStyle, handleEventUpdated, handleEventCreated]);
 
+  const handleCopyConfig = () => {
+    const { onEventUpdated: _onEventUpdated, onEventCreated: _onEventCreated, ...serializableConfig } = config;
+    navigator.clipboard.writeText(JSON.stringify(serializableConfig, null, 2));
+    setConfigCopied(true);
+    setTimeout(() => setConfigCopied(false), 1500);
+  };
+
   return (
     <Layout title="Try mhcalendar" description="Try the mhcalendar component live">
       <div className="mh-demo">
@@ -308,6 +316,16 @@ export default function TryPage(): ReactNode {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="mh-demo-sidebar-section">
+              <span className="mh-demo-sidebar-label">Custom config</span>
+              <span className="mh-demo-sidebar-hint">
+                Below you can check how each option affects the calendar.
+              </span>
+              <button type="button" className="mh-install-copy mh-demo-copy-config" onClick={handleCopyConfig}>
+                {configCopied ? 'Copied!' : 'Copy config'}
+              </button>
             </div>
 
             <details className="mh-demo-sidebar-group" open>

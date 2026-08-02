@@ -14,7 +14,8 @@
 
 .mhCalendarModal__content {
   position: absolute;
-  background: white;
+  background: var(--mainBackgroundColor);
+  color: var(--fontColor);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   padding: 20px;
@@ -34,7 +35,7 @@
 .mhCalendarEventModal__header {
   margin-bottom: 20px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--bordersColor);
 }
 
 .mhCalendarEventModal__header h3 {
@@ -58,21 +59,23 @@
 .mhCalendarEventModal__field label {
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: var(--dateFontColor);
 }
 
 .mhCalendarEventModal__field input[type='text'],
 .mhCalendarEventModal__field textarea {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--bordersColor);
   border-radius: 4px;
   font-size: 14px;
+  background: var(--mainBackgroundColor);
+  color: var(--fontColor);
 }
 
 .mhCalendarEventModal__field input[type='text']:focus,
 .mhCalendarEventModal__field textarea:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--eventBackgroundColor);
 }
 
 .mhCalendarEventModal__field input[type='checkbox'] {
@@ -93,15 +96,17 @@
 
 .mhCalendarEventModal__datetime input[type='datetime-local'] {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--bordersColor);
   border-radius: 4px;
   font-size: 14px;
+  background: var(--mainBackgroundColor);
+  color: var(--fontColor);
 }
 
 .mhCalendarEventModal__footer {
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--bordersColor);
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -118,19 +123,19 @@
 }
 
 .mhCalendarEventModal__button--cancel {
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--buttonsColor);
+  color: var(--fontColor);
 }
 
 .mhCalendarEventModal__button--cancel:hover {
-  background-color: #e0e0e0;
+  background-color: color-mix(in srgb, var(--buttonsColor), white 10%);
 }
 
 .mhCalendarEventModal__button--save {
-  background-color: #007bff;
+  background-color: var(--eventBackgroundColor);
   color: white;
 }
 
 .mhCalendarEventModal__button--save:hover {
-  background-color: #0056b3;
+  background-color: color-mix(in srgb, var(--eventBackgroundColor), black 15%);
 }

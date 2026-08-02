@@ -51,11 +51,6 @@
   width: 32px;
   flex-shrink: 0;
   padding: 0;
-  color: var(--dateFontColor);
-}
-
-.mhCalendarNavigation__arrowBtn:hover {
-  color: var(--fontColor);
 }
 
 .mhCalendarNavigation__arrowBtn svg {

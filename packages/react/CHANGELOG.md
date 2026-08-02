@@ -1,5 +1,13 @@
 # @mhcalendar/react
 
+## 0.2.5
+
+### Patch Changes
+
+- 345014e: Minor bug fixes, start with docs and main site
+- Updated dependencies [345014e]
+  - @mhcalendar/calendar@0.2.5
+
 ## 0.2.4
 
 ### Patch Changes

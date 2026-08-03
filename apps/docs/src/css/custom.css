@@ -893,3 +893,61 @@ body {
     order: initial;
   }
 }
+
+.mh-steps {
+  display: flex;
+  flex-direction: column;
+  margin: 24px 0;
+}
+
+.mh-step {
+  position: relative;
+  display: flex;
+  gap: 20px;
+  padding-bottom: 32px;
+}
+
+.mh-step:last-child {
+  padding-bottom: 0;
+}
+
+.mh-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+
+.mh-step-marker {
+  flex-shrink: 0;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.mh-step-content {
+  min-width: 0;
+  flex: 1;
+  padding-top: 3px;
+}
+
+.mh-step-content h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.mh-step-content > :last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,67 @@
+---
+title: Vanilla JS
+sidebar_position: 2
+---
+
+import { Steps, Step } from '@site/src/components/Steps';
+
+# Vanilla JS
+
+No bundler, no framework — just a `<script type="module">` tag. This is the fastest way to try
+mhcalendar directly in a browser.
+
+:::warning[Pre-1.0 package]
+mhcalendar is still `0.x.x`. Minor and patch releases can contain breaking changes. Pin an
+**exact** version rather than a caret range in production, and check the
+[Changelog](/docs/changelog) before bumping.
+:::
+
+<Steps>
+
+<Step number={1} title="Load the component from a CDN">
+
+```html
+<script type="module">
+  import { defineCustomElements } from 'https://esm.sh/@mhcalendar/calendar/loader';
+  defineCustomElements();
+</script>
+
+<mh-calendar id="calendar"></mh-calendar>
+```
+
+</Step>
+
+<Step number={2} title="Set the config and events">
+
+```html
+<script type="module">
+  const calendar = document.getElementById('calendar');
+  calendar.config = {
+    viewType: 'MONTH',
+    showTimeFrom: 8,
+    showTimeTo: 18,
+  };
+  calendar.events = [
+    {
+      id: 'event-1',
+      title: 'Team Meeting',
+      startDate: new Date(new Date().setHours(10, 0, 0, 0)),
+      endDate: new Date(new Date().setHours(11, 0, 0, 0)),
+    },
+  ];
+</script>
+```
+
+`config` and `events` are set as **DOM properties** (`calendar.config = ...`), not HTML attributes
+— objects and arrays can't round-trip through attribute strings.
+
+</Step>
+
+</Steps>
+
+## Requirements
+
+The shipped component runs in any modern evergreen browser (Chrome, Firefox, Safari, Edge) with
+native Custom Elements support — no build step required.
+
+Using a bundler instead? See [Other Frameworks](/docs/quick-start/other-frameworks).

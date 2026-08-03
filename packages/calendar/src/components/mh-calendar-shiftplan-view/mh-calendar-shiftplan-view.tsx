@@ -6,6 +6,7 @@ import { IMHCalendarEvent } from '../../types';
 import { DateUtils } from '../../utils/DateUtils';
 import { EventManager } from '../../utils/EventManager';
 import { VIEW_HEIGHT } from '../../const/default-theme';
+import { LabelUtils } from '../../utils/LabelUtils';
 
 const MAX_VISIBLE_EVENTS = 2;
 
@@ -169,7 +170,9 @@ export class MHCalendarShiftplanView {
 
     const modalContent = (
       <div class="mhCalendarShiftplan__morePopup">
-        <div class="mhCalendarShiftplan__morePopupHeader">{dayjs(date).format('ddd, MMM D')}</div>
+        <div class="mhCalendarShiftplan__morePopupHeader">
+          {dayjs(date).locale(storeState.locale).format('ddd, MMM D')}
+        </div>
         <div class="mhCalendarShiftplan__morePopupList">
           {events.map((event) => (
             <mh-calendar-event key={event.id} event={event} />
@@ -226,7 +229,9 @@ export class MHCalendarShiftplanView {
                     'mhCalendarShiftplan__dateCell--weekend': isWeekend,
                   }}
                 >
-                  <span class="mhCalendarShiftplan__dateDayName">{dayjs(date).format('ddd')}</span>
+                  <span class="mhCalendarShiftplan__dateDayName">
+                    {dayjs(date).locale(storeState.locale).format('ddd')}
+                  </span>
                   <span class="mhCalendarShiftplan__dateNumber">{dayjs(date).format('D')}</span>
                 </div>
               );
@@ -274,7 +279,7 @@ export class MHCalendarShiftplanView {
                         class="mhCalendarShiftplan__moreBtn"
                         onClick={(e: MouseEvent) => this.onMoreClick(events, date, resource.id, e)}
                       >
-                        +{hiddenCount} more
+                        {LabelUtils.moreEvents(hiddenCount)}
                       </button>
                     )}
                   </div>

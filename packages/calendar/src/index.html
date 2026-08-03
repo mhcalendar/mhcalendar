@@ -28,6 +28,8 @@
     <mh-calendar id="cal"></mh-calendar>
 
     <script type="module">
+      import plLocale from 'https://esm.sh/dayjs@1.11.21/locale/pl';
+
       const today = new Date();
       const at = (dayOffset, h, m = 0) => {
         const d = new Date(today);
@@ -38,7 +40,21 @@
 
       const cal = document.getElementById('cal');
 
-      cal.config = { viewType: 'WEEK', showTimeFrom: 20, showTimeTo: 24, theme: 'dark' };
+      cal.config = {
+        viewType: 'WEEK',
+        showTimeFrom: 20,
+        showTimeTo: 24,
+        theme: 'dark',
+        // Pass the imported locale OBJECT, not the 'pl' string — mhcalendar bundles its own
+        // Day.js instance, so a side-effect-only "import 'dayjs/locale/pl'" would register
+        // the locale on a different instance and have no effect.
+        locale: plLocale,
+        labels: {
+          today: 'Dzisiaj',
+          moreEvents: (hiddenCount) => `+${hiddenCount} więcej`,
+          views: { WEEK: 'Tydzień', MONTH: 'Miesiąc', DAY: 'Dzień', AGENDA: 'Plan dnia' },
+        },
+      };
 
       cal.events = [
         {

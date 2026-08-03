@@ -2,6 +2,7 @@ import { Component, h } from '@stencil/core';
 import { store, storeState } from '../../store/mh-calendar-store';
 import dayjs from 'dayjs';
 import { DateUtils } from '../../utils/DateUtils';
+import { LabelUtils } from '../../utils/LabelUtils';
 
 @Component({
   tag: 'mh-calendar-navigation',
@@ -42,7 +43,7 @@ export class MhCalendarNavigation {
         {storeState.showDateSwitcher && (
           <div class="mhCalendarNavigation">
             <button class="mhCalendarNavigation__todayBtn" onClick={this.onTodayClick}>
-              Today
+              {LabelUtils.today()}
             </button>
             <button
               class="mhCalendarNavigation__arrowBtn"

@@ -91,6 +91,8 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       'resources',
       'shiftplanDays',
       'availableViews',
+      'locale',
+      'labels',
     ] as const;
 
     for (const key of configKeys) {
@@ -214,9 +216,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
 
     const startDate = DateUtils.getExactDateBasedOnUserPosition(topPosition, date);
     const eventDurationInMinutes = this.calculateEventDuration(state.draggedEvent);
-    const endDate = new Date(
-      startDate.getTime() + eventDurationInMinutes * MILLISECONDS_IN_MINUTE,
-    );
+    const endDate = new Date(startDate.getTime() + eventDurationInMinutes * MILLISECONDS_IN_MINUTE);
 
     if (state.blockBusinessHours && !isAllDay && state.draggedEvent.allDay) {
       const isWithinBusinessHours = BusinessHoursUtils.isEventWithinBusinessHours(

@@ -25,6 +25,8 @@ export const DEFAULT_CALENDAR_CONFIG: IMHCalendarConfigBase = {
   showViewHeader: true,
   createEventOnClick: false,
   availableViews: undefined,
+  locale: 'en',
+  labels: undefined,
 };
 
 export const DEFAULT_WEEK_VIEW_CONFIG: IMHCalendarWeekConfig = {

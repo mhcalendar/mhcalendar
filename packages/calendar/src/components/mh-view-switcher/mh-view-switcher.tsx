@@ -1,6 +1,7 @@
 import { Component, h, State } from '@stencil/core';
 import { store, storeState } from '../../store/mh-calendar-store';
 import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
+import { LabelUtils } from '../../utils/LabelUtils';
 
 @Component({
   tag: 'mh-view-switcher',
@@ -48,7 +49,7 @@ export class MhViewSwitcher {
           >
             {filteredViewTypes.map((viewType) => (
               <option value={viewType} selected={currentView === viewType}>
-                {viewType.charAt(0) + viewType.slice(1).toLowerCase()}
+                {LabelUtils.viewName(viewType)}
               </option>
             ))}
           </select>
@@ -63,7 +64,7 @@ export class MhViewSwitcher {
             class={`mhViewSwitcher__btn${currentView === viewType ? ' mhViewSwitcher__btn--active' : ''}`}
             onClick={() => this.onViewChange(viewType)}
           >
-            {viewType.charAt(0) + viewType.slice(1).toLowerCase()}
+            {LabelUtils.viewName(viewType)}
           </button>
         ))}
       </div>

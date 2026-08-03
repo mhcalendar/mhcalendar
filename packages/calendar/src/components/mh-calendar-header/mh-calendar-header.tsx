@@ -34,7 +34,7 @@ export class MHCalendarHeader {
   private formatDate(date: Date) {
     if (this.showCurrentDate) {
       // Works for multiview, where we need to display day number
-      const dayDate = dayjs(date);
+      const dayDate = dayjs(date).locale(storeState.locale);
       const isWeekend = [0, 6].includes(dayDate.day());
       return (
         <div
@@ -48,7 +48,7 @@ export class MHCalendarHeader {
       );
     }
 
-    return <span>{dayjs(date).format('ddd')}</span>;
+    return <span>{dayjs(date).locale(storeState.locale).format('ddd')}</span>;
   }
 
   private getGridTemplateColumns() {

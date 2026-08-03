@@ -6,6 +6,7 @@ import styling from './styling';
 import theming from './theming';
 import timezones from './timezones';
 import displayHours from './display-hours';
+import locale from './locale';
 import type { CodePenExample } from './shared';
 
 export type { CodePenExample };
@@ -19,4 +20,5 @@ export const codepenExamples: Record<string, CodePenExample> = {
   theming,
   timezones,
   'display-hours': displayHours,
+  locale,
 };

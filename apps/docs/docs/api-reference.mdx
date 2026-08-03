@@ -481,6 +481,41 @@ const config = {
 See [Timezones](/docs/guides/timezones) for the full guide, including why events themselves stay
 timezone-agnostic.
 
+## `locale` / `labels`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `locale` | `string \| ILocale` | `'en'` | Day.js locale used to format day/month names (e.g. `'ddd'`, `'MMMM'`). |
+| `labels` | `Partial<IMHCalendarLabels>` | `undefined` | Overrides for hardcoded UI strings (the "Today" button/label, the "+N more" overflow indicator, and view switcher names). |
+
+<TryOnCodePen topic="locale" />
+
+```tsx
+import plLocale from 'dayjs/locale/pl';
+
+const config = {
+  locale: plLocale,
+  labels: {
+    today: 'Dzisiaj',
+    moreEvents: (hiddenCount) => `+${hiddenCount} więcej`,
+    views: { MONTH: 'Miesiąc', WEEK: 'Tydzień' },
+  },
+};
+```
+
+**`locale`:** pass the imported Day.js locale *object*, not its BCP 47 tag as a bare string (e.g.
+not `locale: 'pl'` with a side-effect-only `import 'dayjs/locale/pl'`). This package bundles its
+own private Day.js instance, so a side-effect import in your app registers the locale on a
+*different* Day.js instance and silently has no effect here — passing the object itself works
+regardless, because Day.js self-registers whatever locale object it's given at the point of use.
+Each calendar instance formats with its own `locale` value instead of mutating Day.js's global
+locale, so multiple instances on the same page can use different locales safely. The default
+`'en'` is the one case where the plain string is fine, since it's Day.js's built-in fallback.
+
+**`labels`:** any key you omit falls back to the built-in English default (e.g. `'Today'`,
+`` `+${hiddenCount} more` ``, or the title-cased view type). `views` only needs entries for the
+views you want to relabel.
+
 ## `eventDisplayMode`
 
 | Prop | Type | Default | Description |

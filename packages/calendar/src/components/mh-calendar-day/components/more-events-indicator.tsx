@@ -1,5 +1,6 @@
 import { Component, h, Prop } from '@stencil/core';
 import store from '../../../store/mh-calendar-store';
+import { LabelUtils } from '../../../utils/LabelUtils';
 
 @Component({
   tag: 'mh-calendar-more-events-indicator',
@@ -16,7 +17,7 @@ export class MoreEventsIndicator {
           ...store.getInlineStyleForClass('mhCalendarDay__eventsLeftIndicator'),
         }}
       >
-        {`+${this.hiddenCount} more`}
+        {LabelUtils.moreEvents(this.hiddenCount)}
       </div>
     );
   }

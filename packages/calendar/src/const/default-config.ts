@@ -47,8 +47,6 @@ export const DEFAULT_WEEK_VIEW_CONFIG: IMHCalendarWeekConfig = {
   timezoneLabel: undefined,
   eventDisplayMode: EventDisplayMode.SideBySide,
   showTimeIndicator: true,
-  customWeekView: false,
-  showWeekends: true,
   resources: [],
   shiftplanDays: 7,
 };

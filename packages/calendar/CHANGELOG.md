@@ -1,5 +1,11 @@
 # @mhcalendar/calendar
 
+## 0.2.6
+
+### Patch Changes
+
+- bbef205: Add locale config option support, add more docs
+
 ## 0.2.5
 
 ### Patch Changes

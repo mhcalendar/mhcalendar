@@ -1,5 +1,13 @@
 # @mhcalendar/react
 
+## 0.2.6
+
+### Patch Changes
+
+- bbef205: Add locale config option support, add more docs
+- Updated dependencies [bbef205]
+  - @mhcalendar/calendar@0.2.6
+
 ## 0.2.5
 
 ### Patch Changes

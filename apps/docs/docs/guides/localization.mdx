@@ -3,6 +3,104 @@ title: Localization
 sidebar_position: 5
 ---
 
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
+
 # Localization
 
-This page is a work in progress — docs for localization are still being written.
+mhcalendar separates localization into two independent options, since they solve two different
+problems: **`locale`** controls day/month names (via Day.js), and **`labels`** overrides the
+handful of hardcoded UI strings ("Today", the "+N more" indicator, view names).
+
+<TryOnCodePen topic="locale" />
+
+## Default: English, nothing to configure
+
+Out of the box the calendar renders day and month names in English (`'en'`) and all UI strings in
+English ("Today", "+3 more", "Month", etc.) — there's nothing to set up for the common case.
+
+## Day/month names: `locale`
+
+Day/month names (the `'ddd'`/`'MMMM'`-style tokens you see in the navigation date range and the
+view headers) are formatted with Day.js under the hood, controlled by `config.locale`:
+
+```tsx
+import plLocale from 'dayjs/locale/pl';
+
+const config = {
+  locale: plLocale,
+};
+```
+
+**Pass the imported locale *object*, not its BCP 47 tag as a bare string** — i.e. not
+`locale: 'pl'` together with a side-effect-only `import 'dayjs/locale/pl'` elsewhere in your app.
+This matters because mhcalendar bundles its own private Day.js instance internally; a side-effect
+import in your app registers the locale on a *different* Day.js instance and silently has no
+effect on the calendar. Passing the locale object directly works regardless, because Day.js
+self-registers whatever locale object it's given at the point of use — it doesn't rely on any
+prior registration. The one exception is the default `'en'`, which is Day.js's built-in fallback
+and works fine as a plain string.
+
+Each calendar instance formats using its own `locale` value — the library never mutates Day.js's
+global locale — so multiple calendar instances on the same page can use different locales safely.
+
+```tsx
+import deLocale from 'dayjs/locale/de';
+import esLocale from 'dayjs/locale/es';
+
+// Two independent calendars, two independent locales.
+<MhCalendar config={{ locale: deLocale }} events={germanTeamEvents} />
+<MhCalendar config={{ locale: esLocale }} events={spanishTeamEvents} />
+```
+
+## UI strings: `labels`
+
+A handful of strings in the built-in chrome are hardcoded in English with no locale of their own —
+`locale` only affects Day.js-formatted day/month names, not these. Override them individually via
+`config.labels`:
+
+```tsx
+const config = {
+  labels: {
+    today: 'Dzisiaj',
+    moreEvents: (hiddenCount) => `+${hiddenCount} więcej`,
+    views: { MONTH: 'Miesiąc', WEEK: 'Tydzień', DAY: 'Dzień', AGENDA: 'Plan dnia' },
+  },
+};
+```
+
+| Key | Type | Default | Where it's used |
+|---|---|---|---|
+| `today` | `string` | `'Today'` | The "Today" navigation button, and the "Today" day header in agenda view. |
+| `moreEvents` | `(hiddenCount: number) => string` | `` (hiddenCount) => `+${hiddenCount} more` `` | The overflow indicator shown when a day has more events than fit (month view, all-day row, shift plan). |
+| `views` | `Partial<Record<IMHCalendarViewType, string>>` | `{}` | Names shown in the view switcher (button row and the compact `<select>` on narrow screens). |
+
+Any key you omit — including individual entries inside `views` — falls back to the built-in
+English default, so you only need to override what you actually want to change:
+
+```tsx
+// Only override the "Today" label; moreEvents and view names stay in English.
+const config = { labels: { today: 'Aujourd’hui' } };
+```
+
+`moreEvents` is a function rather than a plain string because pluralization/word order differ by
+language — you get the raw `hiddenCount` and return the finished string yourself.
+
+## Combining both
+
+`locale` and `labels` are independent and typically set together for a fully translated calendar:
+
+```tsx
+import plLocale from 'dayjs/locale/pl';
+
+const config = {
+  locale: plLocale,
+  labels: {
+    today: 'Dzisiaj',
+    moreEvents: (hiddenCount) => `+${hiddenCount} więcej`,
+    views: { MONTH: 'Miesiąc', WEEK: 'Tydzień', DAY: 'Dzień', AGENDA: 'Plan dnia' },
+  },
+};
+```
+
+See the [`locale` / `labels` API reference](/docs/api-reference#locale--labels) for the full type
+signatures.

@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { MhCalendar, type IMHCalendarEvent, type IMHCalendarViewType } from '@mhcalendar/react';
 import './App.css';
 
+import plLocale from 'dayjs/locale/pl';
+import deLocale from 'dayjs/locale/de';
+import esLocale from 'dayjs/locale/es';
+
 const CONFIG = {
   viewType: 'MONTH' as IMHCalendarViewType,
   showTimeFrom: 8,
@@ -10,6 +14,7 @@ const CONFIG = {
   allowEventDragging: true,
   allowEventResize: true,
   createEventOnClick: false,
+  locale: plLocale,
 };
 
 const TEST_EVENTS = [
@@ -39,6 +44,8 @@ function App() {
   return (
     <main className="app">
       <MhCalendar config={{ ...CONFIG }} events={events} />
+      <MhCalendar config={{ ...CONFIG, locale: deLocale }} events={events} />
+      <MhCalendar config={{ ...CONFIG, locale: esLocale }} events={events} />
     </main>
   );
 }

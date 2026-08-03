@@ -6,8 +6,9 @@ export const boldTheme: Record<string, any> = {
     currentTimeColor: '#FF2D55',
     eventTimeLabelBg: '#FFDD00',
     eventTimeLabelColor: '#111111',
+    mainBackgroundColor: '#FFDD00',
+    fontFamily: "'Courier New', monospace",
   },
-  mhCalendar: { backgroundColor: '#FFDD00', fontFamily: "'Courier New', monospace" },
 };
 
 // Modeled after Microsoft Teams' dark calendar view: deep purple-grey

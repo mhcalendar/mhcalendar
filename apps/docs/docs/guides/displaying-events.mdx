@@ -1,5 +1,5 @@
 ---
-title:  
+title: Displaying events
 sidebar_position: 3
 ---
 
@@ -11,7 +11,8 @@ sidebar_position: 3
 - events data change can be handled internaly in mhcalend or externaly using a reactive state
 - you can set title and despription,
 
-export interface IMHCalendarEvent {
+```ts
+interface IMHCalendarEvent {
   id: string;
   startDate: Date;
   endDate: Date;
@@ -24,6 +25,7 @@ export interface IMHCalendarEvent {
   draggingToggle?: boolean;
   [key: string]: unknown;
 }
+```
 
 ## Requirements
 

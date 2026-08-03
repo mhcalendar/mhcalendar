@@ -5,4 +5,145 @@ sidebar_position: 3
 
 # Style object
 
-This page is a work in progress — docs are still being written.
+[Properties](/docs/styling/properties) cover most theming needs. When you need to reach past
+them, `style.styles` lets you attach a plain CSS-in-JS object directly to any of the calendar's
+internal classes.
+
+```tsx
+<MhCalendar
+  config={{
+    style: {
+      styles: {
+        mhCalendarEvent: { borderRadius: '10px', boxShadow: '0 2px 6px rgba(0, 0, 0, 0.25)' },
+      },
+    },
+  }}
+/>
+```
+
+Each key is a class name, and each value is a `Record<string, string>` of camelCase CSS properties
+(the same shape as a React/JSX `style` object). It's applied as an inline style, so it always wins
+over the calendar's own stylesheet, and it composes with `style.properties`: set colors and sizes
+through properties, and reach for `styles` only for the rest (border radius, shadows, spacing,
+etc).
+
+Below is every class you can target this way.
+
+## `mhCalendar`
+
+The root container of the whole calendar.
+
+## `mhCalendarNavigation__container`
+
+The outer strip holding the navigation bar (Today button, prev/next arrows, date label, and view
+switcher), shown when `showCalendarNavigation` is enabled.
+
+## `mhCalendarHeader`
+
+The day/week header row that displays day names and dates, in DAY and WEEK views.
+
+## `mhCalendarHeader__date`
+
+An individual date cell inside that header row.
+
+## `mhCalendarHeader__today`
+
+The date number for today specifically, inside the header row.
+
+## `mhCalendarMultiView`
+
+The wrapper around the whole DAY/WEEK grid (time column plus one or more day columns).
+
+## `mhCalendarMultiView__holder`
+
+The inner grid holder inside `mhCalendarMultiView`, laid out with `--timeSlotWidth` as its first
+column.
+
+## `mhCalendarTimeSlots`
+
+The time-slots column area showing hour labels down the left side of DAY and WEEK views.
+
+## `mhCalendarWeek__borders`
+
+The full-width layer of horizontal grid lines drawn across the time grid.
+
+## `mhCalendarWeek__border`
+
+A single horizontal divider line for one row of the time grid.
+
+## `time__holder`
+
+The all-day row's cell for a single day, shown when `showAllDayTasks` is enabled.
+
+## `gtmInfo`
+
+The timezone label shown in the corner of the all-day row, when a `timezoneLabel` or multiple
+`timezones` are configured.
+
+## `mhCalendarDay`
+
+A single day column in DAY/WEEK views, or a single day cell in MONTH view.
+
+## `mhCalendarDay_dayDate`
+
+The date label inside a day cell in MONTH view.
+
+## `mhCalendarDay_allDaysEventHolder`
+
+The container holding all-day events for a given day.
+
+## `mhCalendarDay__eventHolder`
+
+The holder wrapping the events rendered inside a single day cell.
+
+## `mhCalendarDay__eventsLeftIndicator`
+
+The "+N more" overflow indicator shown when a day has more events than fit.
+
+## `mhCalendarDay__currentTime`
+
+The current-time indicator line in DAY and WEEK views.
+
+## `mhCalendarDay__nonBusinessHours`
+
+The overlay drawn over time slots outside configured business hours.
+
+## `mhCalendarMonth`
+
+The grid wrapper for the whole MONTH view.
+
+## `mhCalendarEvent`
+
+An event block, as rendered in DAY and WEEK views.
+
+## `mhCalendarEventSmall`
+
+A compact event chip, as rendered in MONTH and AGENDA views.
+
+## `mhCalendarEventFull`
+
+The wrapper around an event's expanded detail popover (shown on click).
+
+## `mhCalendarEventFull__userEventContentHolder`
+
+Inside that popover, the holder for custom content rendered via `eventContent`.
+
+## `mhCalendarEventFull__content`
+
+The main content box inside the event detail popover.
+
+## `mhCalendarEventFull__content__title`
+
+The event title text inside that popover.
+
+## `mhCalendarEventFull__content__date`
+
+The event date/time text inside that popover.
+
+## `mhCalendarResizeEventHandler`
+
+The drag handle strip shown at the bottom of an event while resizing.
+
+## `mhCalendarModal__content`
+
+The event modal's content panel, used for the built-in create/edit event form.

@@ -5,4 +5,35 @@ sidebar_position: 1
 
 # Overview
 
-This page is a work in progress — docs are still being written.
+mhcalendar exposes its look through the `style` field on `config`, in two complementary ways:
+
+- **[Properties](/docs/styling/properties)**: a flat object of named values (colors, sizes, fonts)
+  passed as `style.properties`. This is the recommended starting point, it covers colors, sizes,
+  and fonts for every view without you needing to know any internal class names.
+- **[Style object](/docs/styling/style-object)**: a CSS-in-JS object keyed by internal class name,
+  passed as `style.styles`. Reach for this only when a property doesn't cover what you need (border
+  radius, shadows, spacing, and similar details).
+
+Both apply at once and can be combined in the same `config.style`:
+
+```tsx
+<MhCalendar
+  config={{
+    style: {
+      properties: { eventBackgroundColor: '#1e3a8a' },
+      styles: { mhCalendarEvent: { borderRadius: '10px' } },
+    },
+  }}
+/>
+```
+
+mhcalendar also ships two built-in presets, `theme: 'light'` and `theme: 'dark'`, which are just
+predefined `properties` values applied before your own overrides. See
+[Theming](/docs/guides/theming) for how presets and overrides layer together.
+
+## Building your own theme
+
+The fastest way to build a custom look is the [live theme builder](/try): adjust colors and sizes
+with color pickers and inputs, see the result on a real calendar instantly, then use **Copy
+config** to grab the resulting `style` object for your app. It's a quicker starting point than
+reading through the full properties reference top to bottom.

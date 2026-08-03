@@ -1,8 +1,203 @@
 ---
-title: Propeties
+title: Properties
 sidebar_position: 2
 ---
 
-# Propeties
+# Properties
 
-This page is a work in progress — docs are still being written.
+Every visual detail the calendar exposes for theming is controlled through `style.properties`: a
+flat object of named values passed to `config.style.properties`. Pass only the ones you want to
+override; anything you don't set falls back to the active theme's default (see
+[Theming](/docs/guides/theming) for how the `light`/`dark` presets and your own overrides combine).
+
+```tsx
+<MhCalendar
+  config={{
+    style: {
+      properties: {
+        eventBackgroundColor: '#1e3a8a',
+        bordersColor: '#cbd5e1',
+      },
+    },
+  }}
+/>
+```
+
+Below is every property this object accepts, what it visually controls, and its default in each
+built-in theme.
+
+## `timeSlotWidth`
+
+Width of the time-label column on the left side of DAY and WEEK views.
+
+- Type: `string`
+- Default: `'60px'`
+
+## `bordersColor`
+
+Color of internal grid borders and dividers: between time slots, day columns, and header cells,
+the line under the navigation bar, and form field borders inside the event modal. Applies across
+DAY, WEEK, MONTH, AGENDA, and SHIFTPLAN views.
+
+- Type: `string`
+- Default (dark theme): `'#2a2a36'`
+- Default (light theme): `'#e2e2e8'`
+
+## `eventBackgroundColor`
+
+Default background color for events that have no per-event `color` set. Individual events can
+override this via the `color` field on the event object (see
+[Displaying events](/docs/guides/displaying-events)). Also used for the event modal's Save button
+and the focus border of its form fields.
+
+- Type: `string`
+- Default: `'#8a79ff'`
+
+## `headerTodayBackgroundColor`
+
+Ring color around today's date number in the DAY/WEEK header and the SHIFTPLAN header. Also used
+as the highlight color for the drag-over target cell in SHIFTPLAN.
+
+- Type: `string`
+- Default: `'#8a79ff'`
+
+## `currentTimeColor`
+
+Color of the current-time indicator line and dot shown in DAY and WEEK views.
+
+- Type: `string`
+- Default: `'#db372d'`
+
+## `eventResizeHandleColor`
+
+Color of the drag handle shown at the bottom of an event while resizing. If not set, the handle
+inherits that event's own color instead.
+
+- Type: `string` (optional)
+- Default: `undefined`
+- Example: `'#00b536'`, `'yellow'`
+
+## `eventHoverFilter`
+
+CSS `filter` applied to an event on hover. Set to `'none'` to disable the hover effect entirely.
+
+- Type: `string`
+- Default (dark theme): `'brightness(0.88)'`
+- Default (light theme): `'brightness(0.92)'`
+- Other examples: `'brightness(1.1)'`, `'saturate(1.5)'`, `'brightness(0.8) saturate(1.2)'`
+
+## `eventTimeLabelBg`
+
+Background color of the floating tooltip that shows the event's time while it's being resized.
+
+- Type: `string`
+- Default: `'#fff'`
+
+## `eventTimeLabelColor`
+
+Text color inside that same resize time-label tooltip.
+
+- Type: `string`
+- Default: `'#222'`
+
+## `eventTimeDiffColor`
+
+Color of the duration-diff text (e.g. `"+15 min"`) inside the resize tooltip, and of the "+N more"
+overflow button in the SHIFTPLAN view.
+
+- Type: `string`
+- Default: `'#3578fa'`
+
+## `nonBusinessHoursOverlayColor`
+
+Color of the semi-transparent overlay drawn over time slots outside business hours in DAY and WEEK
+views. Business hours are configured separately via the `businessHours` config option (see
+[Business hours](/docs/guides/business-hours)).
+
+- Type: `string`
+- Default (dark theme): `'rgba(0, 0, 0, 0.03)'`
+- Default (light theme): `'rgba(0, 0, 0, 0.04)'`
+
+## `viewHeaderHeight`
+
+Height of the header row that displays day names and dates at the top of DAY and WEEK views.
+
+- Type: `string`
+- Default: `'70px'`
+
+## `monthEventHeight`
+
+Fixed height of a single event row wherever events render compactly: MONTH view, the all-day row,
+and SHIFTPLAN cells.
+
+- Type: `string`
+- Default: `'20px'`
+
+## `mainBackgroundColor`
+
+Background color of the calendar's root container, the navigation bar strip, the event modal and
+its form inputs, and event cards in the AGENDA view.
+
+- Type: `string`
+- Default (dark theme): `'#131314'`
+- Default (light theme): `'#ffffff'`
+
+## `fontColor`
+
+General text color: inside event cards, the view switcher, the event modal's Cancel button and
+form inputs, and AGENDA view titles/times/descriptions.
+
+- Type: `string`
+- Default (dark theme): `'#d4d4d4'`
+- Default (light theme): `'#1a1a1a'`
+
+## `fontFamily`
+
+Font family applied to the calendar and everything rendered inside it.
+
+- Type: `string`
+- Default: `'system-ui'`
+
+## `dateFontColor`
+
+Muted text color for secondary date-related labels: hour labels in the time column, field labels
+in the event modal, and day/date headings in the AGENDA view.
+
+- Type: `string`
+- Default (dark theme): `'#82828e'`
+- Default (light theme): `'#6e6e80'`
+
+## `navigationBackgroundColor`
+
+Background color of the pill-shaped navigation bar (Today button, prev/next arrows, date label)
+shown when `showCalendarNavigation` is enabled (see
+[Navigation visibility](/docs/props/navigation-visibility)).
+
+- Type: `string`
+- Default (dark theme): `'#1b1b1b'`
+- Default (light theme): `'#f5f5f7'`
+
+## `buttonsColor`
+
+Background color of filled buttons: the Today/prev/next buttons in the navigation bar, the active
+view-switcher button, and the event modal's Cancel button.
+
+- Type: `string`
+- Default (dark theme): `'#232323'`
+- Default (light theme): `'#ebebef'`
+
+## `holidayDateColor`
+
+Text color for weekend day names and numbers in the DAY/WEEK header and the SHIFTPLAN header. Not
+currently applied to weekend day cells in the MONTH view.
+
+- Type: `string`
+- Default (dark theme): `'#8a2929'`
+- Default (light theme): `'#c0392b'`
+
+## `calendarNavigationHeight`
+
+Height of the top navigation bar (title, arrow buttons, view switcher).
+
+- Type: `string`
+- Default: `'80px'`

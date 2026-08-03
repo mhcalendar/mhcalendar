@@ -1,0 +1,68 @@
+---
+title: Other Frameworks
+sidebar_position: 3
+---
+
+import { Steps, Step } from '@site/src/components/Steps';
+
+# Other Frameworks
+
+For Vue, Svelte, Angular, or plain JS with a bundler (Vite, Webpack, ...) — install the package
+from npm instead of loading it from a CDN.
+
+:::warning[Pre-1.0 package]
+mhcalendar is still `0.x.x`. Minor and patch releases can contain breaking changes. Pin an
+**exact** version rather than a caret range in production, and check the
+[Changelog](/docs/changelog) before bumping.
+:::
+
+<Steps>
+
+<Step number={1} title="Install">
+
+```bash
+npm install @mhcalendar/calendar
+```
+
+`@mhcalendar/calendar` only depends on `dayjs`. It's a plain Web Component, so it works with any
+framework that can render standard HTML elements.
+
+</Step>
+
+<Step number={2} title="Register the custom element">
+
+```ts
+import { defineCustomElements } from '@mhcalendar/calendar/loader';
+
+defineCustomElements();
+```
+
+Call this once, as early as possible in your app (e.g. its entry file).
+
+</Step>
+
+<Step number={3} title="Render and configure">
+
+```html
+<mh-calendar></mh-calendar>
+```
+
+```ts
+const calendar = document.querySelector('mh-calendar');
+calendar.config = {/* ... */};
+calendar.events = [/* ... */];
+```
+
+`config` and `events` are set as **DOM properties**, not HTML attributes — objects and arrays
+can't round-trip through attribute strings. Most frameworks need an explicit hook to reach the
+underlying DOM node and set properties directly on it — e.g. a `ref` (Vue's `ref`/`onMounted`,
+Svelte's `bind:this`) rather than passing `config`/`events` as plain element attributes.
+
+</Step>
+
+</Steps>
+
+## Requirements
+
+Node.js is only needed for the build tooling — the shipped component runs in any modern evergreen
+browser (Chrome, Firefox, Safari, Edge) with native Custom Elements support.

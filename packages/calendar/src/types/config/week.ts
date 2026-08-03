@@ -7,18 +7,6 @@ export interface IMHCalendarResource {
 
 export interface ICalendarWeekConfig extends ICalendarMultiViewConfig {
   /**
-   * If set to true, the week view will start from the `startDate` provided.
-   * @description NOT IMPLEMENTED
-   */
-  customWeekView: boolean;
-
-  /**
-   * Defines if the week view should show weekends (Saturday and Sunday).
-   * @description NOT IMPLEMENTED
-   */
-  showWeekends: boolean;
-
-  /**
    * Array of resources (employees, rooms, courts, etc.) for SHIFTPLAN view.
    */
   resources: IMHCalendarResource[];

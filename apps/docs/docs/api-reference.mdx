@@ -1,0 +1,573 @@
+---
+title: API Reference
+sidebar_position: 4
+---
+
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
+
+# API Reference
+
+`<MhCalendar>` (`<mh-calendar>` as a plain custom element) takes two top-level props:
+
+| Prop | Type | Description |
+|---|---|---|
+| `config` | `IMHCalendarFullOptions` | View type, behavior toggles, styling, business hours: everything except the events themselves. Documented field-by-field below. |
+| `events` | `IMHCalendarEvent[]` | The events to render. See [`events`](#events). |
+
+`config` is a single flat object, merged internally from three layers (base behavior,
+multi-view/grid options, week/shiftplan-specific options): you never nest anything, just pass one
+object with whichever fields you need.
+
+<TryOnCodePen topic="basic-usage" />
+
+```tsx
+<MhCalendar config={{ viewType: 'MONTH', availableViews: ['MONTH', 'WEEK', 'AGENDA'] }} events={events} />
+```
+
+`config` and `events` are one-way: they describe what the calendar should render. To read the
+calendar's current state or imperatively navigate/mutate events, use the `getApi()` method exposed
+on the element instead.
+
+## `events`
+
+`events: IMHCalendarEvent[]` is the list of events to render.
+
+```ts
+interface IMHCalendarEvent {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  title?: string;
+  allDay?: boolean;
+  description?: string;
+  isHidden?: boolean;
+  color?: string;
+  resourceId?: string; // matches a Shiftplan resource's `id`, see Resources
+  draggingToggle?: boolean;
+  [key: string]: unknown; // extra fields are allowed and passed through
+}
+```
+
+A multi-day event is duplicated across each date it spans internally for rendering, you don't need
+to split it yourself; pass one object with `startDate`/`endDate` and let the calendar handle the
+rest.
+
+This prop is one-way: the calendar never mutates the array you pass in. Creating, dragging, or
+resizing an event fires a callback (see [Click callbacks](#click-callbacks) and
+[`onEventCreated`/`onEventUpdated`](#oneventcreated--oneventupdated)) instead of changing your data
+directly, persist the change yourself and pass an updated array back down.
+
+```tsx
+const [events, setEvents] = useState<IMHCalendarEvent[]>(INITIAL_EVENTS);
+
+<MhCalendar config={config} events={events} />;
+```
+
+If you'd rather mutate events imperatively instead of reacting to callbacks, `getApi()` exposes
+`addEvent`, `updateEvent`, and `removeEvent` directly.
+
+For a walkthrough of the everyday fields (`title`, `color`, hiding, blocking drag on one event),
+see [Displaying events](/docs/guides/displaying-events).
+
+## `viewType` / `availableViews`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `viewType` | `'DAY' \| 'WEEK' \| 'MONTH' \| 'AGENDA' \| 'SHIFTPLAN'` | `'AGENDA'` | The active view. |
+| `availableViews` | `string[]` | all views | Restricts which views the built-in view switcher offers. |
+
+`viewType` controls which view renders. Users can also switch views themselves via the built-in
+navigation bar (toggle it with [`showCalendarNavigation`](#navigation-visibility)); restrict which
+views are offered with `availableViews`.
+
+```tsx
+<MhCalendar config={{ viewType: 'MONTH', availableViews: ['MONTH', 'WEEK', 'AGENDA'] }} events={events} />
+```
+
+## `startDate`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `startDate` | `Date \| string` | today | Initial anchor date shown on mount. |
+
+Only read once, on mount: it's the initial date, not a controlled value. To navigate
+programmatically afterwards (next/previous period, jump to today), use the `getApi()` method
+exposed on the element instead.
+
+## Navigation visibility
+
+Four independent booleans that toggle pieces of the built-in chrome. All default to `true`.
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `showDateSwitcher` | `boolean` | `true` | Shows the prev/next/today controls. |
+| `showViewTypeSwitcher` | `boolean` | `true` | Shows the view-switch buttons/select. |
+| `showCalendarNavigation` | `boolean` | `true` | Toggles the whole top navigation bar (date switcher + title + view switcher). |
+| `showViewHeader` | `boolean` | `true` | Shows the per-view header row (day names, dates). |
+
+`showCalendarNavigation` is the master switch for the whole bar: turning it off hides the date
+switcher and view switcher regardless of their own settings. Use the other two when you want the
+bar itself but need to hide just one control, e.g. building your own view switcher and hiding only
+`showViewTypeSwitcher`.
+
+```tsx
+<MhCalendar config={{ showCalendarNavigation: false }} events={events} />
+```
+
+## `allowEventDragging` / `allowEventResize` / `minEventDuration`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `allowEventDragging` | `boolean` | `true` | Enables drag-to-move for events. |
+| `allowEventResize` | `boolean` | `true` | Enables drag-to-resize on event edges. |
+| `minEventDuration` | `number` (minutes) | `15` | Minimum duration enforced when resizing. |
+
+```tsx
+const config = {
+  allowEventDragging: true,
+  allowEventResize: true,
+  minEventDuration: 30,
+};
+```
+
+**Important:** these props only control whether the interaction is *allowed*, they don't persist
+the result. Drag/resize fires `onEventUpdated`, and the calendar never mutates the `events` array
+you passed in. If you don't update your own state inside that callback, the change visually
+animates and then snaps back on the next render. See
+[`onEventCreated`/`onEventUpdated`](#oneventcreated--oneventupdated).
+
+Dragging/resizing into a blocked time range is a separate concern, see
+[Business hours](#business-hours).
+
+## `createEventOnClick`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `createEventOnClick` | `boolean` | `false` | Clicking an empty slot creates a new event (fires `onEventCreated`). |
+
+Must be explicitly enabled: without it, [`onDayClick`](#click-callbacks) still fires on an
+empty-slot click, but no event is created for you.
+
+```tsx
+const [events, setEvents] = useState<IMHCalendarEvent[]>(INITIAL_EVENTS);
+
+const config = {
+  createEventOnClick: true,
+  onEventCreated: (event) => setEvents((prev) => [...prev, event]),
+};
+```
+
+As with drag/resize, the calendar doesn't add the event to your data for you; persist it yourself
+inside `onEventCreated`, see [`onEventCreated`/`onEventUpdated`](#oneventcreated--oneventupdated).
+
+## `fixedHeight` / `virtualScrollHeight`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `fixedHeight` | `string` | none | Enables virtual scrolling; must be set together with `virtualScrollHeight`. |
+| `virtualScrollHeight` | `string` | none | Total scrollable height when `fixedHeight` is set. |
+
+Both must be set together, setting only one throws immediately when `config` is applied:
+
+> Both `fixedHeight` and `virtualScrollHeight` must be set for virtual scrolling to work.
+
+Useful for rendering a very tall time range (e.g. midnight to midnight) without paying the render
+cost of every slot up front. See [Display hours](/docs/guides/display-hours) for more on
+controlling the displayed range.
+
+## `theme`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `theme` | `'dark' \| 'light' \| string` | `'dark'` | Base theme preset; anything other than `dark`/`light` falls back to the dark theme. |
+
+Picks the base defaults your [`style`](#style) overrides are layered on top of.
+
+```tsx
+const config = { theme: 'light', style: { properties: { eventBackgroundColor: '#1e3a8a' } } };
+```
+
+See [Styling](/docs/styling/overview) for the full property reference and
+[Theming](/docs/guides/theming) for packaging overrides into a reusable, named theme.
+
+## `style`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `style` | `{ properties?, styles? }` | `{}` | CSS custom properties (`properties`) plus per-class inline overrides keyed by class name (`styles`). |
+
+```tsx
+const config = {
+  style: {
+    properties: { eventBackgroundColor: '#1e3a8a', bordersColor: '#cbd5e1' },
+    styles: { mhCalendarEvent: { borderRadius: '10px' } },
+  },
+};
+```
+
+Every component renders with `shadow: false`: there's no Shadow DOM boundary and no `::part()`
+selectors to learn, so `style` (custom properties plus per-class overrides) is the only styling
+surface. This is big enough to warrant its own section, see [Styling](/docs/styling/overview) for
+the full custom-property table and class list, and [Theming](/docs/guides/theming) for reusing a
+style object as a named theme.
+
+## `eventContent` / `eventSmallContent`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `eventContent` | `(event) => any` | none | Custom render for full-size events (Day/Week views). |
+| `eventSmallContent` | `(event) => any` | none | Custom render for compact events (Month/Shiftplan/Agenda). |
+
+Both receive the `IMHCalendarEvent` object (see [`events`](#events)) and return renderable
+content:
+
+```tsx
+const config = {
+  eventContent: (event) => (
+    <div className="my-event">
+      <strong>{event.title}</strong>
+      {event.description && <p>{event.description}</p>}
+    </div>
+  ),
+  eventSmallContent: (event) => <span>{event.title}</span>,
+};
+```
+
+If you only need to change colors per event rather than the whole markup, it's usually simpler to
+set `event.color` on individual events instead of overriding rendering, see
+[`events`](#events).
+
+Translated event text (title, description, or any extra field) is entirely in your control through
+these two props, see [Localization](/docs/guides/localization) for the current state of i18n more
+broadly.
+
+## Click callbacks
+
+| Prop | Type | Fires when |
+|---|---|---|
+| `onEventClick` | `(event: IMHCalendarEvent) => void` | Left-click on an event. |
+| `onRightEventClick` | `(event: IMHCalendarEvent) => void` | Right-click (context menu) on an event. |
+| `onDayClick` | `(day: IMHCalendarDayClickPayload) => void` | Left-click on an empty day/slot. |
+| `onRightDayClick` | `(day: IMHCalendarDayClickPayload) => void` | Right-click on an empty day/slot. |
+
+`IMHCalendarDayClickPayload`:
+
+```ts
+type IMHCalendarDayClickPayload = {
+  date: Date;
+  resourceId?: string; // present for Shiftplan clicks
+};
+```
+
+`onDayClick` fires on every empty-slot click regardless of [`createEventOnClick`](#createeventonclick),
+it doesn't create an event by itself, it just tells you where the click happened.
+
+```tsx
+const config = {
+  onEventClick: (event) => openDetails(event.id),
+  onDayClick: (day) => console.log(day.date, day.resourceId),
+};
+```
+
+## `onEventCreated` / `onEventUpdated`
+
+| Prop | Type | Fires when |
+|---|---|---|
+| `onEventCreated` | `(event: IMHCalendarEvent) => void` | A new event was created by clicking an empty slot (requires [`createEventOnClick: true`](#createeventonclick)). |
+| `onEventUpdated` | `(event: IMHCalendarEvent) => void` | An existing event finished being dragged or resized (see [`allowEventDragging`/`allowEventResize`](#alloweventdragging--alloweventresize--mineventduration)). |
+
+**Important:** these callbacks tell you what happened, they don't mutate your data. The calendar
+never changes the [`events`](#events) array you passed in. To actually persist a create/drag/resize,
+update your own state inside the callback:
+
+```tsx
+const [events, setEvents] = useState<IMHCalendarEvent[]>(INITIAL_EVENTS);
+
+const config = {
+  createEventOnClick: true,
+  allowEventDragging: true,
+  allowEventResize: true,
+  onEventCreated: (event) => setEvents((prev) => [...prev, event]),
+  onEventUpdated: (updated) =>
+    setEvents((prev) => prev.map((e) => (e.id === updated.id ? updated : e))),
+};
+
+<MhCalendar config={config} events={events} />;
+```
+
+If you skip this, drag/resize/create will visually animate but snap back: the calendar re-renders
+from whatever `events` array you continue to pass it.
+
+If you'd rather mutate events imperatively than react to these callbacks, `getApi()` exposes
+`addEvent`/`updateEvent`/`removeEvent` directly.
+
+## `showTimeFrom` / `showTimeTo`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `showTimeFrom` | `number` | `8` | First visible hour (0 to 24). |
+| `showTimeTo` | `number` | `17` | Last visible hour; must be greater than `showTimeFrom`. |
+
+```tsx
+<MhCalendar config={{ showTimeFrom: 8, showTimeTo: 18 }} events={events} />
+```
+
+`showTimeTo` must be strictly greater than `showTimeFrom`, otherwise config validation throws
+immediately. See [Display hours](/docs/guides/display-hours) for a full walkthrough, including
+rendering a very tall range with [`fixedHeight`/`virtualScrollHeight`](#fixedheight--virtualscrollheight).
+
+## `slotInterval` / `hoursSlotInterval` / `hoursDisplayFormat`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `slotInterval` | `{ hours, minutes, visibleEvery? }` | `{ hours: 1, minutes: 0 }` | The invisible snapping grid used when dragging and resizing events. |
+| `hoursSlotInterval` | `{ hours, minutes }` | `{ hours: 1, minutes: 0 }` | Granularity of the hour-label column. |
+| `hoursDisplayFormat` | `string` | `'h A'` | [Day.js format string](https://day.js.org/docs/en/display/format) for hour labels, e.g. `'HH:mm'` for 24-hour time. |
+
+`minutes` on `slotInterval`/`hoursSlotInterval` must be divisible by 5, otherwise config validation
+throws immediately.
+
+Events snap to `slotInterval` when dragged or resized, this can't be disabled, but you can reduce
+it down to `{ hours: 0, minutes: 1 }` if you want movement to feel almost unrestricted while still
+snapping. `hoursSlotInterval` is purely cosmetic: it controls how many hour labels show in the time
+gutter without affecting the actual snapping grid or displayed range.
+
+```tsx
+const config = {
+  slotInterval: { hours: 0, minutes: 15 },
+  hoursSlotInterval: { hours: 2, minutes: 0 },
+  hoursDisplayFormat: 'HH:mm',
+};
+```
+
+See [Display hours](/docs/guides/display-hours) for more on combining these.
+
+## `showAllDayTasks` / `allDayEventsHeight`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `showAllDayTasks` | `boolean` | `true` | Shows the all-day event row. |
+| `allDayEventsHeight` | `number` | `100` | Pixel height of the all-day row. |
+
+Events with `allDay: true` on their [`IMHCalendarEvent`](#events) render in this dedicated row
+instead of the time grid.
+
+```tsx
+const config = { showAllDayTasks: true, allDayEventsHeight: 60 };
+```
+
+## `makeAllDaysSticky`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `makeAllDaysSticky` | `boolean` | `false` | Sticks the day header row on scroll. |
+
+```tsx
+const config = { makeAllDaysSticky: true };
+```
+
+## `hiddenDays`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `hiddenDays` | `number[]` | `[]` | Days to hide, `0` = Sunday through `6` = Saturday. |
+
+```tsx
+const config = { hiddenDays: [0, 6] }; // hide weekends
+```
+
+## Business hours
+
+Defines the active time window for event placement. When set, areas outside this range are
+visually disabled (shaded gray by default). Useful for constraining event creation within a
+broader displayed time range (e.g. displaying 8:00 to 18:00, but allowing events only between
+10:00 and 16:00).
+
+<TryOnCodePen topic="business-hours" />
+
+```tsx
+<MhCalendar
+  config={{
+    businessHours: [
+      { dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }, // Monday to Friday
+      { dayOfWeek: [0, 6], start: 10, end: 14 }, // Weekend, shorter hours
+    ],
+  }}
+/>
+```
+
+Each entry in the array is a `BusinessHoursConfig`:
+
+| Field       | Type                 | Description                                                                                        |
+| ----------- | -------------------- | -------------------------------------------------------------------------------------------------- |
+| `dayOfWeek` | `number \| number[]` | `0` (Sunday) to `6` (Saturday). Omit to match any day not already matched by a more specific entry. |
+| `date`      | `Date \| string`     | A specific calendar date. Takes priority over `dayOfWeek` for that day.                            |
+| `start`     | `number`             | Opening hour (0 to 23).                                                                             |
+| `end`       | `number`             | Closing hour (0 to 24).                                                                             |
+
+### How business hours are resolved
+
+`businessHours` lets you set both recurring weekly schedules (using `dayOfWeek`) and specific date
+overrides (using `date`).
+
+For any given day, the calendar evaluates the `businessHours` array from top to bottom and applies
+the first matching entry based on this priority order:
+
+1. **Specific date** (`date`). Takes highest priority, overrides any recurring weekly rules for
+   that specific calendar day.
+2. **Day of week** (`dayOfWeek`). Matches recurring days of the week (`0` for Sunday through `6`
+   for Saturday).
+
+```tsx
+<MhCalendar
+  config={{
+    businessHours: [
+      { date: '2026-12-24', start: 10, end: 14 }, // Early closure on Christmas Eve
+      { dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }, // Mon-Fri
+      { dayOfWeek: [0, 6], start: 10, end: 14 }, // weekend
+    ],
+  }}
+/>
+```
+
+### Blocking drops outside business hours
+
+By default, dragging or resizing an event into non-business hours is allowed, the gray overlay is
+purely visual. Set `blockBusinessHours: true` to actually prevent it.
+
+```tsx
+<MhCalendar
+  config={{
+    businessHours: [{ dayOfWeek: [1, 2, 3, 4, 5], start: 9, end: 17 }],
+    blockBusinessHours: true,
+  }}
+/>
+```
+
+### Styling the overlay
+
+The overlay tint on non-business hours is controlled by the `nonBusinessHoursOverlayColor` CSS
+custom property, see
+[Styling → Properties](/docs/styling/properties#nonbusinesshoursoverlaycolor).
+
+```tsx
+<MhCalendar
+  config={{
+    style: { properties: { nonBusinessHoursOverlayColor: 'rgba(220, 38, 38, 0.06)' } },
+  }}
+/>
+```
+
+## `timezones` / `timezoneLabel`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `timezones` | `string[]` | `[]` | Up to 3 IANA timezone names; first is the main timezone. |
+| `timezoneLabel` | `string` | auto | Overrides the auto-generated main timezone label (e.g. `"CET (GMT+1)"`). |
+
+```tsx
+const config = {
+  timezones: ['America/Los_Angeles', 'America/New_York', 'Europe/London'],
+  timezoneLabel: 'HQ',
+};
+```
+
+- Accepts IANA timezone names (e.g. `'Europe/Warsaw'`), not abbreviations or UTC offsets, an
+  invalid string throws immediately when `config` is set.
+- Passing more than 3 entries doesn't throw; it logs a `console.warn` and keeps only the first
+  three.
+- If `timezones` is omitted, the calendar falls back to the browser's own timezone.
+
+See [Timezones](/docs/guides/timezones) for the full guide, including why events themselves stay
+timezone-agnostic.
+
+## `locale` / `labels`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `locale` | `string \| ILocale` | `'en'` | Day.js locale used to format day/month names (e.g. `'ddd'`, `'MMMM'`). |
+| `labels` | `Partial<IMHCalendarLabels>` | `undefined` | Overrides for hardcoded UI strings (the "Today" button/label, the "+N more" overflow indicator, and view switcher names). |
+
+<TryOnCodePen topic="locale" />
+
+```tsx
+import plLocale from 'dayjs/locale/pl';
+
+const config = {
+  locale: plLocale,
+  labels: {
+    today: 'Dzisiaj',
+    moreEvents: (hiddenCount) => `+${hiddenCount} więcej`,
+    views: { MONTH: 'Miesiąc', WEEK: 'Tydzień' },
+  },
+};
+```
+
+**`locale`:** pass the imported Day.js locale *object*, not its BCP 47 tag as a bare string (e.g.
+not `locale: 'pl'` with a side-effect-only `import 'dayjs/locale/pl'`). This package bundles its
+own private Day.js instance, so a side-effect import in your app registers the locale on a
+*different* Day.js instance and silently has no effect here — passing the object itself works
+regardless, because Day.js self-registers whatever locale object it's given at the point of use.
+Each calendar instance formats with its own `locale` value instead of mutating Day.js's global
+locale, so multiple instances on the same page can use different locales safely. The default
+`'en'` is the one case where the plain string is fine, since it's Day.js's built-in fallback.
+
+**`labels`:** any key you omit falls back to the built-in English default (e.g. `'Today'`,
+`` `+${hiddenCount} more` ``, or the title-cased view type). `views` only needs entries for the
+views you want to relabel.
+
+## `eventDisplayMode`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `eventDisplayMode` | `'side-by-side' \| 'overlapping'` | `'side-by-side'` | How concurrent events lay out within a day column. |
+
+```tsx
+const config = { eventDisplayMode: 'overlapping' };
+```
+
+## `showTimeIndicator`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `showTimeIndicator` | `boolean` | `true` | Shows the current-time red line. |
+
+```tsx
+const config = { showTimeIndicator: false };
+```
+
+The line's color is controlled by the `currentTimeColor` CSS custom property, see
+[Styling → Properties](/docs/styling/properties#currenttimecolor).
+
+## `resources`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `resources` | `{ id: string; title: string }[]` | `[]` | Rows for the Shiftplan view; matched to events via `event.resourceId`. |
+
+```tsx
+const config = {
+  viewType: 'SHIFTPLAN',
+  resources: [
+    { id: 'alice', title: 'Alice' },
+    { id: 'bob', title: 'Bob' },
+  ],
+};
+
+const events: IMHCalendarEvent[] = [
+  { id: 's1', resourceId: 'alice', title: 'Morning shift', startDate, endDate },
+];
+```
+
+`resourceId` on an event (see [`events`](#events)) is also read by
+[`onDayClick`/`onRightDayClick`](#click-callbacks)'s payload when clicking an empty Shiftplan cell.
+
+## `shiftplanDays`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `shiftplanDays` | `number` | `7` | Number of days shown in the Shiftplan view. |
+
+```tsx
+const config = { viewType: 'SHIFTPLAN', shiftplanDays: 14 };
+```

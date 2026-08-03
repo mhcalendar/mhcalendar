@@ -9,6 +9,13 @@ import {
   IMHCalendarViewType,
   MhCalendar,
 } from '@mhcalendar/react';
+// Bare import so TypeScript loads Day.js's ambient locale module declarations
+// (`declare module 'dayjs/locale/*'`) before resolving the locale imports below.
+import 'dayjs';
+import localeDe from 'dayjs/locale/de';
+import localeEs from 'dayjs/locale/es';
+import localeFr from 'dayjs/locale/fr';
+import localePl from 'dayjs/locale/pl';
 import { boldTheme, corporateTheme, minimalTheme } from '../theme-config/calendarThemes';
 import ThemeToggle from '../components/ThemeToggle';
 
@@ -169,6 +176,23 @@ function getPropertyThemeDefault(property: PropertyField, activeStyle: StyleVari
   return themeProperties?.[property.key] ?? baseDefaults[property.key] ?? property.placeholder;
 }
 
+const LOCALE_PRESETS: Array<{ value: string; label: string; locale: string | ILocale }> = [
+  { value: 'en', label: 'English', locale: 'en' },
+  { value: 'pl', label: 'Polski', locale: localePl },
+  { value: 'de', label: 'Deutsch', locale: localeDe },
+  { value: 'es', label: 'Español', locale: localeEs },
+  { value: 'fr', label: 'Français', locale: localeFr },
+];
+
+const VIEW_LABEL_FIELDS: Array<{ key: keyof DemoFormState; view: IMHCalendarViewType; label: string }> =
+  [
+    { key: 'labelViewMonth', view: 'MONTH' as IMHCalendarViewType, label: 'Month' },
+    { key: 'labelViewWeek', view: 'WEEK' as IMHCalendarViewType, label: 'Week' },
+    { key: 'labelViewDay', view: 'DAY' as IMHCalendarViewType, label: 'Day' },
+    { key: 'labelViewAgenda', view: 'AGENDA' as IMHCalendarViewType, label: 'Agenda' },
+    { key: 'labelViewShiftplan', view: 'SHIFTPLAN' as IMHCalendarViewType, label: 'Shift plan' },
+  ];
+
 const TIMEZONE_OPTIONS: Array<{ value: string; label: string }> = [
   { value: '', label: 'None' },
   { value: 'Europe/Warsaw', label: 'Europe/Warsaw' },
@@ -215,6 +239,14 @@ type DemoFormState = {
   fixedHeight: string;
   virtualScrollHeight: string;
   properties: Record<string, string>;
+  localePreset: string;
+  labelToday: string;
+  labelMoreEvents: string;
+  labelViewMonth: string;
+  labelViewWeek: string;
+  labelViewDay: string;
+  labelViewAgenda: string;
+  labelViewShiftplan: string;
 };
 
 const DEFAULT_FORM_STATE: DemoFormState = {
@@ -252,6 +284,14 @@ const DEFAULT_FORM_STATE: DemoFormState = {
   fixedHeight: '',
   virtualScrollHeight: '',
   properties: {},
+  localePreset: 'en',
+  labelToday: '',
+  labelMoreEvents: '',
+  labelViewMonth: '',
+  labelViewWeek: '',
+  labelViewDay: '',
+  labelViewAgenda: '',
+  labelViewShiftplan: '',
 };
 
 function getWeekDates() {
@@ -432,6 +472,24 @@ export default function TryPage(): ReactNode {
       ? { ...baseStyle, properties: { ...(baseStyle.properties as object), ...propertyOverrides } }
       : baseStyle;
 
+    const localePreset =
+      LOCALE_PRESETS.find((preset) => preset.value === form.localePreset) ?? LOCALE_PRESETS[0];
+
+    const viewLabels = Object.fromEntries(
+      VIEW_LABEL_FIELDS.filter((field) => form[field.key]).map((field) => [
+        field.view,
+        form[field.key],
+      ]),
+    );
+
+    const labels = {
+      today: form.labelToday || undefined,
+      moreEvents: form.labelMoreEvents
+        ? (hiddenCount: number) => form.labelMoreEvents.replace('{count}', String(hiddenCount))
+        : undefined,
+      views: viewLabels,
+    };
+
     return {
       viewType: form.viewType as IMHCalendarViewType,
       availableViews: form.availableViews.length ? form.availableViews : undefined,
@@ -465,6 +523,8 @@ export default function TryPage(): ReactNode {
       startDate: form.startDate ? new Date(form.startDate) : undefined,
       fixedHeight: form.fixedHeight || undefined,
       virtualScrollHeight: form.virtualScrollHeight || undefined,
+      locale: localePreset.locale,
+      labels,
       onEventUpdated: handleEventUpdated,
       onEventCreated: handleEventCreated,
       theme: 'dark',
@@ -633,6 +693,61 @@ export default function TryPage(): ReactNode {
                   />
                   <span>Show view header</span>
                 </label>
+              </div>
+            </details>
+
+            <details className="mh-demo-sidebar-group">
+              <summary className="mh-demo-sidebar-label">Locale &amp; labels</summary>
+              <div className="mh-demo-sidebar-group-body">
+                <label className="mh-demo-config-field">
+                  <span>Day.js locale</span>
+                  <select
+                    value={form.localePreset}
+                    onChange={(event) => setField('localePreset', event.target.value)}
+                  >
+                    {LOCALE_PRESETS.map((preset) => (
+                      <option key={preset.value} value={preset.value}>
+                        {preset.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <span className="mh-demo-sidebar-hint">
+                  Controls day/month names (e.g. weekday headers, date range label).
+                </span>
+                <label className="mh-demo-config-field">
+                  <span>"Today" label</span>
+                  <input
+                    type="text"
+                    placeholder="Today"
+                    value={form.labelToday}
+                    onChange={(event) => setField('labelToday', event.target.value)}
+                  />
+                </label>
+                <label className="mh-demo-config-field">
+                  <span>"+N more" label</span>
+                  <input
+                    type="text"
+                    placeholder="+{count} more"
+                    value={form.labelMoreEvents}
+                    onChange={(event) => setField('labelMoreEvents', event.target.value)}
+                  />
+                </label>
+                <span className="mh-demo-sidebar-hint">
+                  Use <code>{'{count}'}</code> as a placeholder for the hidden event count.
+                </span>
+                <span className="mh-demo-sidebar-label">View switcher names</span>
+                {VIEW_LABEL_FIELDS.map((field) => (
+                  <label key={field.key} className="mh-demo-config-field">
+                    <span>{field.label}</span>
+                    <input
+                      type="text"
+                      placeholder={field.label}
+                      value={form[field.key] as string}
+                      onChange={(event) => setField(field.key, event.target.value)}
+                    />
+                  </label>
+                ))}
               </div>
             </details>
 

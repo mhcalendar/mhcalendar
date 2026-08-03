@@ -21,7 +21,7 @@ the porting work is renaming options and reshaping the event objects.
 | `editable: true` | `allowEventDragging: true` | |
 | `eventStartEditable` / `eventDurationEditable` | `allowEventDragging` / `allowEventResize` | mhcalendar splits move vs. resize the same way. |
 | `eventClick(info)` | `onEventClick(event)` | Receives the mhcalendar event object directly, not a FullCalendar `EventApi`. |
-| `eventDrop(info)` / `eventResize(info)` | `onEventUpdated(updatedEvent)` | One callback for both move and resize — see [Create & update callbacks](/docs/props/event-lifecycle). |
+| `eventDrop(info)` / `eventResize(info)` | `onEventUpdated(updatedEvent)` | One callback for both move and resize, see [`onEventCreated`/`onEventUpdated`](/docs/api-reference#oneventcreated--oneventupdated). |
 | `select(info)` + `selectable: true` | `createEventOnClick: true` + `onEventCreated(event)` | mhcalendar creates a default-duration event on click rather than a drag-to-select range. |
 | `headerToolbar: { left, center, right }` | `showDateSwitcher` / `showViewTypeSwitcher` / `showCalendarNavigation` (booleans) | mhcalendar toggles built-in toolbar sections rather than letting you arbitrarily lay out buttons. |
 
@@ -69,5 +69,5 @@ const config = {
   `interactionPlugin`.
 - **Styling isn't CSS-class-based in the same way.** FullCalendar ships CSS files with a large class
   surface to override; mhcalendar has no Shadow DOM and is styled through `config.style` (CSS custom
-  properties + per-class inline overrides). See [Styling](/docs/styling).
+  properties + per-class inline overrides). See [Styling](/docs/styling/overview).
 - **No year view.** If you rely on `multiMonthYear`, there's no direct mhcalendar equivalent today.

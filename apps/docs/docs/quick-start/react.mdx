@@ -1,0 +1,69 @@
+---
+title: React
+sidebar_position: 1
+---
+
+import TryOnCodePen from '@site/src/components/TryOnCodePen';
+import { Steps, Step } from '@site/src/components/Steps';
+
+# React
+
+:::warning[Pre-1.0 package]
+mhcalendar is still `0.x.x`. Minor and patch releases can contain breaking changes. Pin an
+**exact** version rather than a caret range in production, and check the
+[Changelog](/docs/changelog) before bumping.
+:::
+
+<Steps>
+
+<Step number={1} title="Install">
+
+```bash
+npm install @mhcalendar/react
+```
+
+`@mhcalendar/react` depends on `@mhcalendar/calendar` directly, so it's installed automatically —
+there's no separate custom-element registration step. Peer dependencies are `react` and
+`react-dom` (`>=18.0.0`, also compatible with React 19).
+
+</Step>
+
+<Step number={2} title="Render the calendar">
+
+```tsx
+import { useState } from 'react';
+import { MhCalendar, type IMHCalendarEvent, type IMHCalendarViewType } from '@mhcalendar/react';
+
+const CONFIG = {
+  viewType: 'MONTH' as IMHCalendarViewType,
+  showTimeFrom: 8,
+  showTimeTo: 18,
+  showAllDayTasks: true,
+  allowEventDragging: true,
+  allowEventResize: true,
+};
+
+const EVENTS: IMHCalendarEvent[] = [
+  {
+    id: 'event-1',
+    title: 'Team Meeting',
+    startDate: new Date(new Date().setHours(10, 0, 0, 0)),
+    endDate: new Date(new Date().setHours(11, 0, 0, 0)),
+  },
+];
+
+function App() {
+  const [events, setEvents] = useState(EVENTS);
+  return <MhCalendar config={CONFIG} events={events} />;
+}
+```
+
+That's it — `@mhcalendar/react` registers the underlying Web Component for you, so no extra setup
+is needed. Keep `events` in React state (or wherever your data lives) and pass an updated array
+back down whenever something changes; the calendar itself never mutates your data.
+
+</Step>
+
+</Steps>
+
+<TryOnCodePen topic="quick-start" />

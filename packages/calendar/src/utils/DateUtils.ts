@@ -9,8 +9,8 @@ export class DateUtils {
   };
 
   static formatDateRange(from: Date, to: Date, isOneDay = false): string {
-    const fromDate = dayjs(from);
-    const toDate = dayjs(to);
+    const fromDate = dayjs(from).locale(storeState.locale);
+    const toDate = dayjs(to).locale(storeState.locale);
     const showYear = typeof window !== 'undefined' && window.innerWidth > 600;
 
     if (isOneDay || fromDate.isSame(toDate, 'day')) {
@@ -36,7 +36,10 @@ export class DateUtils {
   }
 
   static formatTime(date: Date): string {
-    return dayjs(date).tz(store.mainTimezone).format(storeState.hoursDisplayFormat);
+    return dayjs(date)
+      .tz(store.mainTimezone)
+      .locale(storeState.locale)
+      .format(storeState.hoursDisplayFormat);
   }
 
   static formatEventTime(event: IMHCalendarEvent): string {
@@ -45,8 +48,8 @@ export class DateUtils {
     }
 
     const tz = store.mainTimezone;
-    const startTime = dayjs(event.startDate).tz(tz);
-    const endTime = dayjs(event.endDate).tz(tz);
+    const startTime = dayjs(event.startDate).tz(tz).locale(storeState.locale);
+    const endTime = dayjs(event.endDate).tz(tz).locale(storeState.locale);
 
     if (startTime.isSame(endTime, 'day')) {
       return `${DateUtils.formatTime(event.startDate)} - ${DateUtils.formatTime(event.endDate)}`;
@@ -68,11 +71,7 @@ export class DateUtils {
     const { heightOfCalendarDay, showTimeTo, showTimeFrom } = store.state;
     const { headerMargin } = store;
 
-    if (
-      !heightOfCalendarDay ||
-      typeof showTimeTo !== 'number' ||
-      typeof showTimeFrom !== 'number'
-    )
+    if (!heightOfCalendarDay || typeof showTimeTo !== 'number' || typeof showTimeFrom !== 'number')
       return dayToSet;
 
     const adjustedMousePosition = userTopPosition - headerMargin;

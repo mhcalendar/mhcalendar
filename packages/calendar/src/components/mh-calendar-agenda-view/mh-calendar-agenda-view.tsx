@@ -7,6 +7,7 @@ import { DateUtils } from '../../utils/DateUtils';
 import { EventStyleManager } from '../../utils/EventStyleManager';
 import { IMHCalendarEvent } from '../../types';
 import { VIEW_HEIGHT } from '../../const/default-theme';
+import { LabelUtils } from '../../utils/LabelUtils';
 
 @Component({
   tag: 'mh-calendar-agenda-view',
@@ -129,11 +130,11 @@ export class MHCalendarAgendaView {
   }
 
   private formatDate(date: Date): string {
-    const d = dayjs(date);
+    const d = dayjs(date).locale(storeState.locale);
     const today = dayjs();
 
     if (d.isSame(today, 'day')) {
-      return 'Today';
+      return LabelUtils.today();
     }
 
     if (d.isSame(today.add(1, 'day'), 'day')) {
@@ -201,7 +202,7 @@ export class MHCalendarAgendaView {
               <div class="mhCalendarAgendaView__dayHeader">
                 <span class="mhCalendarAgendaView__dayDate">{this.formatDate(dayData.date)}</span>
                 <span class="mhCalendarAgendaView__dayDateFull">
-                  {dayjs(dayData.date).format('MMM D, YYYY')}
+                  {dayjs(dayData.date).locale(storeState.locale).format('MMM D, YYYY')}
                 </span>
               </div>
               <div class="mhCalendarAgendaView__events">

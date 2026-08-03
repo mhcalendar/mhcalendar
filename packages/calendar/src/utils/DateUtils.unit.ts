@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from '@stencil/vitest';
 import dayjs from 'dayjs';
+import 'dayjs/locale/pl';
 import '../global/global';
 import { DateUtils } from './DateUtils';
 import { store } from '../store/mh-calendar-store';
@@ -46,6 +47,41 @@ describe('DateUtils', () => {
       const from = new Date(2026, 6, 28);
       const to = new Date(2026, 7, 2);
       expect(DateUtils.formatDateRange(from, to)).toBe('July 28 - August 2');
+    });
+
+    it('formats month names using the configured locale string', () => {
+      const originalLocale = store.state.locale;
+      store.state.locale = 'pl';
+      try {
+        const day = new Date(2026, 6, 10);
+        expect(DateUtils.formatDateRange(day, day, true)).toBe('lipiec 10');
+      } finally {
+        store.state.locale = originalLocale;
+      }
+    });
+
+    it('formats month names using a locale object, independent of any prior registration', () => {
+      // A locale object self-registers wherever .locale() is called, unlike a bare string
+      // (which relies on the locale already being registered on this exact Day.js instance —
+      // see the `locale` config doc comment for why the consumer's own dayjs/locale/xx import
+      // can't reach the Day.js instance bundled inside this package).
+      const originalLocale = store.state.locale;
+      const customLocale: ILocale = {
+        name: 'test-locale',
+        months:
+          'Miesiac1_Miesiac2_Miesiac3_Miesiac4_Miesiac5_Miesiac6_Miesiac7_Miesiac8_Miesiac9_Miesiac10_Miesiac11_Miesiac12'.split(
+            '_',
+          ),
+        formats: {},
+        relativeTime: {},
+      };
+      store.state.locale = customLocale;
+      try {
+        const day = new Date(2026, 6, 10);
+        expect(DateUtils.formatDateRange(day, day, true)).toBe('Miesiac7 10');
+      } finally {
+        store.state.locale = originalLocale;
+      }
     });
   });
 
@@ -152,9 +188,9 @@ describe('DateUtils', () => {
   describe('dateToMinutesInTimezone', () => {
     it('returns minutes since midnight in the given timezone', () => {
       // 18:30 UTC -> 14:30 EDT (UTC-4 in July)
-      expect(DateUtils.dateToMinutesInTimezone(new Date('2026-07-10T18:30:00Z'), 'America/New_York')).toBe(
-        870,
-      );
+      expect(
+        DateUtils.dateToMinutesInTimezone(new Date('2026-07-10T18:30:00Z'), 'America/New_York'),
+      ).toBe(870);
     });
 
     it('returns 0 at local midnight', () => {

@@ -5,37 +5,32 @@ sidebar_position: 1
 
 # Introduction
 
-mhcalendar is a modern calendar component built for web applications that require flexibility without unnecessary complexity.
-
-Our goal is simple: provide one of the most customizable calendar components available while keeping the default setup intuitive. You should be able to install it, render it, and have a modern production-ready calendar in minutes.
+mhcalendar is a calendar component for web applications that need real flexibility without the setup overhead that usually comes with it. Install it, render it, and you have a modern, production-ready calendar in minutes. From there, you have room to fully restyle and reconfigure it as your product grows.
 
 ## Philosophy
 
-mhcalendar was created after working with existing libraries that often forced developers to choose between flexibility and simplicity.
+Most calendar libraries make you choose: either they're simple to set up and rigid once you need to deviate from the defaults, or they're flexible but demand a steep learning curve before you can ship anything. mhcalendar exists to avoid that trade-off.
 
-Modern applications require components that integrate seamlessly with an existing design system instead of dictating one. Customization has been a core design principle since the beginning. Every feature is built with extensibility in mind, allowing you to adapt the calendar to your product rather than adapting your product to the calendar.
+Every feature is built with extensibility in mind, so the calendar adapts to your product instead of the other way around. That starts with styling: the calendar exposes its look through plain CSS custom properties, so it integrates with whatever design system your app already has rather than imposing one of its own.
 
-Another important goal was framework independence.
+It also extends to the stack you build on. Rather than maintaining a separate implementation per framework, mhcalendar is built with [Stencil](https://stenciljs.com/) and compiles down to a standards-based Web Component. That one implementation runs natively in any modern browser, with framework wrappers layered on top purely for developer convenience. No functionality is tied to a specific framework.
 
-Instead of maintaining separate implementations for every framework, mhcalendar is built with [Stencil](https://stenciljs.com/), which allows us to ship standards-based Web Components. This enables the same core component to work across frameworks while avoiding the complexity of maintaining multiple implementations.
-
-For date manipulation we use **Day.js** a lightweight, modern library with an excellent developer experience. Since Stencil is only a development dependency, **Day.js is the only runtime dependency** required by the calendar.
+The only thing running in your app at runtime is the calendar itself and **Day.js**, a lightweight date library. Stencil is a build-time dependency only, so it adds nothing to your bundle.
 
 ## Architecture
 
-mhcalendar is developed as a monorepo containing the core component, framework wrappers, documentation, and example applications.
+mhcalendar is developed as a monorepo: the core component, framework wrappers, documentation, and example apps all live side by side and ship in lockstep.
 
-At the heart of the project is `@mhcalendar/calendar`, a framework-agnostic Web Component that can be used in any modern web application.
+At the center is `@mhcalendar/calendar`, the framework-agnostic Web Component described above. Framework wrappers sit on top of it purely for ergonomics: a wrapper doesn't add capabilities the core component doesn't already have, it just makes integration feel native to that framework. React is the first officially supported wrapper; more may follow as the project grows, always backed by the same underlying component.
 
-To improve the developer experience, framework-specific wrappers are provided. At the moment, React is the first officially supported wrapper. It doesn't introduce any additional functionality. Wrapper makes integrating the core component into React applications more convenient.
-
-As the project evolves, additional framework wrappers may be added while keeping the same underlying implementation.
-
-- **[`@mhcalendar/calendar`](https://www.npmjs.com/package/@mhcalendar/calendar)** - the Web Component.
-- **[`@mhcalendar/react`](https://www.npmjs.com/package/@mhcalendar/react)** - the official React wrapper.
+- **[`@mhcalendar/calendar`](https://www.npmjs.com/package/@mhcalendar/calendar)** is the Web Component.
+- **[`@mhcalendar/react`](https://www.npmjs.com/package/@mhcalendar/react)** is the official React wrapper.
 
 ## Project Status
 
-mhcalendar is currently in **pre-1.0** (`0.2.x`).
+mhcalendar is currently in **pre-1.0** (`0.2.x`). It's already usable in production, but the public API may still evolve before `1.0`. Pin an exact package version rather than a caret range, and check the [Changelog](/docs/changelog) before upgrading.
 
-While the component is already usable, the public API may still evolve before reaching version `1.0`. We recommend pinning an exact package version and reviewing the [Changelog](/docs/changelog) before upgrading.
+## Next Steps
+
+- **New to mhcalendar?** Head to [Quick Start](/docs/quick-start/react) and pick the path for your stack: [React](/docs/quick-start/react), [Vanilla JS](/docs/quick-start/vanilla-js), or [Other Frameworks](/docs/quick-start/other-frameworks).
+- **Already integrated it?** Browse the [Props reference](/docs/props/overview) for every configuration option, or [Theming](/docs/guides/theming) to see how styling works in practice.

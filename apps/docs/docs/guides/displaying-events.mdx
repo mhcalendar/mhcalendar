@@ -1,20 +1,48 @@
 ---
-title: Displaying events
+title:  
 sidebar_position: 3
 ---
 
 # Displaying events
 
-This page is a work in progress — docs are still being written.
+- events are plain objects which are passed to component using a events prop.
+- the only requirement for an event is id, startDate and endDate in order to display it in the calendar
+- If you want to display it in the shiftplan then also a resource id is needed
+- events data change can be handled internaly in mhcalend or externaly using a reactive state
+- you can set title and despription,
+
+export interface IMHCalendarEvent {
+  id: string;
+  startDate: Date;
+  endDate: Date;
+  title?: string;
+  allDay?: boolean;
+  description?: string;
+  isHidden?: boolean;
+  color?: string;
+  resourceId?: string;
+  draggingToggle?: boolean;
+  [key: string]: unknown;
+}
 
 ## Requirements
 
-Dates need to have a timestamp...
+- Each event require an uniq id, this is crucial for internal manipulation.
+- startDate and endDate are Date object from javascript. In order to display it in the timeline view the date
+  require also a time
 
 ## Colors
 
-Events use the `color` property, or the event's own `color` if set.
+By default all events have color set by default property 'eventBackgroundColor'. But this can be overwritten by a color property
+
+## Dragging block
+
+- if you want to block certian event from being draggable then you can set draggingToggle to false. This will overwrite the global config option
+
+## Hidding an event
+
+you can also hide the event with isHidden
 
 ## Event change handling
 
-Either imperative or internal state.
+Either imperative or external state.

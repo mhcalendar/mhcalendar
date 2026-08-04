@@ -27,7 +27,7 @@ mhcalendar is built around easy **customization as a first-class feature**. You 
 - **Lightweight by Design** — Keeps the dependency footprint tiny.
 - **Advanced Timezones** — Support for multiple IANA timezones simultaneously.
 - **Fully Interactive** — Drag & drop event management and event resizing.
-- **Multiple Views** — Month, Week, Day, Agenda, and Shiftplan.
+- **Multiple Views** — Month, Week, Day, Agenda, and Resource.
 - **Business Hours** — Define business hours, block out-of-office dragging, and visualize non-business time.
 - ✨ **...and more!**
 

@@ -1,33 +1,33 @@
-.mhCalendarShiftplan {
+.mhCalendarResource {
   width: 100%;
   overflow: auto;
   box-sizing: border-box;
 }
 
-.mhCalendarShiftplan--empty {
+.mhCalendarResource--empty {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.mhCalendarShiftplan__emptyMessage {
+.mhCalendarResource__emptyMessage {
   color: var(--dateFontColor);
   font-size: 14px;
   text-align: center;
 }
 
-.mhCalendarShiftplan__grid {
+.mhCalendarResource__grid {
   display: grid;
-  grid-template-columns: 160px repeat(var(--shiftplan-cols, 7), 1fr);
+  grid-template-columns: 160px repeat(var(--resource-cols, 7), 1fr);
   min-width: 100%;
 }
 
 /* Header row */
-.mhCalendarShiftplan__headerRow {
+.mhCalendarResource__headerRow {
   display: contents;
 }
 
-.mhCalendarShiftplan__cornerCell {
+.mhCalendarResource__cornerCell {
   position: sticky;
   left: 0;
   z-index: 3;
@@ -36,7 +36,7 @@
   border-right: 1px solid var(--bordersColor);
 }
 
-.mhCalendarShiftplan__dateCell {
+.mhCalendarResource__dateCell {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,16 +51,16 @@
   z-index: 2;
 }
 
-.mhCalendarShiftplan__dateCell:last-child {
+.mhCalendarResource__dateCell:last-child {
   border-right: none;
 }
 
-.mhCalendarShiftplan__dateCell--weekend .mhCalendarShiftplan__dateDayName,
-.mhCalendarShiftplan__dateCell--weekend .mhCalendarShiftplan__dateNumber {
+.mhCalendarResource__dateCell--weekend .mhCalendarResource__dateDayName,
+.mhCalendarResource__dateCell--weekend .mhCalendarResource__dateNumber {
   color: var(--holidayDateColor);
 }
 
-.mhCalendarShiftplan__dateDayName {
+.mhCalendarResource__dateDayName {
   font-size: 11px;
   text-transform: uppercase;
   color: var(--dateFontColor);
@@ -68,7 +68,7 @@
   letter-spacing: 0.5px;
 }
 
-.mhCalendarShiftplan__dateNumber {
+.mhCalendarResource__dateNumber {
   font-size: 16px;
   font-weight: 600;
   color: var(--fontColor);
@@ -76,11 +76,11 @@
   position: relative;
 }
 
-.mhCalendarShiftplan__dateCell--today .mhCalendarShiftplan__dateNumber {
+.mhCalendarResource__dateCell--today .mhCalendarResource__dateNumber {
   color: color-mix(in srgb, var(--fontColor), white 40%);
 }
 
-.mhCalendarShiftplan__dateCell--today .mhCalendarShiftplan__dateNumber::after {
+.mhCalendarResource__dateCell--today .mhCalendarResource__dateNumber::after {
   content: '';
   position: absolute;
   inset: 50%;
@@ -93,11 +93,11 @@
 }
 
 /* Resource rows */
-.mhCalendarShiftplan__row {
+.mhCalendarResource__row {
   display: contents;
 }
 
-.mhCalendarShiftplan__resourceLabel {
+.mhCalendarResource__resourceLabel {
   position: sticky;
   left: 0;
   z-index: 1;
@@ -117,7 +117,7 @@
 }
 
 /* Cells */
-.mhCalendarShiftplan__cell {
+.mhCalendarResource__cell {
   border-bottom: 1px solid var(--bordersColor);
   border-right: 1px solid var(--bordersColor);
   padding: 4px;
@@ -131,27 +131,27 @@
   transition: background-color 0.15s;
 }
 
-.mhCalendarShiftplan__cell:last-child {
+.mhCalendarResource__cell:last-child {
   border-right: none;
 }
 
-.mhCalendarShiftplan__cell:hover {
+.mhCalendarResource__cell:hover {
   background: color-mix(in srgb, var(--mainBackgroundColor), white 5%);
 }
 
-.mhCalendarShiftplan__cell--dragOver {
+.mhCalendarResource__cell--dragOver {
   background: color-mix(in srgb, var(--headerTodayBackgroundColor) 15%, transparent);
   outline: 2px dashed var(--headerTodayBackgroundColor);
   outline-offset: -2px;
 }
 
 /* Event inside cell */
-.mhCalendarShiftplan__cell .mhCalendarEvent {
+.mhCalendarResource__cell .mhCalendarEvent {
   width: 100%;
 }
 
 /* "+N more" button */
-.mhCalendarShiftplan__moreBtn {
+.mhCalendarResource__moreBtn {
   background: none;
   border: none;
   padding: 2px 4px;
@@ -164,17 +164,17 @@
   transition: background-color 0.15s;
 }
 
-.mhCalendarShiftplan__moreBtn:hover {
+.mhCalendarResource__moreBtn:hover {
   background: color-mix(in srgb, var(--eventTimeDiffColor) 8%, transparent);
 }
 
 /* More popup (rendered inside modal) */
-.mhCalendarShiftplan__morePopup {
+.mhCalendarResource__morePopup {
   min-width: 200px;
   max-width: 300px;
 }
 
-.mhCalendarShiftplan__morePopupHeader {
+.mhCalendarResource__morePopupHeader {
   font-size: 13px;
   font-weight: 600;
   color: var(--fontColor);
@@ -183,7 +183,7 @@
   border-bottom: 1px solid var(--bordersColor);
 }
 
-.mhCalendarShiftplan__morePopupList {
+.mhCalendarResource__morePopupList {
   display: flex;
   flex-direction: column;
   gap: 4px;

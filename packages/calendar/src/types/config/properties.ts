@@ -8,7 +8,7 @@ export type ConfigCSSProperites = {
   /**
    * Color of internal grid borders and dividers — between time slots, day columns, header cells,
    * and form fields inside the event modal.
-   * Applies across DAY, WEEK, MONTH, AGENDA, and SHIFTPLAN views.
+   * Applies across DAY, WEEK, MONTH, AGENDA, and RESOURCE views.
    * Default (dark theme): '#2a2a36'
    * Default (light theme): '#e2e2e8'
    */
@@ -22,8 +22,8 @@ export type ConfigCSSProperites = {
   eventBackgroundColor: string;
 
   /**
-   * Ring color around today's date number in the header (DAY/WEEK views) and in the SHIFTPLAN
-   * header. Also used as the highlight color for the drag-over target cell in SHIFTPLAN.
+   * Ring color around today's date number in the header (DAY/WEEK views) and in the RESOURCE
+   * header. Also used as the highlight color for the drag-over target cell in RESOURCE.
    * Default: '#8a79ff'
    */
   headerTodayBackgroundColor: string;
@@ -70,7 +70,7 @@ export type ConfigCSSProperites = {
 
   /**
    * Color of the duration diff label (e.g. "+15 min") inside the resize tooltip, and of the
-   * "+N more" overflow button in the SHIFTPLAN view.
+   * "+N more" overflow button in the RESOURCE view.
    * Default: '#3578fa'
    */
   eventTimeDiffColor: string;
@@ -92,7 +92,7 @@ export type ConfigCSSProperites = {
 
   /**
    * Fixed height of a single event row when it renders compactly: MONTH view, the all-day row,
-   * and SHIFTPLAN cells.
+   * and RESOURCE cells.
    * Default: '20px'
    */
   monthEventHeight: string;
@@ -144,7 +144,7 @@ export type ConfigCSSProperites = {
   buttonsColor: string;
 
   /**
-   * Text color for weekend day names and numbers in the DAY/WEEK header and the SHIFTPLAN header.
+   * Text color for weekend day names and numbers in the DAY/WEEK header and the RESOURCE header.
    *
    * @remarks
    * Not currently applied to weekend day cells in the MONTH view.

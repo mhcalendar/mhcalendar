@@ -15,7 +15,7 @@ import TryOnCodePen from '@site/src/components/TryOnCodePen';
 | `events` | `IMHCalendarEvent[]` | The events to render. See [`events`](#events). |
 
 `config` is a single flat object, merged internally from three layers (base behavior,
-multi-view/grid options, week/shiftplan-specific options): you never nest anything, just pass one
+multi-view/grid options, week/resource-specific options): you never nest anything, just pass one
 object with whichever fields you need.
 
 <TryOnCodePen topic="basic-usage" />
@@ -42,7 +42,7 @@ interface IMHCalendarEvent {
   description?: string;
   isHidden?: boolean;
   color?: string;
-  resourceId?: string; // matches a Shiftplan resource's `id`, see Resources
+  resourceId?: string; // matches a resource's `id` in the Resource view, see Resources
   draggingToggle?: boolean;
   [key: string]: unknown; // extra fields are allowed and passed through
 }
@@ -73,7 +73,7 @@ see [Displaying events](/docs/guides/displaying-events).
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `viewType` | `'DAY' \| 'WEEK' \| 'MONTH' \| 'AGENDA' \| 'SHIFTPLAN'` | `'AGENDA'` | The active view. |
+| `viewType` | `'DAY' \| 'WEEK' \| 'MONTH' \| 'AGENDA' \| 'RESOURCE'` | `'AGENDA'` | The active view. |
 | `availableViews` | `string[]` | all views | Restricts which views the built-in view switcher offers. |
 
 `viewType` controls which view renders. Users can also switch views themselves via the built-in
@@ -216,7 +216,7 @@ style object as a named theme.
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `eventContent` | `(event) => any` | none | Custom render for full-size events (Day/Week views). |
-| `eventSmallContent` | `(event) => any` | none | Custom render for compact events (Month/Shiftplan/Agenda). |
+| `eventSmallContent` | `(event) => any` | none | Custom render for compact events (Month/Resource/Agenda). |
 
 Both receive the `IMHCalendarEvent` object (see [`events`](#events)) and return renderable
 content:
@@ -255,7 +255,7 @@ broadly.
 ```ts
 type IMHCalendarDayClickPayload = {
   date: Date;
-  resourceId?: string; // present for Shiftplan clicks
+  resourceId?: string; // present for Resource clicks
 };
 ```
 
@@ -543,11 +543,11 @@ The line's color is controlled by the `currentTimeColor` CSS custom property, se
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `resources` | `{ id: string; title: string }[]` | `[]` | Rows for the Shiftplan view; matched to events via `event.resourceId`. |
+| `resources` | `{ id: string; title: string }[]` | `[]` | Rows for the Resource view; matched to events via `event.resourceId`. |
 
 ```tsx
 const config = {
-  viewType: 'SHIFTPLAN',
+  viewType: 'RESOURCE',
   resources: [
     { id: 'alice', title: 'Alice' },
     { id: 'bob', title: 'Bob' },
@@ -560,14 +560,14 @@ const events: IMHCalendarEvent[] = [
 ```
 
 `resourceId` on an event (see [`events`](#events)) is also read by
-[`onDayClick`/`onRightDayClick`](#click-callbacks)'s payload when clicking an empty Shiftplan cell.
+[`onDayClick`/`onRightDayClick`](#click-callbacks)'s payload when clicking an empty Resource cell.
 
-## `shiftplanDays`
+## `resourceDays`
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `shiftplanDays` | `number` | `7` | Number of days shown in the Shiftplan view. |
+| `resourceDays` | `number` | `7` | Number of days shown in the Resource view. |
 
 ```tsx
-const config = { viewType: 'SHIFTPLAN', shiftplanDays: 14 };
+const config = { viewType: 'RESOURCE', resourceDays: 14 };
 ```

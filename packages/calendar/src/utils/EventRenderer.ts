@@ -108,7 +108,6 @@ export class EventRenderer {
       };
     } else {
       baseStyle = {
-        height: '40px',
         width: '100%',
         zIndex: 9999,
         position: 'relative',

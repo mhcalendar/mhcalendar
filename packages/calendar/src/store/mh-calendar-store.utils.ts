@@ -35,7 +35,7 @@ export class MHCalendarStoreUtils {
   protected updateDateRangeForViewType(
     viewType: IMHCalendarViewType,
     fromDate: Date,
-    shiftplanDays: number = 7,
+    resourceDays: number = 7,
   ): ICalendarDateRange {
     const anchorDate = new Date(fromDate);
     anchorDate.setHours(0, 0, 0, 0);
@@ -51,9 +51,9 @@ export class MHCalendarStoreUtils {
         const { fromDate: weekFrom, toDate: weekTo } = this.getDatesForWeekView(anchorDate);
         return { fromDate: weekFrom, toDate: weekTo };
       }
-      case IMHCalendarViewType.SHIFTPLAN: {
+      case IMHCalendarViewType.RESOURCE: {
         const to = new Date(anchorDate);
-        to.setDate(anchorDate.getDate() + shiftplanDays - 1);
+        to.setDate(anchorDate.getDate() + resourceDays - 1);
         return { fromDate: anchorDate, toDate: to };
       }
       case IMHCalendarViewType.DAY:
@@ -66,7 +66,7 @@ export class MHCalendarStoreUtils {
     by: IMHCalendarViewType,
     fromDate: Date,
     amount: number = 1,
-    shiftplanDays: number = 7,
+    resourceDays: number = 7,
   ): ICalendarDateRange {
     const newFromDate = new Date(fromDate);
     switch (by) {
@@ -80,12 +80,12 @@ export class MHCalendarStoreUtils {
       case IMHCalendarViewType.MONTH:
         newFromDate.setMonth(newFromDate.getMonth() + amount);
         break;
-      case IMHCalendarViewType.SHIFTPLAN:
-        newFromDate.setDate(newFromDate.getDate() + shiftplanDays * amount);
+      case IMHCalendarViewType.RESOURCE:
+        newFromDate.setDate(newFromDate.getDate() + resourceDays * amount);
         break;
       default:
         throw new Error(`Unsupported unit: ${by}`);
     }
-    return this.updateDateRangeForViewType(by, newFromDate, shiftplanDays);
+    return this.updateDateRangeForViewType(by, newFromDate, resourceDays);
   }
 }

@@ -15,9 +15,9 @@ back through callbacks.
 
 | TUI Calendar | mhcalendar | Notes |
 |---|---|---|
-| `view: 'month' \| 'week' \| 'day'` | `viewType: 'MONTH' \| 'WEEK' \| 'DAY'` | mhcalendar adds `AGENDA` and `SHIFTPLAN`; TUI has no direct equivalent of either. |
+| `view: 'month' \| 'week' \| 'day'` | `viewType: 'MONTH' \| 'WEEK' \| 'DAY'` | mhcalendar adds `AGENDA` and `RESOURCE`; TUI has no direct equivalent of either. |
 | `week.hourStart` / `week.hourEnd` | `showTimeFrom` / `showTimeTo` | See [Display hours](/docs/guides/display-hours). |
-| `calendars: [{ id, name, color, bgColor }]` | *(no direct equivalent)* | TUI's `calendars` are named categories events attach to via `calendarId`. mhcalendar has no calendar-grouping concept — use `resources`/`resourceId` in `SHIFTPLAN` view if what you actually need is per-row grouping, or per-event `color` for categorical coloring. |
+| `calendars: [{ id, name, color, bgColor }]` | *(no direct equivalent)* | TUI's `calendars` are named categories events attach to via `calendarId`. mhcalendar has no calendar-grouping concept — use `resources`/`resourceId` in `RESOURCE` view if what you actually need is per-row grouping, or per-event `color` for categorical coloring. |
 | `events: [{ id, calendarId, title, start, end, isAllday }]` | `events: [{ id, title, startDate, endDate, allDay }]` | `start`/`end` → `startDate`/`endDate` (plain `Date` objects), `isAllday` → `allDay`. `calendarId` has no equivalent — see above. |
 | `calendar.createEvents([...])` (imperative) | pass a new array via the `events` prop | mhcalendar is fully controlled: update your own state and re-render, rather than calling a method on an instance. |
 | `onClickEvent` | `onEventClick` | |
@@ -70,7 +70,7 @@ const config = {
   to reject it, and re-render with the previous data.
 - **No `calendarId` grouping.** If you used multiple TUI `calendars` purely for color-coding, use
   per-event `color` in mhcalendar instead. If you used them for row-based grouping (one calendar per
-  team/person), that's closer to mhcalendar's `SHIFTPLAN` view with `resources`/`resourceId`.
+  team/person), that's closer to mhcalendar's `RESOURCE` view with `resources`/`resourceId`.
 - **Field renames.** `start`/`end` → `startDate`/`endDate`, `isAllday` → `allDay` — mechanical but
   worth a bulk find-and-replace wherever you construct event objects.
 - **Styling.** TUI ships CSS variables and template functions for custom rendering; mhcalendar has no

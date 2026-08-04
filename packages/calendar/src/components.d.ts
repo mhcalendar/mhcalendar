@@ -115,7 +115,7 @@ export namespace Components {
          */
         "eventStartDate": null | Date;
     }
-    interface MhCalendarShiftplanView {
+    interface MhCalendarResourceView {
     }
     interface MhCalendarTimeSlots {
     }
@@ -231,11 +231,11 @@ declare global {
         prototype: HTMLMhCalendarResizeEventHandlerElement;
         new (): HTMLMhCalendarResizeEventHandlerElement;
     };
-    interface HTMLMhCalendarShiftplanViewElement extends Components.MhCalendarShiftplanView, HTMLStencilElement {
+    interface HTMLMhCalendarResourceViewElement extends Components.MhCalendarResourceView, HTMLStencilElement {
     }
-    var HTMLMhCalendarShiftplanViewElement: {
-        prototype: HTMLMhCalendarShiftplanViewElement;
-        new (): HTMLMhCalendarShiftplanViewElement;
+    var HTMLMhCalendarResourceViewElement: {
+        prototype: HTMLMhCalendarResourceViewElement;
+        new (): HTMLMhCalendarResourceViewElement;
     };
     interface HTMLMhCalendarTimeSlotsElement extends Components.MhCalendarTimeSlots, HTMLStencilElement {
     }
@@ -268,7 +268,7 @@ declare global {
         "mh-calendar-multi-view": HTMLMhCalendarMultiViewElement;
         "mh-calendar-navigation": HTMLMhCalendarNavigationElement;
         "mh-calendar-resize-event-handler": HTMLMhCalendarResizeEventHandlerElement;
-        "mh-calendar-shiftplan-view": HTMLMhCalendarShiftplanViewElement;
+        "mh-calendar-resource-view": HTMLMhCalendarResourceViewElement;
         "mh-calendar-time-slots": HTMLMhCalendarTimeSlotsElement;
         "mh-view-switcher": HTMLMhViewSwitcherElement;
     }
@@ -378,7 +378,7 @@ declare namespace LocalJSX {
          */
         "eventStartDate"?: null | Date;
     }
-    interface MhCalendarShiftplanView {
+    interface MhCalendarResourceView {
     }
     interface MhCalendarTimeSlots {
     }
@@ -444,7 +444,7 @@ declare namespace LocalJSX {
         "mh-calendar-multi-view": MhCalendarMultiView;
         "mh-calendar-navigation": MhCalendarNavigation;
         "mh-calendar-resize-event-handler": Omit<MhCalendarResizeEventHandler, keyof MhCalendarResizeEventHandlerAttributes> & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes]?: MhCalendarResizeEventHandler[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `attr:${K}`]?: MhCalendarResizeEventHandlerAttributes[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `prop:${K}`]?: MhCalendarResizeEventHandler[K] } & OneOf<"eventId", MhCalendarResizeEventHandler["eventId"], MhCalendarResizeEventHandlerAttributes["eventId"]> & OneOf<"eventHeight", MhCalendarResizeEventHandler["eventHeight"], MhCalendarResizeEventHandlerAttributes["eventHeight"]>;
-        "mh-calendar-shiftplan-view": MhCalendarShiftplanView;
+        "mh-calendar-resource-view": MhCalendarResourceView;
         "mh-calendar-time-slots": MhCalendarTimeSlots;
         "mh-view-switcher": MhViewSwitcher;
     }
@@ -471,7 +471,7 @@ declare module "@stencil/core" {
             "mh-calendar-multi-view": LocalJSX.IntrinsicElements["mh-calendar-multi-view"] & JSXBase.HTMLAttributes<HTMLMhCalendarMultiViewElement>;
             "mh-calendar-navigation": LocalJSX.IntrinsicElements["mh-calendar-navigation"] & JSXBase.HTMLAttributes<HTMLMhCalendarNavigationElement>;
             "mh-calendar-resize-event-handler": LocalJSX.IntrinsicElements["mh-calendar-resize-event-handler"] & JSXBase.HTMLAttributes<HTMLMhCalendarResizeEventHandlerElement>;
-            "mh-calendar-shiftplan-view": LocalJSX.IntrinsicElements["mh-calendar-shiftplan-view"] & JSXBase.HTMLAttributes<HTMLMhCalendarShiftplanViewElement>;
+            "mh-calendar-resource-view": LocalJSX.IntrinsicElements["mh-calendar-resource-view"] & JSXBase.HTMLAttributes<HTMLMhCalendarResourceViewElement>;
             "mh-calendar-time-slots": LocalJSX.IntrinsicElements["mh-calendar-time-slots"] & JSXBase.HTMLAttributes<HTMLMhCalendarTimeSlotsElement>;
             "mh-view-switcher": LocalJSX.IntrinsicElements["mh-view-switcher"] & JSXBase.HTMLAttributes<HTMLMhViewSwitcherElement>;
         }

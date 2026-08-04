@@ -8,5 +8,5 @@ export enum IMHCalendarViewType {
   MONTH = 'MONTH',
   WEEK = 'WEEK',
   AGENDA = 'AGENDA',
-  SHIFTPLAN = 'SHIFTPLAN',
+  RESOURCE = 'RESOURCE',
 }

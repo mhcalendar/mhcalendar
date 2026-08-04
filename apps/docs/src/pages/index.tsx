@@ -1,10 +1,17 @@
 import type { ReactNode } from 'react';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import {
+  IMHCalendarEvent,
+  IMHCalendarFullOptions,
+  IMHCalendarViewType,
+  MhCalendar,
+} from '@mhcalendar/react';
 import ThemeToggle from '../components/ThemeToggle';
+import { useColorMode } from '@docusaurus/theme-common';
 
 // Official brand marks (path data from simple-icons, CC0), each with its brand color.
 // Next.js's mark is monochrome black/white in the source, so it uses currentColor to
@@ -41,27 +48,78 @@ const INTEGRATIONS: { name: string; color?: string; path: string }[] = [
   },
 ];
 
-const FEATURES: { title: string; description: string; video?: string; image?: string }[] = [
+function FeatureIcon({ children }: { children: ReactNode }): ReactNode {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {children}
+    </svg>
+  );
+}
+
+const FEATURES: { title: string; description: string; icon: ReactNode }[] = [
   {
     title: 'Drag and drop scheduling',
     description:
       'Move events between days and time slots, resize them, or drag to create new ones directly on the grid.',
-    video: '/video/drag-and-drop-scheduling.webm',
+    icon: (
+      <FeatureIcon>
+        <polyline points="5 9 2 12 5 15" />
+        <polyline points="9 5 12 2 15 5" />
+        <polyline points="15 19 12 22 9 19" />
+        <polyline points="19 9 22 12 19 15" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <line x1="12" y1="2" x2="12" y2="22" />
+      </FeatureIcon>
+    ),
   },
   {
     title: 'Five views in one component',
-    description: 'Week, day, month, agenda, and shiftplan. Switch between them with a single prop.',
+    description: 'Week, day, month, agenda, and resource. Switch between them with a single prop.',
+    icon: (
+      <FeatureIcon>
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+        <line x1="3" y1="9" x2="21" y2="9" />
+        <line x1="9" y1="21" x2="9" y2="9" />
+      </FeatureIcon>
+    ),
   },
   {
     title: 'Multi timezone support',
     description:
       'Show events across multiple timezones side by side, with each timezone rendered as its own column.',
-    image: '/img/timezones.png',
+    icon: (
+      <FeatureIcon>
+        <circle cx="12" cy="12" r="10" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+      </FeatureIcon>
+    ),
   },
   {
     title: 'Theming with CSS variables',
     description:
       'Restyle colors, spacing, and fonts through plain CSS custom properties. No proprietary theming API.',
+    icon: (
+      <FeatureIcon>
+        <line x1="4" y1="21" x2="4" y2="14" />
+        <line x1="4" y1="10" x2="4" y2="3" />
+        <line x1="12" y1="21" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12" y2="3" />
+        <line x1="20" y1="21" x2="20" y2="16" />
+        <line x1="20" y1="12" x2="20" y2="3" />
+        <line x1="1" y1="14" x2="7" y2="14" />
+        <line x1="9" y1="8" x2="15" y2="8" />
+        <line x1="17" y1="16" x2="23" y2="16" />
+      </FeatureIcon>
+    ),
   },
 ];
 
@@ -84,14 +142,6 @@ const CTA_SECTIONS: {
   logoPath?: string;
   logoColor?: string;
 }[] = [
-  {
-    id: 'docs',
-    eyebrow: 'Documentation',
-    heading: 'Dive deeper in the docs.',
-    description: 'Every prop, view, and theming option, explained with live examples.',
-    ctaLabel: 'Read the docs',
-    href: '/docs/introduction/',
-  },
   {
     id: 'npm',
     eyebrow: 'npm',
@@ -135,7 +185,7 @@ const FAQS: { question: string; answer: string }[] = [
   },
   {
     question: 'Which views are supported?',
-    answer: 'Week, day, month, agenda, and shiftplan, switchable with a single prop.',
+    answer: 'Week, day, month, agenda, and resource, switchable with a single prop.',
   },
   {
     question: 'Is TypeScript supported?',
@@ -216,6 +266,164 @@ function RotatingWord(): ReactNode {
   );
 }
 
+function makeTryItDate(dayOffset: number, hour: number, minutes = 0): Date {
+  const now = new Date();
+  const day = now.getDay();
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1) + dayOffset);
+  monday.setHours(hour, minutes, 0, 0);
+  return monday;
+}
+
+const TRY_IT_RESOURCES = [
+  { id: 'resource-1', title: 'Design team' },
+  { id: 'resource-2', title: 'Marketing team' },
+  { id: 'resource-3', title: 'Sales team' },
+  { id: 'resource-4', title: 'Ops team' },
+];
+
+function buildTryItEvents(): IMHCalendarEvent[] {
+  return [
+    {
+      id: 'try-1',
+      title: 'Design review',
+      startDate: makeTryItDate(0, 9),
+      endDate: makeTryItDate(0, 10),
+      color: '#6C5CE7',
+    },
+    {
+      id: 'try-2',
+      title: 'Standup',
+      startDate: makeTryItDate(0, 10),
+      endDate: makeTryItDate(0, 11),
+      color: '#00B8A9',
+    },
+    {
+      id: 'try-3',
+      title: 'Customer call',
+      startDate: makeTryItDate(1, 13),
+      endDate: makeTryItDate(1, 14),
+      color: '#FF6B6B',
+    },
+    {
+      id: 'try-4',
+      title: 'Pair on theming',
+      startDate: makeTryItDate(2, 15),
+      endDate: makeTryItDate(2, 17),
+      color: '#4C9AFF',
+    },
+    {
+      id: 'try-5',
+      title: 'Release sync',
+      startDate: makeTryItDate(3, 11),
+      endDate: makeTryItDate(3, 12),
+      color: '#F5A623',
+    },
+    {
+      id: 'try-6',
+      title: 'Retro',
+      startDate: makeTryItDate(4, 13),
+      endDate: makeTryItDate(4, 14),
+      color: '#2ECC71',
+    },
+    {
+      id: 'try-7',
+      title: 'Sprint planning',
+      startDate: makeTryItDate(0, 13),
+      endDate: makeTryItDate(0, 14, 30),
+      resourceId: 'resource-1',
+      color: '#E84393',
+    },
+    {
+      id: 'try-8',
+      title: 'Marketing sync',
+      startDate: makeTryItDate(1, 9),
+      endDate: makeTryItDate(1, 10, 30),
+      resourceId: 'resource-2',
+      color: '#45AAF2',
+    },
+    {
+      id: 'try-9',
+      title: 'Vendor review',
+      startDate: makeTryItDate(3, 15),
+      endDate: makeTryItDate(3, 16, 30),
+      resourceId: 'resource-3',
+      color: '#FDCB6E',
+    },
+    {
+      id: 'try-10',
+      title: 'Ops handoff',
+      startDate: makeTryItDate(4, 10),
+      endDate: makeTryItDate(4, 11),
+      resourceId: 'resource-4',
+      color: '#A29BFE',
+    },
+    {
+      id: 'try-11',
+      title: 'Team offsite',
+      startDate: makeTryItDate(2, 0),
+      endDate: makeTryItDate(2, 23, 59),
+      allDay: true,
+      color: '#EF5350',
+    },
+    {
+      id: 'try-12',
+      title: 'Conference',
+      startDate: makeTryItDate(3, 0),
+      endDate: makeTryItDate(4, 23, 59),
+      allDay: true,
+      color: '#26C6DA',
+    },
+  ];
+}
+
+function TryItCalendar(): ReactNode {
+  const [mounted, setMounted] = useState(false);
+  const [events, setEvents] = useState<IMHCalendarEvent[]>(() => buildTryItEvents());
+  const { colorMode, setColorMode } = useColorMode();
+
+  useEffect(() => setMounted(true), []);
+
+  const handleEventUpdated = useCallback((updated: IMHCalendarEvent) => {
+    setEvents((prev) =>
+      prev.map((event) => (event.id === updated.id ? { ...event, ...updated } : event)),
+    );
+  }, []);
+
+  const handleEventCreated = useCallback((created: IMHCalendarEvent) => {
+    setEvents((prev) => [...prev, created]);
+  }, []);
+
+  const config: IMHCalendarFullOptions = useMemo(
+    () => ({
+      viewType: 'WEEK' as IMHCalendarViewType,
+      showTimeFrom: 8,
+      showTimeTo: 19,
+      allowEventDragging: true,
+      allowEventResize: true,
+      createEventOnClick: true,
+      resources: TRY_IT_RESOURCES,
+      onEventUpdated: handleEventUpdated,
+      onEventCreated: handleEventCreated,
+      theme: colorMode,
+    }),
+    [handleEventUpdated, handleEventCreated, colorMode],
+  );
+
+  if (!mounted) {
+    return <div className="mh-try-calendar" />;
+  }
+
+  return (
+    <div
+      className="mh-try-calendar"
+      style={{ background: colorMode === 'dark' ? '#131314' : 'white' }}
+    >
+      <MhCalendar config={config} events={events} />
+    </div>
+  );
+}
+
 function InstallCommand(): ReactNode {
   const command = 'npm i @mhcalendar/react';
   const [copied, setCopied] = useState(false);
@@ -290,8 +498,9 @@ export default function Home(): ReactNode {
             </a>
             <div className="mh-nav-links">
               <a href="#features">Features</a>
+              <a href="#try">Try it</a>
+              <Link to="/theme-builder">Theme builder</Link>
               <a href="#stack">Works with</a>
-              <a href="#docs">Docs</a>
               <a href="#npm">npm</a>
               <a href="#community">Community</a>
               <a href="#faq">FAQ</a>
@@ -332,9 +541,9 @@ export default function Home(): ReactNode {
               </p>
               <InstallCommand />
               <div className="mh-hero-actions">
-                <Link className="mh-btn primary" to="/try">
+                <a className="mh-btn primary" href="#try">
                   Try it!
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -346,38 +555,34 @@ export default function Home(): ReactNode {
             <p className="mh-features-intro">
               The core features teams reach for most, no extra configuration needed.
             </p>
-            <div className="mh-feature-list">
-              {FEATURES.map((feature, index) => (
-                <div
-                  key={feature.title}
-                  className={
-                    index % 2 === 1 ? 'mh-feature-row mh-feature-row-reverse' : 'mh-feature-row'
-                  }
-                >
-                  <div className="mh-feature-text">
-                    <h3>{feature.title}</h3>
-                    <p>{feature.description}</p>
-                  </div>
-                  <div className="mh-feature-media">
-                    {feature.video ? (
-                      <video
-                        className="mh-feature-video"
-                        src={feature.video}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                      />
-                    ) : feature.image ? (
-                      <img className="mh-feature-image" src={feature.image} alt={feature.title} />
-                    ) : null}
-                  </div>
+            <div className="mh-features-grid">
+              {FEATURES.map((feature) => (
+                <div key={feature.title} className="mh-feature-card">
+                  <span className="mh-feature-icon">{feature.icon}</span>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
-        <section className="mh-integrations mh-bg-a" id="stack">
+        <section className="mh-try mh-bg-a" id="try">
+          <div className="container">
+            <div className="mh-try-text">
+              <span className="mh-eyebrow">Try it</span>
+              <h2>Play with it, right here.</h2>
+              <p>
+                Drag events around, resize them, or click an empty slot to create one. This is the
+                real component, not a screenshot.
+              </p>
+              <Link className="mh-btn primary" to="/theme-builder">
+                Theme builder
+              </Link>
+            </div>
+            <TryItCalendar />
+          </div>
+        </section>
+        <section className="mh-integrations mh-bg-b" id="stack">
           <div className="container">
             <span className="mh-eyebrow">Works with</span>
             <h2>Drop it into the stack you already have.</h2>
@@ -407,7 +612,7 @@ export default function Home(): ReactNode {
             id={cta.id}
             className={
               'mh-cta' +
-              (index % 2 === 0 ? ' mh-bg-b' : ' mh-bg-a') +
+              (index % 2 === 0 ? ' mh-bg-a' : ' mh-bg-b') +
               (cta.reverse ? ' mh-cta-reverse' : '')
             }
           >
@@ -427,24 +632,7 @@ export default function Home(): ReactNode {
                 )}
               </div>
               <div className="mh-cta-media">
-                {cta.id === 'docs' ? (
-                  <svg
-                    className="mh-cta-logo"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                    <polyline points="14 2 14 8 20 8" />
-                    <line x1="16" y1="13" x2="8" y2="13" />
-                    <line x1="16" y1="17" x2="8" y2="17" />
-                    <polyline points="10 9 9 9 8 9" />
-                  </svg>
-                ) : cta.logoPath ? (
+                {cta.logoPath ? (
                   <svg
                     className="mh-cta-logo"
                     viewBox="0 0 24 24"

@@ -1,5 +1,13 @@
 # @mhcalendar/example-react-19-vite
 
+## 0.0.3
+
+### Patch Changes
+
+- c402ba8: Bug fixes in month view, rename shiftplan to resource view, main page and docs upgrade
+- Updated dependencies [c402ba8]
+  - @mhcalendar/react@0.2.7
+
 ## 0.0.2
 
 ### Patch Changes

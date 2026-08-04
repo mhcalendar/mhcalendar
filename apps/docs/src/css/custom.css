@@ -384,58 +384,48 @@ body {
   max-width: 480px;
 }
 
-.mh-feature-list {
+.mh-features-grid {
   margin-top: 56px;
-  display: flex;
-  flex-direction: column;
-  gap: 72px;
-}
-
-.mh-feature-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 48px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
 }
 
-.mh-feature-row-reverse .mh-feature-text {
-  order: 2;
-}
-
-.mh-feature-row-reverse .mh-feature-media {
-  order: 1;
-}
-
-.mh-feature-text h3 {
-  margin: 0 0 12px;
-  font-size: clamp(20px, 2.2vw, 26px);
-  letter-spacing: -0.02em;
-}
-
-.mh-feature-text p {
-  margin: 0;
-  max-width: 440px;
-}
-
-.mh-feature-media {
-  aspect-ratio: 16 / 10;
+.mh-feature-card {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  border: 1px dashed var(--border-strong);
-  background: var(--bg-elev);
-  overflow: hidden;
 }
 
-.mh-feature-media:has(.mh-feature-video),
-.mh-feature-media:has(.mh-feature-image) {
-  border: none;
+.mh-feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: color-mix(in oklch, var(--accent) 14%, transparent);
+  color: var(--accent);
+  margin-bottom: 20px;
 }
 
-.mh-feature-video,
-.mh-feature-image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.mh-feature-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.mh-feature-card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.mh-feature-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-muted);
 }
 
 .mh-integrations-grid {
@@ -475,6 +465,30 @@ body {
   font-size: 15px;
   font-weight: 600;
   color: var(--text);
+}
+
+.mh-try {
+  padding: 90px 0;
+}
+
+.mh-try-text h2 {
+  margin: 14px 0 0;
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+}
+
+.mh-try-text p {
+  margin: 12px 0 24px;
+  max-width: 480px;
+  color: var(--text-muted);
+}
+
+.mh-try-calendar {
+  height: 750px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #201f28;
 }
 
 .mh-cta {
@@ -873,14 +887,10 @@ body {
     gap: 26px;
   }
 
-  .mh-feature-row {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .mh-feature-row-reverse .mh-feature-text,
-  .mh-feature-row-reverse .mh-feature-media {
-    order: initial;
+  .mh-try-calendar {
+    width: 100%;
+    height: 380px;
+    margin-top: 32px;
   }
 
   .mh-cta-inner {

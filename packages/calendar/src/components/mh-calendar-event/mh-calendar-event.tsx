@@ -141,7 +141,7 @@ export class MHCalendarEvent {
         height: 'var(--monthEventHeight)',
         width: '100%',
         opacity: '1',
-        padding: '4px',
+        padding: '3px',
         fontSize: '10px',
         backgroundColor: eventColor,
       };
@@ -164,7 +164,7 @@ export class MHCalendarEvent {
       height: 'var(--monthEventHeight)',
       width: '100%',
       opacity: '1',
-      padding: '4px',
+      padding: '3px',
       fontSize: '10px',
       backgroundColor: eventColor,
     };

@@ -1,7 +1,7 @@
 import { storeState } from '../store/mh-calendar-store';
 
 const DEFAULT_MAX_VISIBLE_EVENTS = 3;
-const EVENT_DISPLAY_PADDING = 4;
+const EVENT_DISPLAY_PADDING = 2;
 
 export class MonthViewCalculator {
   static calculateMaxVisibleEvents(el: HTMLElement | null): number {
@@ -18,7 +18,7 @@ export class MonthViewCalculator {
 
     const maxEvents = Math.max(
       1,
-      Math.floor(availableHeight / MonthViewCalculator.getMonthEventHeight()) - 1,
+      Math.floor(availableHeight / MonthViewCalculator.getMonthEventHeight()),
     );
 
     return Math.max(1, Math.min(maxEvents, 10));

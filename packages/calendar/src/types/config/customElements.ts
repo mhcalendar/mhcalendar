@@ -6,7 +6,7 @@ export interface IMHCalendarCustomRenderConfig {
   eventContent: (event: any) => any;
 
   /**
-   * Custom render function for small/compact events (MONTH, SHIFTPLAN, AGENDA views).
+   * Custom render function for small/compact events (MONTH, RESOURCE, AGENDA views).
    * Receives the event object and should return an HTML string.
    */
   eventSmallContent: (event: any) => any;

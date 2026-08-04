@@ -43,7 +43,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     const { fromDate, toDate } = this.updateDateRangeForViewType(
       payload.viewType,
       payload.startDate || new Date(),
-      payload.shiftplanDays,
+      payload.resourceDays,
     );
 
     state.anchorDate = fromDate;
@@ -89,7 +89,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       'onEventUpdated',
       'createEventOnClick',
       'resources',
-      'shiftplanDays',
+      'resourceDays',
       'availableViews',
       'locale',
       'labels',
@@ -109,7 +109,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     const newCalendarDateRange = this.updateDateRangeForViewType(
       payload.viewType,
       state.anchorDate ?? state.calendarDateRange.fromDate ?? new Date(),
-      state.shiftplanDays,
+      state.resourceDays,
     );
     state.viewType = payload.viewType;
     state.calendarDateRange = newCalendarDateRange;
@@ -125,7 +125,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       state.viewType,
       state.anchorDate,
       payload.amount,
-      state.shiftplanDays,
+      state.resourceDays,
     );
     state.anchorDate = state.calendarDateRange.fromDate;
     return state;
@@ -136,7 +136,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     state.calendarDateRange = this.updateDateRangeForViewType(
       state.viewType,
       new Date(),
-      state.shiftplanDays,
+      state.resourceDays,
     );
     state.anchorDate = state.calendarDateRange.fromDate;
     return state;
@@ -149,7 +149,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     const { topPosition, date, isAllDay } = payload;
     if (!state.draggedEvent) return state;
 
-    if (state.viewType === IMHCalendarViewType.SHIFTPLAN) {
+    if (state.viewType === IMHCalendarViewType.RESOURCE) {
       state.draggedEvent = null;
       return state;
     }

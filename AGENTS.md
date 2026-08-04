@@ -74,7 +74,7 @@ mh-calendar (shadow: false)     ← root; owns config and store init
 │       └── mh-calendar-event ×N
 ├── mh-calendar-month           ← MONTH view
 ├── mh-calendar-agenda-view     ← AGENDA view
-├── mh-calendar-shiftplan-view  ← SHIFTPLAN view
+├── mh-calendar-resource-view   ← RESOURCE view
 └── mh-calendar-modal           ← event create/edit modal
 ```
 

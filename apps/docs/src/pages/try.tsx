@@ -43,7 +43,7 @@ const VIEW_TYPES: Array<{ value: string; label: string }> = [
   { value: 'WEEK', label: 'Week' },
   { value: 'MONTH', label: 'Month' },
   { value: 'AGENDA', label: 'Agenda' },
-  { value: 'SHIFTPLAN', label: 'Shift plan' },
+  { value: 'RESOURCE', label: 'Resource' },
 ];
 
 const DAYS: Array<{ value: number; label: string }> = [
@@ -190,7 +190,7 @@ const VIEW_LABEL_FIELDS: Array<{ key: keyof DemoFormState; view: IMHCalendarView
     { key: 'labelViewWeek', view: 'WEEK' as IMHCalendarViewType, label: 'Week' },
     { key: 'labelViewDay', view: 'DAY' as IMHCalendarViewType, label: 'Day' },
     { key: 'labelViewAgenda', view: 'AGENDA' as IMHCalendarViewType, label: 'Agenda' },
-    { key: 'labelViewShiftplan', view: 'SHIFTPLAN' as IMHCalendarViewType, label: 'Shift plan' },
+    { key: 'labelViewResource', view: 'RESOURCE' as IMHCalendarViewType, label: 'Resource' },
   ];
 
 const TIMEZONE_OPTIONS: Array<{ value: string; label: string }> = [
@@ -233,8 +233,8 @@ type DemoFormState = {
   timezoneRef2: string;
   timezoneRef3: string;
   timezoneLabel: string;
-  shiftplanResourceCount: number;
-  shiftplanDays: number;
+  resourceCount: number;
+  resourceDays: number;
   startDate: string;
   fixedHeight: string;
   virtualScrollHeight: string;
@@ -246,7 +246,7 @@ type DemoFormState = {
   labelViewWeek: string;
   labelViewDay: string;
   labelViewAgenda: string;
-  labelViewShiftplan: string;
+  labelViewResource: string;
 };
 
 const DEFAULT_FORM_STATE: DemoFormState = {
@@ -278,8 +278,8 @@ const DEFAULT_FORM_STATE: DemoFormState = {
   timezoneRef2: '',
   timezoneRef3: '',
   timezoneLabel: '',
-  shiftplanResourceCount: 4,
-  shiftplanDays: 7,
+  resourceCount: 4,
+  resourceDays: 7,
   startDate: '',
   fixedHeight: '',
   virtualScrollHeight: '',
@@ -291,7 +291,7 @@ const DEFAULT_FORM_STATE: DemoFormState = {
   labelViewWeek: '',
   labelViewDay: '',
   labelViewAgenda: '',
-  labelViewShiftplan: '',
+  labelViewResource: '',
 };
 
 function getWeekDates() {
@@ -311,7 +311,7 @@ function getWeekDates() {
   return { makeDate };
 }
 
-function getShiftplanDates() {
+function getResourceDates() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -327,7 +327,7 @@ function getShiftplanDates() {
 
 function buildEvents() {
   const { makeDate } = getWeekDates();
-  const { makeDate: makeShiftplanDate } = getShiftplanDates();
+  const { makeDate: makeResourceDate } = getResourceDates();
   return [
     {
       id: '1',
@@ -367,30 +367,30 @@ function buildEvents() {
     {
       id: 'shift-1',
       title: 'Morning shift',
-      startDate: makeShiftplanDate(0, 8),
-      endDate: makeShiftplanDate(0, 12),
+      startDate: makeResourceDate(0, 8),
+      endDate: makeResourceDate(0, 12),
       color: '#F59E0B',
       resourceId: 'resource-1',
     },
     {
       id: 'shift-2',
       title: 'Afternoon shift',
-      startDate: makeShiftplanDate(0, 13),
-      endDate: makeShiftplanDate(0, 17),
+      startDate: makeResourceDate(0, 13),
+      endDate: makeResourceDate(0, 17),
       resourceId: 'resource-2',
     },
     {
       id: 'shift-3',
       title: 'Evening shift',
-      startDate: makeShiftplanDate(1, 14),
-      endDate: makeShiftplanDate(1, 18),
+      startDate: makeResourceDate(1, 14),
+      endDate: makeResourceDate(1, 18),
       resourceId: 'resource-3',
     },
     {
       id: 'shift-4',
       title: 'Warehouse check',
-      startDate: makeShiftplanDate(2, 9),
-      endDate: makeShiftplanDate(2, 11),
+      startDate: makeResourceDate(2, 9),
+      endDate: makeResourceDate(2, 11),
       resourceId: 'resource-4',
     },
   ];
@@ -459,7 +459,7 @@ export default function TryPage(): ReactNode {
 
     const timezones = [form.timezoneMain, form.timezoneRef2, form.timezoneRef3].filter(Boolean);
 
-    const resources = Array.from({ length: form.shiftplanResourceCount }, (_, index) => ({
+    const resources = Array.from({ length: form.resourceCount }, (_, index) => ({
       id: `resource-${index + 1}`,
       title: `Resource ${index + 1}`,
     }));
@@ -519,7 +519,7 @@ export default function TryPage(): ReactNode {
       timezones,
       timezoneLabel: form.timezoneLabel || undefined,
       resources,
-      shiftplanDays: form.shiftplanDays,
+      resourceDays: form.resourceDays,
       startDate: form.startDate ? new Date(form.startDate) : undefined,
       fixedHeight: form.fixedHeight || undefined,
       virtualScrollHeight: form.virtualScrollHeight || undefined,
@@ -1072,9 +1072,9 @@ export default function TryPage(): ReactNode {
               </div>
             </details>
 
-            {form.viewType === 'SHIFTPLAN' ? (
+            {form.viewType === 'RESOURCE' ? (
               <details className="mh-demo-sidebar-group" open>
-                <summary className="mh-demo-sidebar-label">Shift plan</summary>
+                <summary className="mh-demo-sidebar-label">Resource</summary>
                 <div className="mh-demo-sidebar-group-body">
                   <label className="mh-demo-config-field">
                     <span>Resources</span>
@@ -1082,9 +1082,9 @@ export default function TryPage(): ReactNode {
                       type="number"
                       min={1}
                       max={20}
-                      value={form.shiftplanResourceCount}
+                      value={form.resourceCount}
                       onChange={(event) =>
-                        setField('shiftplanResourceCount', Number(event.target.value))
+                        setField('resourceCount', Number(event.target.value))
                       }
                     />
                   </label>
@@ -1094,8 +1094,8 @@ export default function TryPage(): ReactNode {
                       type="number"
                       min={1}
                       max={31}
-                      value={form.shiftplanDays}
-                      onChange={(event) => setField('shiftplanDays', Number(event.target.value))}
+                      value={form.resourceDays}
+                      onChange={(event) => setField('resourceDays', Number(event.target.value))}
                     />
                   </label>
                 </div>

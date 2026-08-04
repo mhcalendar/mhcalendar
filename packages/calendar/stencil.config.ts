@@ -34,7 +34,7 @@ export const config: Config = {
         'mh-calendar-multi-view',
         'mh-calendar-navigation',
         'mh-calendar-resize-event-handler',
-        'mh-calendar-shiftplan-view',
+        'mh-calendar-resource-view',
         'mh-calendar-time-slots',
       ],
     }),

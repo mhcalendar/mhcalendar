@@ -14,7 +14,7 @@ the porting work is renaming options and reshaping the event objects.
 
 | FullCalendar | mhcalendar | Notes |
 |---|---|---|
-| `initialView: 'dayGridMonth' \| 'timeGridWeek' \| 'timeGridDay' \| 'listWeek'` | `viewType: 'MONTH' \| 'WEEK' \| 'DAY' \| 'AGENDA'` | mhcalendar also has `SHIFTPLAN` (resource rows); FullCalendar's `multiMonthYear` has no equivalent. |
+| `initialView: 'dayGridMonth' \| 'timeGridWeek' \| 'timeGridDay' \| 'listWeek'` | `viewType: 'MONTH' \| 'WEEK' \| 'DAY' \| 'AGENDA'` | mhcalendar also has `RESOURCE` (resource rows); FullCalendar's `multiMonthYear` has no equivalent. |
 | `events: [{ id, title, start, end, allDay }]` | `events: [{ id, title, startDate, endDate, allDay }]` | `start`/`end` → `startDate`/`endDate`. Both are plain JS `Date` objects, not ISO strings. |
 | `slotMinTime: '08:00:00'` / `slotMaxTime: '18:00:00'` | `showTimeFrom: 8` / `showTimeTo: 18` | Numbers (0–24), not time strings. See [Display hours](/docs/guides/display-hours). |
 | `businessHours: { daysOfWeek: [1,2,3,4,5], startTime: '09:00', endTime: '17:00' }` | `businessHours: [{ dayOfWeek: [1,2,3,4,5], start: 9, end: 17 }]` | Array of entries instead of one object; supports per-date overrides too. See [Business hours](/docs/guides/business-hours). |

@@ -55,8 +55,8 @@ export class MHCalendar {
         return <mh-calendar-month />;
       case IMHCalendarViewType.AGENDA:
         return <mh-calendar-agenda-view />;
-      case IMHCalendarViewType.SHIFTPLAN:
-        return <mh-calendar-shiftplan-view />;
+      case IMHCalendarViewType.RESOURCE:
+        return <mh-calendar-resource-view />;
       default:
         return <mh-calendar-multi-view />;
     }

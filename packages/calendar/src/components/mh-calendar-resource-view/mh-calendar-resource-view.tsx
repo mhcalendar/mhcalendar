@@ -16,11 +16,11 @@ interface DragOverCell {
 }
 
 @Component({
-  tag: 'mh-calendar-shiftplan-view',
-  styleUrl: 'mh-calendar-shiftplan-view.css',
+  tag: 'mh-calendar-resource-view',
+  styleUrl: 'mh-calendar-resource-view.css',
   shadow: false,
 })
-export class MHCalendarShiftplanView {
+export class MHCalendarResourceView {
   @Element() el?: HTMLElement;
 
   @State() dragOverCell: DragOverCell | null = null;
@@ -169,11 +169,11 @@ export class MHCalendarShiftplanView {
     const rect = target.getBoundingClientRect();
 
     const modalContent = (
-      <div class="mhCalendarShiftplan__morePopup">
-        <div class="mhCalendarShiftplan__morePopupHeader">
+      <div class="mhCalendarResource__morePopup">
+        <div class="mhCalendarResource__morePopupHeader">
           {dayjs(date).locale(storeState.locale).format('ddd, MMM D')}
         </div>
-        <div class="mhCalendarShiftplan__morePopupList">
+        <div class="mhCalendarResource__morePopupList">
           {events.map((event) => (
             <mh-calendar-event key={event.id} event={event} />
           ))}
@@ -193,10 +193,10 @@ export class MHCalendarShiftplanView {
     if (this.resources.length === 0) {
       return (
         <div
-          class="mhCalendarShiftplan mhCalendarShiftplan--empty"
+          class="mhCalendarResource mhCalendarResource--empty"
           style={{ height: containerHeight }}
         >
-          <div class="mhCalendarShiftplan__emptyMessage">No resources configured</div>
+          <div class="mhCalendarResource__emptyMessage">No resources configured</div>
         </div>
       );
     }
@@ -205,18 +205,18 @@ export class MHCalendarShiftplanView {
 
     return (
       <div
-        class="mhCalendarShiftplan"
+        class="mhCalendarResource"
         style={
           {
             height: containerHeight,
-            '--shiftplan-cols': `${colCount}`,
+            '--resource-cols': `${colCount}`,
           } as any
         }
       >
-        <div class="mhCalendarShiftplan__grid">
+        <div class="mhCalendarResource__grid">
           {/* Header row */}
-          <div class="mhCalendarShiftplan__headerRow">
-            <div class="mhCalendarShiftplan__cornerCell" />
+          <div class="mhCalendarResource__headerRow">
+            <div class="mhCalendarResource__cornerCell" />
             {this.dates.map((date) => {
               const isToday = DateUtils.isToday(date);
               const isWeekend = DateUtils.isWeekend(date);
@@ -224,15 +224,15 @@ export class MHCalendarShiftplanView {
                 <div
                   key={DateUtils.convertDateToString(date)}
                   class={{
-                    mhCalendarShiftplan__dateCell: true,
-                    'mhCalendarShiftplan__dateCell--today': isToday,
-                    'mhCalendarShiftplan__dateCell--weekend': isWeekend,
+                    mhCalendarResource__dateCell: true,
+                    'mhCalendarResource__dateCell--today': isToday,
+                    'mhCalendarResource__dateCell--weekend': isWeekend,
                   }}
                 >
-                  <span class="mhCalendarShiftplan__dateDayName">
+                  <span class="mhCalendarResource__dateDayName">
                     {dayjs(date).locale(storeState.locale).format('ddd')}
                   </span>
-                  <span class="mhCalendarShiftplan__dateNumber">{dayjs(date).format('D')}</span>
+                  <span class="mhCalendarResource__dateNumber">{dayjs(date).format('D')}</span>
                 </div>
               );
             })}
@@ -240,8 +240,8 @@ export class MHCalendarShiftplanView {
 
           {/* Resource rows */}
           {this.resources.map((resource) => (
-            <div key={resource.id} class="mhCalendarShiftplan__row">
-              <div class="mhCalendarShiftplan__resourceLabel">{resource.title}</div>
+            <div key={resource.id} class="mhCalendarResource__row">
+              <div class="mhCalendarResource__resourceLabel">{resource.title}</div>
               {this.dates.map((date) => {
                 const events = this.getEventsForCell(resource.id, date);
                 const dateKey = DateUtils.convertDateToString(date);
@@ -258,10 +258,10 @@ export class MHCalendarShiftplanView {
                   <div
                     key={dateKey}
                     class={{
-                      mhCalendarShiftplan__cell: true,
-                      'mhCalendarShiftplan__cell--dragOver': isDragOver,
-                      'mhCalendarShiftplan__cell--weekend': isWeekend,
-                      'mhCalendarShiftplan__cell--today': isToday,
+                      mhCalendarResource__cell: true,
+                      'mhCalendarResource__cell--dragOver': isDragOver,
+                      'mhCalendarResource__cell--weekend': isWeekend,
+                      'mhCalendarResource__cell--today': isToday,
                     }}
                     onDragOver={(e: DragEvent) => this.onDragOver(resource.id, date, e)}
                     onDragLeave={this.onDragLeave}
@@ -276,7 +276,7 @@ export class MHCalendarShiftplanView {
                     )}
                     {hiddenCount > 0 && (
                       <button
-                        class="mhCalendarShiftplan__moreBtn"
+                        class="mhCalendarResource__moreBtn"
                         onClick={(e: MouseEvent) => this.onMoreClick(events, date, resource.id, e)}
                       >
                         {LabelUtils.moreEvents(hiddenCount)}

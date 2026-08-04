@@ -7,15 +7,15 @@ export interface IMHCalendarResource {
 
 export interface ICalendarWeekConfig extends ICalendarMultiViewConfig {
   /**
-   * Array of resources (employees, rooms, courts, etc.) for SHIFTPLAN view.
+   * Array of resources (employees, rooms, courts, etc.) for RESOURCE view.
    */
   resources: IMHCalendarResource[];
 
   /**
-   * Number of days to display in SHIFTPLAN view.
+   * Number of days to display in RESOURCE view.
    * @default 7
    */
-  shiftplanDays: number;
+  resourceDays: number;
 }
 
 /**

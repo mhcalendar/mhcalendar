@@ -64,7 +64,6 @@
 }
 
 .mhCalendarNavigation__dateLabel {
-  max-width: 180px;
   text-align: center;
   padding: 0 10px;
   white-space: nowrap;

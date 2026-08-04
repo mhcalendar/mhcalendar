@@ -10,8 +10,8 @@ import {
   IMHCalendarViewType,
   MhCalendar,
 } from '@mhcalendar/react';
-import { corporateTheme } from '../theme-config/calendarThemes';
 import ThemeToggle from '../components/ThemeToggle';
+import { useColorMode } from '@docusaurus/theme-common';
 
 // Official brand marks (path data from simple-icons, CC0), each with its brand color.
 // Next.js's mark is monochrome black/white in the source, so it uses currentColor to
@@ -313,6 +313,7 @@ function buildTryItEvents(): IMHCalendarEvent[] {
 function TryItCalendar(): ReactNode {
   const [mounted, setMounted] = useState(false);
   const [events, setEvents] = useState<IMHCalendarEvent[]>(() => buildTryItEvents());
+  const { colorMode, setColorMode } = useColorMode();
 
   useEffect(() => setMounted(true), []);
 
@@ -336,9 +337,9 @@ function TryItCalendar(): ReactNode {
       createEventOnClick: true,
       onEventUpdated: handleEventUpdated,
       onEventCreated: handleEventCreated,
-      theme: 'dark',
+      theme: colorMode,
     }),
-    [handleEventUpdated, handleEventCreated],
+    [handleEventUpdated, handleEventCreated, colorMode],
   );
 
   if (!mounted) {
@@ -346,7 +347,10 @@ function TryItCalendar(): ReactNode {
   }
 
   return (
-    <div className="mh-try-calendar">
+    <div
+      className="mh-try-calendar"
+      style={{ background: colorMode === 'dark' ? '#131314' : 'white' }}
+    >
       <MhCalendar config={config} events={events} />
     </div>
   );

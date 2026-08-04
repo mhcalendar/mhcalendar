@@ -486,9 +486,11 @@ body {
 
 .mh-try-calendar {
   height: 750px;
+  padding: 10px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: #201f28;
+  background: #131314;
+  margin-top: 30px;
 }
 
 .mh-cta {

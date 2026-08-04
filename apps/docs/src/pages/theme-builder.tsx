@@ -396,7 +396,7 @@ function buildEvents() {
   ];
 }
 
-export default function TryPage(): ReactNode {
+export default function ThemeBuilderPage(): ReactNode {
   const markUrl = useBaseUrl('/img/mh-mark.png');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeStyle, setActiveStyle] = useState<StyleVariant>('corporate');
@@ -573,7 +573,7 @@ export default function TryPage(): ReactNode {
   };
 
   return (
-    <Layout title="Try mhcalendar" description="Try the mhcalendar component live">
+    <Layout title="Theme builder — mhcalendar" description="Build a custom mhcalendar theme live">
       <div className="mh-demo">
         <aside className={sidebarOpen ? 'mh-demo-sidebar open' : 'mh-demo-sidebar'}>
           <div className="mh-demo-sidebar-inner">

@@ -275,37 +275,104 @@ function makeTryItDate(dayOffset: number, hour: number, minutes = 0): Date {
   return monday;
 }
 
+const TRY_IT_RESOURCES = [
+  { id: 'resource-1', title: 'Design team' },
+  { id: 'resource-2', title: 'Marketing team' },
+  { id: 'resource-3', title: 'Sales team' },
+  { id: 'resource-4', title: 'Ops team' },
+];
+
 function buildTryItEvents(): IMHCalendarEvent[] {
   return [
     {
       id: 'try-1',
       title: 'Design review',
-      startDate: makeTryItDate(0, 10),
-      endDate: makeTryItDate(0, 11),
+      startDate: makeTryItDate(0, 9),
+      endDate: makeTryItDate(0, 10),
+      color: '#6C5CE7',
     },
     {
       id: 'try-2',
       title: 'Standup',
-      startDate: makeTryItDate(1, 9),
-      endDate: makeTryItDate(1, 9, 30),
+      startDate: makeTryItDate(0, 10),
+      endDate: makeTryItDate(0, 11),
+      color: '#00B8A9',
     },
     {
       id: 'try-3',
       title: 'Customer call',
-      startDate: makeTryItDate(2, 13),
-      endDate: makeTryItDate(2, 14),
+      startDate: makeTryItDate(1, 13),
+      endDate: makeTryItDate(1, 14),
+      color: '#FF6B6B',
     },
     {
       id: 'try-4',
       title: 'Pair on theming',
-      startDate: makeTryItDate(3, 15),
-      endDate: makeTryItDate(3, 17),
+      startDate: makeTryItDate(2, 15),
+      endDate: makeTryItDate(2, 17),
+      color: '#4C9AFF',
     },
     {
       id: 'try-5',
       title: 'Release sync',
-      startDate: makeTryItDate(4, 11),
-      endDate: makeTryItDate(4, 12),
+      startDate: makeTryItDate(3, 11),
+      endDate: makeTryItDate(3, 12),
+      color: '#F5A623',
+    },
+    {
+      id: 'try-6',
+      title: 'Retro',
+      startDate: makeTryItDate(4, 13),
+      endDate: makeTryItDate(4, 14),
+      color: '#2ECC71',
+    },
+    {
+      id: 'try-7',
+      title: 'Sprint planning',
+      startDate: makeTryItDate(0, 13),
+      endDate: makeTryItDate(0, 14, 30),
+      resourceId: 'resource-1',
+      color: '#E84393',
+    },
+    {
+      id: 'try-8',
+      title: 'Marketing sync',
+      startDate: makeTryItDate(1, 9),
+      endDate: makeTryItDate(1, 10, 30),
+      resourceId: 'resource-2',
+      color: '#45AAF2',
+    },
+    {
+      id: 'try-9',
+      title: 'Vendor review',
+      startDate: makeTryItDate(3, 15),
+      endDate: makeTryItDate(3, 16, 30),
+      resourceId: 'resource-3',
+      color: '#FDCB6E',
+    },
+    {
+      id: 'try-10',
+      title: 'Ops handoff',
+      startDate: makeTryItDate(4, 10),
+      endDate: makeTryItDate(4, 11),
+      resourceId: 'resource-4',
+      color: '#A29BFE',
+    },
+    {
+      id: 'try-11',
+      title: 'Team offsite',
+      startDate: makeTryItDate(2, 0),
+      endDate: makeTryItDate(2, 23, 59),
+      allDay: true,
+      color: '#EF5350',
+    },
+    {
+      id: 'try-12',
+      title: 'Conference',
+      startDate: makeTryItDate(3, 0),
+      endDate: makeTryItDate(4, 23, 59),
+      allDay: true,
+      color: '#26C6DA',
     },
   ];
 }
@@ -335,6 +402,7 @@ function TryItCalendar(): ReactNode {
       allowEventDragging: true,
       allowEventResize: true,
       createEventOnClick: true,
+      resources: TRY_IT_RESOURCES,
       onEventUpdated: handleEventUpdated,
       onEventCreated: handleEventCreated,
       theme: colorMode,
@@ -431,6 +499,7 @@ export default function Home(): ReactNode {
             <div className="mh-nav-links">
               <a href="#features">Features</a>
               <a href="#try">Try it</a>
+              <Link to="/theme-builder">Theme builder</Link>
               <a href="#stack">Works with</a>
               <a href="#npm">npm</a>
               <a href="#community">Community</a>
@@ -472,9 +541,9 @@ export default function Home(): ReactNode {
               </p>
               <InstallCommand />
               <div className="mh-hero-actions">
-                <Link className="mh-btn primary" to="/try">
+                <a className="mh-btn primary" href="#try">
                   Try it!
-                </Link>
+                </a>
               </div>
             </div>
           </div>
@@ -506,7 +575,7 @@ export default function Home(): ReactNode {
                 Drag events around, resize them, or click an empty slot to create one. This is the
                 real component, not a screenshot.
               </p>
-              <Link className="mh-btn primary" to="/try">
+              <Link className="mh-btn primary" to="/theme-builder">
                 Theme builder
               </Link>
             </div>

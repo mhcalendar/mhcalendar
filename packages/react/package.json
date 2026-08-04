@@ -1,6 +1,6 @@
 {
   "name": "@mhcalendar/react",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "React wrapper for @mhcalendar/calendar web components",
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "@mhcalendar/calendar": "^0.2.6",
+    "@mhcalendar/calendar": "^0.2.7",
     "@stencil/react-output-target": "^1.0.3"
   },
   "devDependencies": {

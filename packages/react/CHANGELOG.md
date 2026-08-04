@@ -1,5 +1,13 @@
 # @mhcalendar/react
 
+## 0.2.7
+
+### Patch Changes
+
+- c402ba8: Bug fixes in month view, rename shiftplan to resource view, main page and docs upgrade
+- Updated dependencies [c402ba8]
+  - @mhcalendar/calendar@0.2.7
+
 ## 0.2.6
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "apps-docs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -19,7 +19,7 @@
     "@docusaurus/faster": "3.10.1",
     "@docusaurus/preset-classic": "3.10.1",
     "@mdx-js/react": "^3.0.0",
-    "@mhcalendar/react": "^0.2.6",
+    "@mhcalendar/react": "^0.2.7",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.13",
     "prism-react-renderer": "^2.3.0",

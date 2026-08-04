@@ -43,14 +43,14 @@ describe('MonthViewCalculator', () => {
     });
 
     it('computes how many events fit within the cell', () => {
-      // available = 200 - 40 (date) - 4 (padding) = 156; floor(156 / 20) - 1 = 6
+      // available = 200 - 40 (date) - 2 (padding) = 158; floor(158 / 20) = 7
       const el = createDayCellElement({ offsetHeight: 200, dateElementHeight: 40 });
-      expect(MonthViewCalculator.calculateMaxVisibleEvents(el)).toBe(6);
+      expect(MonthViewCalculator.calculateMaxVisibleEvents(el)).toBe(7);
     });
 
     it('falls back to a 40px date height when no date element is found', () => {
       const el = createDayCellElement({ offsetHeight: 200, hasDateElement: false });
-      expect(MonthViewCalculator.calculateMaxVisibleEvents(el)).toBe(6);
+      expect(MonthViewCalculator.calculateMaxVisibleEvents(el)).toBe(7);
     });
 
     it('never returns less than 1, even when the cell is too small to fit the date', () => {
@@ -67,9 +67,9 @@ describe('MonthViewCalculator', () => {
   describe('calculateFromElementHeight', () => {
     it('subtracts the date height and padding before dividing by the event height', () => {
       const el = createDayCellElement({ dateElementHeight: 50 });
-      // available = 100 - 50 - 4 = 46; floor(46 / 20) - 1 = 1
+      // available = 100 - 50 - 2 = 48; floor(48 / 20) = 2
       const result = (MonthViewCalculator as any).calculateFromElementHeight(100, el);
-      expect(result).toBe(1);
+      expect(result).toBe(2);
     });
 
     it('clamps to 1 when the available height is negative', () => {

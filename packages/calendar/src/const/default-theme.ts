@@ -8,6 +8,9 @@ export const NAVIGATION_HEIGHT = '20%';
 export const CALENDAR_HEIGHT = `calc(100% - ${NAVIGATION_HEIGHT})`;
 export const CALENDAR_BACKGROUND_COLOR = '#14141a';
 export const MONTH_EVENT_HEIGHT = 20;
+export const ALL_DAY_EVENT_GAP = 3;
+export const ALL_DAY_CONTAINER_PADDING = 4;
+export const ALL_DAY_MIN_HEIGHT = 40;
 
 const DARK_PROPERTIES: ConfigCSSProperites = {
   timeSlotWidth: '60px',

@@ -2,10 +2,7 @@ import { Component, Prop, h } from '@stencil/core';
 import { IMHCalendarEvent } from '../../../types';
 import { DragDropState } from '../../../utils/DragDropHandler';
 import { store, storeState } from '../../../store/mh-calendar-store';
-import { MONTH_EVENT_HEIGHT } from '../../../const/default-theme';
-
-const ALL_DAY_EVENT_GAP = 3;
-const ALL_DAY_CONTAINER_PADDING = 4;
+import { AllDayEventsHeightUtils } from '../../../utils/AllDayEventsHeightUtils';
 
 @Component({
   tag: 'mh-calendar-day-all-day-events-holder',
@@ -24,25 +21,28 @@ export class AllDayEventsHolder {
       return null;
     }
 
-    const maxEvents = Math.max(
-      1,
-      Math.floor(
-        (storeState.allDayEventsHeight - ALL_DAY_CONTAINER_PADDING) /
-          (MONTH_EVENT_HEIGHT + ALL_DAY_EVENT_GAP),
-      ),
-    );
+    const maxHeight = storeState.allDayEventsHeight;
+    const maxEvents = AllDayEventsHeightUtils.getMaxVisibleEvents(maxHeight);
     const hasMoreEvents = this.allDayEvents.length > maxEvents;
     const eventsToShow = hasMoreEvents
       ? this.allDayEvents.slice(0, maxEvents - 1)
       : this.allDayEvents;
     const hiddenCount = this.allDayEvents.length - eventsToShow.length;
+    const showsDragPreview = this.dragDropState.isDraggedOverAllDay && !!storeState.draggedEvent;
+    const ownHeight = AllDayEventsHeightUtils.getHeightForEventCount(
+      this.allDayEvents.length + (showsDragPreview ? 1 : 0),
+      maxHeight,
+    );
+    // Every day column shares one row with the hour grid, so they must all use the same
+    // height (driven by whichever day currently has the most all-day events) to stay aligned.
+    const height = Math.max(store.currentAllDayEventsHeight, ownHeight);
 
     return (
       <div
         class="mhCalendarDay_allDaysEventHolder"
         style={{
           position: storeState.makeAllDaysSticky ? 'sticky' : 'absolute',
-          height: storeState.allDayEventsHeight + 'px',
+          height: `${height}px`,
           ...store.getInlineStyleForClass('mhCalendarDay_allDaysEventHolder'),
         }}
         onDragOver={this.handleDragOver}

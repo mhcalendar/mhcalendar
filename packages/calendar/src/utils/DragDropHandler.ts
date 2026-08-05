@@ -109,9 +109,8 @@ export class DragDropHandler {
 
     if (allDayHolder && storeState.showAllDayTasks && !showCurrentDate) {
       const allDayRect = allDayHolder.getBoundingClientRect();
-      const allDayHeight = storeState.allDayEventsHeight || 0;
 
-      if (clientY >= allDayRect.top && clientY <= allDayRect.top + allDayHeight) {
+      if (clientY >= allDayRect.top && clientY <= allDayRect.bottom) {
         isAllDay = true;
       }
     }

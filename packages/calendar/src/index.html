@@ -42,15 +42,16 @@
 
       cal.config = {
         viewType: 'WEEK',
-        showTimeFrom: 20,
-        showTimeTo: 24,
+        showTimeFrom: 10,
+        showTimeTo: 18,
+        createEventOnClick: true,
         theme: 'dark',
         // Pass the imported locale OBJECT, not the 'pl' string — mhcalendar bundles its own
         // Day.js instance, so a side-effect-only "import 'dayjs/locale/pl'" would register
         // the locale on a different instance and have no effect.
         locale: plLocale,
         labels: {
-          today: 'Dzisiaj',
+          today: 'Dzisiaj2',
           moreEvents: (hiddenCount) => `+${hiddenCount} więcej`,
           views: { WEEK: 'Tydzień', MONTH: 'Miesiąc', DAY: 'Dzień', AGENDA: 'Plan dnia' },
         },

@@ -13,6 +13,7 @@ import { initialState } from './mh-calendar-store.const';
 import { EventManager } from '../utils/EventManager';
 import { CssStyles } from '../types/config/cssStyles';
 import { IMHCalendarEvent } from '../types';
+import { AllDayEventsHeightUtils } from '../utils/AllDayEventsHeightUtils';
 
 export class MHCalendarStore extends MHCalendarActions {
   private readonly _map: ObservableMap<IMHCalendarState>;
@@ -64,7 +65,32 @@ export class MHCalendarStore extends MHCalendarActions {
   }
 
   get headerMargin(): number {
-    return (this.state.showAllDayTasks ? this.state.allDayEventsHeight : 0) ?? 0;
+    return (this.state.showAllDayTasks ? this.currentAllDayEventsHeight : 0) ?? 0;
+  }
+
+  /**
+   * Actual space the all-day row currently needs, based on the most all-day events shown
+   * on any visible day, clamped to `allDayEventsHeight` (the configured max).
+   */
+  get currentAllDayEventsHeight(): number {
+    const maxHeight = this.state.allDayEventsHeight ?? 0;
+    if (!this.state.showAllDayTasks || !maxHeight) return 0;
+
+    if (
+      this.state.viewType !== IMHCalendarViewType.DAY &&
+      this.state.viewType !== IMHCalendarViewType.WEEK
+    ) {
+      return maxHeight;
+    }
+
+    const maxEventCount = DaysGenerator.getDatesForMultiView().reduce((max, day) => {
+      const allDayEventCount = EventManager.getEventsForDate(day).filter(
+        (event) => event.allDay,
+      ).length;
+      return Math.max(max, allDayEventCount);
+    }, 0);
+
+    return AllDayEventsHeightUtils.getHeightForEventCount(maxEventCount, maxHeight);
   }
 
   // ###### Queries ######

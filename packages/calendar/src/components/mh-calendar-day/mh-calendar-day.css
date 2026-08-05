@@ -75,8 +75,14 @@ mh-calendar-day {
   border-radius: 5px;
   color: white;
   font-weight: bold;
-  padding: 2px;
+  padding: 0 3px;
   cursor: pointer;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .mhCalendarDay_dayDate {

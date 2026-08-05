@@ -13,6 +13,10 @@
 
 A highly customizable, full-sized event calendar built with TypeScript, Stencil, and Day.js.
 
+<p align="center">
+  <img src="../../assets/demo.gif" alt="mhcalendar demo: switching views and dragging events" width="800" />
+</p>
+
 > [!WARNING]
 > mhcalendar is currently in its `0.x.x` phase. As per Semantic Versioning, the API is not yet stable, and any new minor or patch release might introduce breaking changes. We recommend pinning the exact version in your `package.json` until we reach `1.0.0`.
 

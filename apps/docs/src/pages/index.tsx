@@ -370,7 +370,7 @@ function buildTryItEvents(): IMHCalendarEvent[] {
 function TryItCalendar(): ReactNode {
   const [mounted, setMounted] = useState(false);
   const [events, setEvents] = useState<IMHCalendarEvent[]>(() => buildTryItEvents());
-  const { colorMode, setColorMode } = useColorMode();
+  const { colorMode } = useColorMode();
 
   useEffect(() => setMounted(true), []);
 

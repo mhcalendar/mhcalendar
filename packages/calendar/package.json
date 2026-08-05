@@ -1,6 +1,6 @@
 {
   "name": "@mhcalendar/calendar",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "mhcalendar — Stencil web component",
   "repository": {
     "type": "git",

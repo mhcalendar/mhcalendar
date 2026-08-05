@@ -1,5 +1,16 @@
 # @mhcalendar/react
 
+## 0.3.0
+
+### Minor Changes
+
+- e8d6215: Docs update, Fix bugs in month view, fix bugs in all day tasks, update main page, readme update
+
+### Patch Changes
+
+- Updated dependencies [e8d6215]
+  - @mhcalendar/calendar@0.3.0
+
 ## 0.2.7
 
 ### Patch Changes

@@ -22,6 +22,7 @@ export class MHCalendarTimeSlots {
       store.onChange('reactiveEvents', () => forceUpdate(this)),
       store.onChange('calendarDateRange', () => forceUpdate(this)),
       store.onChange('viewType', () => forceUpdate(this)),
+      store.onChange('draggedOverAllDayDate', () => forceUpdate(this)),
     );
   }
 

@@ -20,6 +20,7 @@ export const initialState: IMHCalendarState = {
   heightOfCalendarHour: DEFAULT_HOUR_HEIGHT,
   heightOfCalendarDay: undefined,
   draggedEvent: null,
+  draggedOverAllDayDate: null,
   properties: {},
   modal: {
     isOpen: false,

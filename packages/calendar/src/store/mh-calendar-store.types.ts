@@ -36,6 +36,7 @@ export interface IMHCalendarState extends ICalendarWeekConfig {
   calendarDateRange: IMHCalendarDateRange;
   reactiveEvents: EventBuilderMapByDate;
   draggedEvent: IMHCalendarEvent | null;
+  draggedOverAllDayDate: Date | null;
   heightOfCalendarHour: number;
   heightOfCalendarDay: number | undefined;
   properties: Record<string, string>;

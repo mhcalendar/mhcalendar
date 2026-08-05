@@ -26,13 +26,17 @@ export class AllDayEventsHolder {
     const draggedEvent = this.dragDropState.isDraggedOverAllDay ? storeState.draggedEvent : undefined;
     const showsDragPreview = !!draggedEvent;
 
+    const sortedAllDayEvents = [...this.allDayEvents].sort(
+      (a, b) => a.startDate.getTime() - b.startDate.getTime(),
+    );
+
     // The dragged preview counts as one more row (shown first) so the "+N more" indicator
     // reflects what the holder will actually look like once the event is dropped.
-    const effectiveCount = this.allDayEvents.length + (showsDragPreview ? 1 : 0);
+    const effectiveCount = sortedAllDayEvents.length + (showsDragPreview ? 1 : 0);
     const hasMoreEvents = effectiveCount > maxEvents;
     const visibleSlots = hasMoreEvents ? maxEvents - 1 : effectiveCount;
     const visibleRealEvents = showsDragPreview ? Math.max(visibleSlots - 1, 0) : visibleSlots;
-    const eventsToShow = this.allDayEvents.slice(0, visibleRealEvents);
+    const eventsToShow = sortedAllDayEvents.slice(0, visibleRealEvents);
     const hiddenCount = effectiveCount - visibleSlots;
 
     const ownHeight = AllDayEventsHeightUtils.getHeightForEventCount(effectiveCount, maxHeight);
@@ -52,9 +56,15 @@ export class AllDayEventsHolder {
         onDragLeave={this.handleDragLeave}
         onDrop={this.handleDrop}
       >
-        {draggedEvent && <mh-calendar-event event={{ ...draggedEvent, allDay: true }} isDragged={true} />}
+        {draggedEvent && (
+          <div style={{ flexShrink: '0' }}>
+            <mh-calendar-event event={{ ...draggedEvent, allDay: true }} isDragged={true} />
+          </div>
+        )}
         {eventsToShow.map((event) => (
-          <mh-calendar-event event={event} />
+          <div style={{ flexShrink: '0' }}>
+            <mh-calendar-event event={event} />
+          </div>
         ))}
         {hasMoreEvents && <mh-calendar-more-events-indicator hiddenCount={hiddenCount} />}
       </div>

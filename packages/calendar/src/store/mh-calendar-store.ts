@@ -83,10 +83,17 @@ export class MHCalendarStore extends MHCalendarActions {
       return maxHeight;
     }
 
+    const draggedOverDate = this.state.draggedEvent ? this.state.draggedOverAllDayDate : null;
+
     const maxEventCount = DaysGenerator.getDatesForMultiView().reduce((max, day) => {
-      const allDayEventCount = EventManager.getEventsForDate(day).filter(
+      let allDayEventCount = EventManager.getEventsForDate(day).filter(
         (event) => event.allDay,
       ).length;
+      // Account for the drag preview before it's committed, so the row already has room for
+      // it while dragging instead of only growing once the event is dropped.
+      if (draggedOverDate && dayjs(day).isSame(draggedOverDate, 'day')) {
+        allDayEventCount += 1;
+      }
       return Math.max(max, allDayEventCount);
     }, 0);
 
@@ -143,6 +150,10 @@ export class MHCalendarStore extends MHCalendarActions {
 
   setDraggedEvent(event: IMHCalendarEvent | null): void {
     this.state.draggedEvent = event;
+  }
+
+  setDraggedOverAllDayDate(day: Date | null): void {
+    this.state.draggedOverAllDayDate = day;
   }
 
   dropEvent(payload: IEventDropPayload): void {

@@ -104,7 +104,7 @@ mh-calendar-day {
 
 .mhCalendarDay__currentTime {
   position: absolute;
-  height: 3px;
+  height: 1px;
   left: 50%;
   transform: translateX(-50%);
   top: 50%;

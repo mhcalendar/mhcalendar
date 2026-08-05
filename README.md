@@ -22,18 +22,21 @@ mhcalendar is built around easy **customization as a first-class feature**. You 
 
 ### Key Features
 
-- **Customization** — Style it your way.
-- **Framework Agnostic** — Built as a Web Component with Stencil.
-- **Lightweight by Design** — Keeps the dependency footprint tiny.
-- **Advanced Timezones** — Support for multiple IANA timezones simultaneously.
-- **Fully Interactive** — Drag & drop event management and event resizing.
-- **Multiple Views** — Month, Week, Day, Agenda, and Resource.
-- **Business Hours** — Define business hours, block out-of-office dragging, and visualize non-business time.
-- ✨ **...and more!**
+- **Customization**: style it your way.
+- **Framework Agnostic**: built as a Web Component with Stencil.
+- **Lightweight by Design**: keeps the dependency footprint tiny.
+- **Advanced Timezones**: supports multiple IANA timezones simultaneously.
+- **Localization**: configurable day/month names (`locale`) and UI text (`labels`).
+- **Fully Interactive**: drag & drop event management and event resizing.
+- **Multiple Views**: Month, Week, Day, Agenda, and Resource.
+- **Business Hours**: define business hours, block out-of-office dragging, and visualize non-business time.
 
 ## Documentation
 
-> 📖 Full documentation is currently **in progress**. Stay tuned!
+📖 Full documentation, guides, and API reference are available at **[mhcalendar.dev](https://mhcalendar.dev)**.
+The docs are under active development, so some pages may be incomplete or lag behind the latest
+release. If you notice something missing or inaccurate, please
+[open an issue](https://github.com/mhcalendar/mhcalendar/issues) or submit a pull request.
 
 ## Installation
 
@@ -110,7 +113,8 @@ Contributions are welcome! If you'd like to report a bug, suggest a feature, or 
 
 ## Changelog
 
-See [CHANGELOG.md](./CHANGELOG.md) for a full list of changes between releases.
+- [packages/calendar/CHANGELOG.md](./packages/calendar/CHANGELOG.md)
+- [packages/react/CHANGELOG.md](./packages/react/CHANGELOG.md)
 
 ## License
 

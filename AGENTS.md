@@ -53,13 +53,13 @@ npm run dev --workspace @mhcalendar/react
 
 ## What NOT to touch
 
-- `dist/` — build artifact, regenerated on every build
-- `.yalc/`, `node_modules/` — package artifacts
+- `dist/`: build artifact, regenerated on every build
+- `.yalc/`, `node_modules/`: package artifacts
 
 ## Source of truth for types
 
-- `packages/calendar/src/store/mh-calendar-store.types.ts` — enums and internal state interfaces
-- `packages/calendar/src/types/index.d.ts` — public-facing types
+- `packages/calendar/src/store/mh-calendar-store.types.ts`: enums and internal state interfaces
+- `packages/calendar/src/types/index.d.ts`: public-facing types
 
 Both files must stay in sync when adding or removing types.
 

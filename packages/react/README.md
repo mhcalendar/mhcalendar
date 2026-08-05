@@ -11,11 +11,11 @@
   <a href="https://bundlephobia.com/package/@mhcalendar/react"><img src="https://img.shields.io/bundlephobia/minzip/@mhcalendar/react?style=flat-square&color=green" alt="Bundle Size"></a>
 </p>
 
-Official React wrapper for [**@mhcalendar/calendar**](https://www.npmjs.com/package/@mhcalendar/calendar) — a
+Official React wrapper for [**@mhcalendar/calendar**](https://www.npmjs.com/package/@mhcalendar/calendar), a
 highly customizable, full-sized event calendar built with TypeScript, Stencil, and Day.js.
 
 This package is a thin, typed React binding around the `@mhcalendar/calendar` Web Component. All
-configuration options, events, and behavior are identical — see the
+configuration options, events, and behavior are identical. See the
 [**@mhcalendar/calendar** README](https://github.com/mhcalendar/mhcalendar/tree/main/packages/calendar#readme)
 for the full feature list and configuration reference.
 
@@ -35,8 +35,8 @@ yarn add @mhcalendar/react
 pnpm add @mhcalendar/react
 ```
 
-`@mhcalendar/calendar` is a regular dependency of this package and gets installed automatically —
-you don't need to install, import, or register it yourself.
+`@mhcalendar/calendar` is a regular dependency of this package and gets installed automatically,
+so you don't need to install, import, or register it yourself.
 
 ## Quick Start
 
@@ -83,7 +83,7 @@ request, please open an issue first to discuss what you'd like to change.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/mhcalendar/mhcalendar/blob/main/CHANGELOG.md) for a
+See [CHANGELOG.md](https://github.com/mhcalendar/mhcalendar/blob/main/packages/react/CHANGELOG.md) for a
 full list of changes between releases.
 
 ## License

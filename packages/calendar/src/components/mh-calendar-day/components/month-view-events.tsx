@@ -1,6 +1,7 @@
 import { Component, Prop, h } from '@stencil/core';
 import { IMHCalendarEvent } from '../../../types';
-import { store } from '../../../store/mh-calendar-store';
+import { store, storeState } from '../../../store/mh-calendar-store';
+import { DragDropState } from '../../../utils/DragDropHandler';
 
 @Component({
   tag: 'mh-calendar-day-month-view-events',
@@ -11,6 +12,7 @@ export class MonthViewEvents {
   @Prop() maxVisibleEventsInMonthView!: number;
   @Prop() calendarDayElementHeight?: number;
   @Prop() day?: Date;
+  @Prop() dragDropState?: DragDropState;
 
   render() {
     if (!this.calendarDayElementHeight || !this.day || !this.groupedEvents) {
@@ -25,10 +27,19 @@ export class MonthViewEvents {
     });
 
     const maxEvents = this.maxVisibleEventsInMonthView;
-    const hasMoreEvents = sortedEvents.length > maxEvents;
-    const eventsToShow = hasMoreEvents
-      ? sortedEvents.slice(0, maxEvents - 1)
-      : sortedEvents.slice(0, maxEvents);
+    const draggedEvent =
+      this.dragDropState?.isDraggedOver !== null && this.dragDropState?.isDraggedOver !== undefined
+        ? storeState.draggedEvent
+        : undefined;
+
+    // The dragged preview counts as one more row (shown first) so the "+N more" indicator
+    // reflects what the cell will actually look like once the event is dropped.
+    const effectiveCount = sortedEvents.length + (draggedEvent ? 1 : 0);
+    const hasMoreEvents = effectiveCount > maxEvents;
+    const visibleSlots = hasMoreEvents ? maxEvents - 1 : effectiveCount;
+    const visibleRealEvents = draggedEvent ? Math.max(visibleSlots - 1, 0) : visibleSlots;
+    const eventsToShow = sortedEvents.slice(0, visibleRealEvents);
+    const hiddenCount = effectiveCount - visibleSlots;
 
     return (
       <div
@@ -42,6 +53,24 @@ export class MonthViewEvents {
           padding: '2px',
         }}
       >
+        {draggedEvent && (
+          <div
+            class="mhCalendarDay__eventHolder"
+            style={{
+              width: '100%',
+              position: 'relative',
+              ...store.getInlineStyleForClass('mhCalendarDay__eventHolder'),
+            }}
+          >
+            <mh-calendar-event
+              event={draggedEvent}
+              dayHeight={this.calendarDayElementHeight}
+              eventTopPosition={0}
+              dayOfRendering={this.day}
+              isDragged={true}
+            />
+          </div>
+        )}
         {eventsToShow.map((event) => {
           return (
             <div
@@ -71,11 +100,7 @@ export class MonthViewEvents {
               ...store.getInlineStyleForClass('mhCalendarDay__eventHolder'),
             }}
           >
-            {hasMoreEvents && (
-              <mh-calendar-more-events-indicator
-                hiddenCount={sortedEvents.length - eventsToShow.length}
-              />
-            )}
+            {hasMoreEvents && <mh-calendar-more-events-indicator hiddenCount={hiddenCount} />}
           </div>
         )}
       </div>

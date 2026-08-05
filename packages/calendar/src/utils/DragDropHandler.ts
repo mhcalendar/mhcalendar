@@ -81,7 +81,10 @@ export class DragDropHandler {
       storeState.businessHours,
     );
 
-    if (dragState.isDraggedOver !== calcBlockPosition || dragState.isDraggedOverBlocked !== isBlocked) {
+    if (
+      dragState.isDraggedOver !== calcBlockPosition ||
+      dragState.isDraggedOverBlocked !== isBlocked
+    ) {
       return {
         ...dragState,
         draggedOverOffsetY: touchOffsetY,
@@ -109,9 +112,8 @@ export class DragDropHandler {
 
     if (allDayHolder && storeState.showAllDayTasks && !showCurrentDate) {
       const allDayRect = allDayHolder.getBoundingClientRect();
-      const allDayHeight = storeState.allDayEventsHeight || 0;
 
-      if (clientY >= allDayRect.top && clientY <= allDayRect.top + allDayHeight) {
+      if (clientY >= allDayRect.top && clientY <= allDayRect.bottom) {
         isAllDay = true;
       }
     }
@@ -147,7 +149,7 @@ export class DragDropHandler {
     const touch = e.touches[0];
     if (!touch) return dragState;
 
-    const rect = this.targetRect || this.updateTargetRect();
+    const rect = this.updateTargetRect();
     if (!rect) return dragState;
 
     const isInside = this.isPointInside(touch.clientX, touch.clientY, rect);

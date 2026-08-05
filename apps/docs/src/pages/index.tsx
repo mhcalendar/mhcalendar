@@ -130,42 +130,32 @@ const GITHUB_ICON_PATH =
 const NPM_ICON_PATH =
   'M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z';
 
-const CTA_SECTIONS: {
+const OPEN_SOURCE_SECTION: {
   id: string;
   eyebrow: string;
   heading: string;
   description: string;
-  ctaLabel: string;
-  href: string;
-  external?: boolean;
-  reverse?: boolean;
-  logoPath?: string;
-  logoColor?: string;
-}[] = [
-  {
-    id: 'npm',
-    eyebrow: 'npm',
-    heading: 'Install it from npm.',
-    description:
-      'Published as @mhcalendar/calendar and @mhcalendar/react. Add it to your project with one command.',
-    ctaLabel: 'View on npm',
-    href: 'https://www.npmjs.com/package/@mhcalendar/react',
-    external: true,
-    reverse: true,
-    logoPath: NPM_ICON_PATH,
-    logoColor: '#CB3837',
-  },
-  {
-    id: 'community',
-    eyebrow: 'Open Source',
-    heading: 'Built in the open.',
-    description: 'MIT licensed. Browse the code, open an issue, or join the community on GitHub.',
-    ctaLabel: 'View on GitHub',
-    href: 'https://github.com/mhcalendar/mhcalendar',
-    external: true,
-    logoPath: GITHUB_ICON_PATH,
-  },
-];
+  links: { label: string; href: string; logoPath: string; logoColor?: string }[];
+} = {
+  id: 'open-source',
+  eyebrow: 'Open Source',
+  heading: 'Built in the open.',
+  description:
+    'MIT licensed and published on npm as @mhcalendar/calendar and @mhcalendar/react. Browse the code, open an issue, or add it to your project with one command.',
+  links: [
+    {
+      label: 'View on npm',
+      href: 'https://www.npmjs.com/package/@mhcalendar/react',
+      logoPath: NPM_ICON_PATH,
+      logoColor: '#CB3837',
+    },
+    {
+      label: 'View on GitHub',
+      href: 'https://github.com/mhcalendar/mhcalendar',
+      logoPath: GITHUB_ICON_PATH,
+    },
+  ],
+};
 
 const FAQS: { question: string; answer: string }[] = [
   {
@@ -380,7 +370,7 @@ function buildTryItEvents(): IMHCalendarEvent[] {
 function TryItCalendar(): ReactNode {
   const [mounted, setMounted] = useState(false);
   const [events, setEvents] = useState<IMHCalendarEvent[]>(() => buildTryItEvents());
-  const { colorMode, setColorMode } = useColorMode();
+  const { colorMode } = useColorMode();
 
   useEffect(() => setMounted(true), []);
 
@@ -501,8 +491,7 @@ export default function Home(): ReactNode {
               <a href="#try">Try it</a>
               <Link to="/theme-builder">Theme builder</Link>
               <a href="#stack">Works with</a>
-              <a href="#npm">npm</a>
-              <a href="#community">Community</a>
+              <a href="#open-source">Open source</a>
               <a href="#faq">FAQ</a>
             </div>
             <div className="mh-nav-cta">
@@ -606,46 +595,41 @@ export default function Home(): ReactNode {
             </div>
           </div>
         </section>
-        {CTA_SECTIONS.map((cta, index) => (
-          <section
-            key={cta.id}
-            id={cta.id}
-            className={
-              'mh-cta' +
-              (index % 2 === 0 ? ' mh-bg-a' : ' mh-bg-b') +
-              (cta.reverse ? ' mh-cta-reverse' : '')
-            }
-          >
-            <div className="container mh-cta-inner">
-              <div className="mh-cta-text">
-                <span className="mh-eyebrow">{cta.eyebrow}</span>
-                <h2>{cta.heading}</h2>
-                <p>{cta.description}</p>
-                {cta.external ? (
-                  <a className="mh-btn primary" href={cta.href} target="_blank" rel="noreferrer">
-                    {cta.ctaLabel}
-                  </a>
-                ) : (
-                  <Link className="mh-btn primary" to={cta.href}>
-                    {cta.ctaLabel}
-                  </Link>
-                )}
-              </div>
-              <div className="mh-cta-media">
-                {cta.logoPath ? (
-                  <svg
-                    className="mh-cta-logo"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    style={cta.logoColor ? { color: cta.logoColor } : undefined}
+        <section className="mh-cta mh-bg-a" id={OPEN_SOURCE_SECTION.id}>
+          <div className="container mh-cta-inner">
+            <div className="mh-cta-text">
+              <span className="mh-eyebrow">{OPEN_SOURCE_SECTION.eyebrow}</span>
+              <h2>{OPEN_SOURCE_SECTION.heading}</h2>
+              <p>{OPEN_SOURCE_SECTION.description}</p>
+              <div className="mh-cta-actions">
+                {OPEN_SOURCE_SECTION.links.map((link) => (
+                  <a
+                    key={link.href}
+                    className="mh-btn primary"
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    <path fill="currentColor" d={cta.logoPath} />
-                  </svg>
-                ) : null}
+                    {link.label}
+                  </a>
+                ))}
               </div>
             </div>
-          </section>
-        ))}
+            <div className="mh-cta-media">
+              {OPEN_SOURCE_SECTION.links.map((link) => (
+                <svg
+                  key={link.href}
+                  className="mh-cta-logo"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  style={link.logoColor ? { color: link.logoColor } : undefined}
+                >
+                  <path fill="currentColor" d={link.logoPath} />
+                </svg>
+              ))}
+            </div>
+          </div>
+        </section>
         <section className="mh-faq mh-bg-a" id="faq">
           <div className="container">
             <span className="mh-eyebrow">FAQ</span>

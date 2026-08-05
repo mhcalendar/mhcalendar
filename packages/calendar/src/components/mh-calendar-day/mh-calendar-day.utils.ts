@@ -115,13 +115,13 @@ export class DayUtils {
 
   static getDragEventTopPosition(mousePosition: number, calendarDayElementHeight: number): number {
     const { hoursInDay, headerMargin } = store;
-    const { showAllDayTasks, allDayEventsHeight } = store.state;
+    const { showAllDayTasks } = store.state;
 
     const slotHeight = (calendarDayElementHeight - headerMargin) / hoursInDay;
     const slotIndex = Math.floor((mousePosition - headerMargin) / slotHeight);
     const topPosition = slotIndex * slotHeight;
 
-    if ((showAllDayTasks && mousePosition < (allDayEventsHeight ?? 0)) || mousePosition < 0) {
+    if ((showAllDayTasks && mousePosition < headerMargin) || mousePosition < 0) {
       return headerMargin || 1;
     }
 

@@ -1,4 +1,4 @@
-import { Component, Element, h } from '@stencil/core';
+import { Component, Element, forceUpdate, h } from '@stencil/core';
 import { store, storeState } from '../../store/mh-calendar-store';
 import { DaysGenerator } from '../../utils/DaysGenerator';
 import { TimezoneUtils } from '../../utils/TimezoneUtils';
@@ -13,6 +13,23 @@ export class MHCalendarTimeSlots {
 
   private amountOfPrintedSlots = 0;
   private amountOfPrintedHoursSlots: string[] = [];
+  private storeUnsubscribers: (() => void)[] = [];
+
+  componentWillLoad() {
+    // currentAllDayEventsHeight is derived from reactiveEvents through nested helper calls,
+    // which @stencil/store's automatic dependency tracking doesn't pick up — re-render explicitly.
+    this.storeUnsubscribers.push(
+      store.onChange('reactiveEvents', () => forceUpdate(this)),
+      store.onChange('calendarDateRange', () => forceUpdate(this)),
+      store.onChange('viewType', () => forceUpdate(this)),
+      store.onChange('draggedOverAllDayDate', () => forceUpdate(this)),
+    );
+  }
+
+  disconnectedCallback() {
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
+  }
 
   componentWillRender() {
     if (!storeState.slotInterval || !storeState.hoursSlotInterval) {
@@ -171,7 +188,7 @@ export class MHCalendarTimeSlots {
             <div
               class="mhCalendarWeek__border mhCalendarWeek__border--hidden"
               style={{
-                height: `${storeState.allDayEventsHeight}px`,
+                height: `${store.currentAllDayEventsHeight}px`,
                 ...store.getInlineStyleForClass('mhCalendarWeek__border'),
               }}
             />
@@ -183,7 +200,7 @@ export class MHCalendarTimeSlots {
             <div
               class="time__holder"
               style={{
-                height: `${storeState.allDayEventsHeight}px`,
+                height: `${store.currentAllDayEventsHeight}px`,
                 ...store.getInlineStyleForClass('time__holder'),
               }}
             >

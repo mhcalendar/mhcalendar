@@ -224,7 +224,7 @@ describe('DragDropHandler', () => {
       store.state.showAllDayTasks = true;
       store.state.allDayEventsHeight = 50;
 
-      const allDayHolder = createFakeElement({ top: 0 });
+      const allDayHolder = createFakeElement({ top: 0, bottom: 50 });
       const container = createFakeElement({}, allDayHolder);
       const getTopPositionSpy = vi.spyOn(DayUtils, 'getDragEventTopPosition');
       const dropSpy = vi.spyOn(store, 'dropEvent').mockImplementation(() => undefined);

@@ -56,10 +56,12 @@ export class MHCalendarDay {
   private dispatchDropEvent = (clientY: number): void => {
     this.dragDropHandler.dispatchDropEvent(clientY, this.el || null, this.showCurrentDate);
     this.dragDropState = this.dragDropHandler.resetDragState();
+    store.setDraggedOverAllDayDate(null);
   };
 
   private resetDragState = (): void => {
     this.dragDropState = this.dragDropHandler.resetDragState();
+    store.setDraggedOverAllDayDate(null);
   };
 
   // Touch event handlers
@@ -80,9 +82,11 @@ export class MHCalendarDay {
     try {
       this.dragDropHandler.handleTouchEnd(e, this.el, this.showCurrentDate);
       this.dragDropState = this.dragDropHandler.resetDragState();
+      store.setDraggedOverAllDayDate(null);
     } catch (error) {
       console.error('Error handling touch end:', error);
       this.dragDropState = this.dragDropHandler.resetDragState();
+      store.setDraggedOverAllDayDate(null);
     }
   }
 
@@ -179,6 +183,7 @@ export class MHCalendarDay {
     this.storeUnsubscribers.push(
       store.onChange('calendarDateRange', () => {
         this.scheduleGetGroupedEvents();
+        this.updateCurrentTimePosition();
         this.calculateMaxVisibleEventsInMonthView();
       }),
     );
@@ -186,6 +191,9 @@ export class MHCalendarDay {
     this.storeUnsubscribers.push(
       store.onChange('reactiveEvents', () => {
         this.scheduleGetGroupedEvents();
+        // headerMargin (all-day row height) can change with the event count, which shifts
+        // where the current-time line should render.
+        this.updateCurrentTimePosition();
         setTimeout(() => {
           this.calculateMaxVisibleEventsInMonthView();
         }, 50);
@@ -340,6 +348,8 @@ export class MHCalendarDay {
                 isDraggedOverAllDay: true,
                 isDraggedOver: null, // Clear timed event preview
               };
+              // Let the shared all-day row height account for this preview before drop.
+              if (this.day) store.setDraggedOverAllDayDate(this.day);
             }
           }}
           handleDragLeave={(e: DragEvent) => {
@@ -351,6 +361,7 @@ export class MHCalendarDay {
                 ...this.dragDropState,
                 isDraggedOverAllDay: false,
               };
+              store.setDraggedOverAllDayDate(null);
             }
           }}
           handleDrop={(e: DragEvent) => {
@@ -376,12 +387,14 @@ export class MHCalendarDay {
           currentTimePosition={this.currentTimePosition}
           isTimeView={isTimeView}
         />
-        <mh-calendar-day-dragged-event-preview
-          dragDropState={this.dragDropState}
-          day={this.day}
-          calendarDayElementHeight={this.calendarDayElementHeight}
-          viewType={storeState.viewType}
-        />
+        {isTimeView && (
+          <mh-calendar-day-dragged-event-preview
+            dragDropState={this.dragDropState}
+            day={this.day}
+            calendarDayElementHeight={this.calendarDayElementHeight}
+            viewType={storeState.viewType}
+          />
+        )}
         {isTimeView ? (
           <mh-calendar-day-time-view-events
             groupedEvents={this.groupedEvents as Map<string, IMHCalendarEvent[]>}
@@ -394,6 +407,7 @@ export class MHCalendarDay {
             maxVisibleEventsInMonthView={this.maxVisibleEventsInMonthView}
             calendarDayElementHeight={this.calendarDayElementHeight}
             day={this.day}
+            dragDropState={this.dragDropState}
           />
         )}
       </div>

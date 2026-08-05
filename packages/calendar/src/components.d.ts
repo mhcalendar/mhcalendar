@@ -49,6 +49,7 @@ export namespace Components {
     interface MhCalendarDayMonthViewEvents {
         "calendarDayElementHeight"?: number;
         "day"?: Date;
+        "dragDropState"?: DragDropState;
         "groupedEvents": IMHCalendarEvent[];
         "maxVisibleEventsInMonthView": number;
     }
@@ -312,6 +313,7 @@ declare namespace LocalJSX {
     interface MhCalendarDayMonthViewEvents {
         "calendarDayElementHeight"?: number;
         "day"?: Date;
+        "dragDropState"?: DragDropState;
         "groupedEvents": IMHCalendarEvent[];
         "maxVisibleEventsInMonthView": number;
     }

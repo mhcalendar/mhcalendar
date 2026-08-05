@@ -28,7 +28,9 @@
 
 /* Event Modal Styles */
 .mhCalendarEventModal {
-  min-width: 400px;
+  /* Same 400px minimum as before, but shrinks instead of overflowing when the modal's
+     available width (90vw minus its 40px padding) is narrower than that, e.g. on mobile. */
+  min-width: min(400px, calc(90vw - 40px));
   max-width: 600px;
 }
 
@@ -84,11 +86,12 @@
 
 .mhCalendarEventModal__datetime {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
 .mhCalendarEventModal__datetime > div {
-  flex: 1;
+  flex: 1 1 160px;
   display: flex;
   flex-direction: column;
   gap: 4px;

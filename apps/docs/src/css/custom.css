@@ -536,6 +536,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 32px;
   border: none;
   background: none;
 }
@@ -544,6 +545,13 @@ body {
   width: 30%;
   max-width: 140px;
   color: var(--text);
+}
+
+.mh-cta-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .mh-faq-list {
@@ -876,6 +884,10 @@ body {
 }
 
 @media (max-width: 960px) {
+  .container {
+    padding: 0 16px;
+  }
+
   .mh-nav-links {
     display: none;
   }
@@ -891,7 +903,8 @@ body {
 
   .mh-try-calendar {
     width: 100%;
-    height: 380px;
+    height: 100vh;
+    height: 100dvh;
     margin-top: 32px;
   }
 

@@ -23,16 +23,19 @@ export class AllDayEventsHolder {
 
     const maxHeight = storeState.allDayEventsHeight;
     const maxEvents = AllDayEventsHeightUtils.getMaxVisibleEvents(maxHeight);
-    const hasMoreEvents = this.allDayEvents.length > maxEvents;
-    const eventsToShow = hasMoreEvents
-      ? this.allDayEvents.slice(0, maxEvents - 1)
-      : this.allDayEvents;
-    const hiddenCount = this.allDayEvents.length - eventsToShow.length;
-    const showsDragPreview = this.dragDropState.isDraggedOverAllDay && !!storeState.draggedEvent;
-    const ownHeight = AllDayEventsHeightUtils.getHeightForEventCount(
-      this.allDayEvents.length + (showsDragPreview ? 1 : 0),
-      maxHeight,
-    );
+    const draggedEvent = this.dragDropState.isDraggedOverAllDay ? storeState.draggedEvent : undefined;
+    const showsDragPreview = !!draggedEvent;
+
+    // The dragged preview counts as one more row (shown first) so the "+N more" indicator
+    // reflects what the holder will actually look like once the event is dropped.
+    const effectiveCount = this.allDayEvents.length + (showsDragPreview ? 1 : 0);
+    const hasMoreEvents = effectiveCount > maxEvents;
+    const visibleSlots = hasMoreEvents ? maxEvents - 1 : effectiveCount;
+    const visibleRealEvents = showsDragPreview ? Math.max(visibleSlots - 1, 0) : visibleSlots;
+    const eventsToShow = this.allDayEvents.slice(0, visibleRealEvents);
+    const hiddenCount = effectiveCount - visibleSlots;
+
+    const ownHeight = AllDayEventsHeightUtils.getHeightForEventCount(effectiveCount, maxHeight);
     // Every day column shares one row with the hour grid, so they must all use the same
     // height (driven by whichever day currently has the most all-day events) to stay aligned.
     const height = Math.max(store.currentAllDayEventsHeight, ownHeight);
@@ -49,19 +52,11 @@ export class AllDayEventsHolder {
         onDragLeave={this.handleDragLeave}
         onDrop={this.handleDrop}
       >
+        {draggedEvent && <mh-calendar-event event={{ ...draggedEvent, allDay: true }} isDragged={true} />}
         {eventsToShow.map((event) => (
           <mh-calendar-event event={event} />
         ))}
         {hasMoreEvents && <mh-calendar-more-events-indicator hiddenCount={hiddenCount} />}
-        {this.dragDropState.isDraggedOverAllDay &&
-          storeState.draggedEvent &&
-          (() => {
-            const previewEvent = {
-              ...storeState.draggedEvent,
-              allDay: true,
-            };
-            return <mh-calendar-event event={previewEvent} isDragged={true} />;
-          })()}
       </div>
     );
   }

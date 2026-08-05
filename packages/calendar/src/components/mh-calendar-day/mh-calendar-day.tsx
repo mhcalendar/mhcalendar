@@ -376,12 +376,14 @@ export class MHCalendarDay {
           currentTimePosition={this.currentTimePosition}
           isTimeView={isTimeView}
         />
-        <mh-calendar-day-dragged-event-preview
-          dragDropState={this.dragDropState}
-          day={this.day}
-          calendarDayElementHeight={this.calendarDayElementHeight}
-          viewType={storeState.viewType}
-        />
+        {isTimeView && (
+          <mh-calendar-day-dragged-event-preview
+            dragDropState={this.dragDropState}
+            day={this.day}
+            calendarDayElementHeight={this.calendarDayElementHeight}
+            viewType={storeState.viewType}
+          />
+        )}
         {isTimeView ? (
           <mh-calendar-day-time-view-events
             groupedEvents={this.groupedEvents as Map<string, IMHCalendarEvent[]>}
@@ -394,6 +396,7 @@ export class MHCalendarDay {
             maxVisibleEventsInMonthView={this.maxVisibleEventsInMonthView}
             calendarDayElementHeight={this.calendarDayElementHeight}
             day={this.day}
+            dragDropState={this.dragDropState}
           />
         )}
       </div>

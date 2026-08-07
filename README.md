@@ -66,7 +66,7 @@ pnpm add @mhcalendar/calendar
 
 Import and initialize the web component in your app's entry file (e.g., `main.ts`):
 
-```javascript
+```typescript
 import { defineCustomElements } from '@mhcalendar/calendar/loader';
 
 // Registers the <mh-calendar> custom element in the browser
@@ -83,33 +83,41 @@ Example usage:
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <script type="module" src="/src/main.js"></script>
     <mh-calendar id="my-calendar"></mh-calendar>
-    <script type="module">
-      const mhcalendar = document.getElementById('my-calendar');
-
-      const now = new Date();
-      const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0);
-      const endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 11, 30);
-
-      mhcalendar.config = {
-        viewType: 'WEEK',
-        showTimeFrom: 9,
-        showTimeTo: 18,
-        allowEventDragging: true,
-      };
-      mhcalendar.events = [
-        {
-          id: '1',
-          title: 'Team Meeting',
-          startDate,
-          endDate,
-        },
-      ];
-    </script>
+    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/mhcalendar.ts" defer></script>
   </body>
 </html>
 ```
+
+```typescript
+import type { IMHCalendarEvent, IMHCalendarViewType } from '@mhcalendar/calendar';
+
+const mhcalendar = document.getElementById('my-calendar') as HTMLMhCalendarElement;
+
+const now = new Date();
+const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0);
+const endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 11, 30);
+
+mhcalendar.config = {
+  viewType: 'WEEK' as IMHCalendarViewType,
+  showTimeFrom: 9,
+  showTimeTo: 18,
+  allowEventDragging: true,
+};
+
+const events: IMHCalendarEvent[] = [
+  {
+    id: '1',
+    title: 'Team Meeting',
+    startDate,
+    endDate,
+  },
+];
+mhcalendar.events = events;
+```
+
+👉 See [`examples/vanilla-ts`](./examples/vanilla-ts) for a full working app.
 
 ## Contributing
 

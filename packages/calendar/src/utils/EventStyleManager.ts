@@ -4,6 +4,7 @@ import {
   MINUTES_IN_HOUR,
 } from '../components/mh-calendar-day/mh-calendar-day.const';
 import { store, storeState } from '../store/mh-calendar-store';
+import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarEvent } from '../types';
 import { EventUtils } from './EventUtils';
 
@@ -13,6 +14,72 @@ const EVENT_MARGIN = 2; // pixels
 export class EventStyleManager {
   static getEventColor(event?: { color?: string }): string {
     return event?.color || storeState.properties.eventBackgroundColor;
+  }
+
+  /**
+   * Computes the inline style for an event's container element across all view types
+   * (month/week/day, regular and dragged-preview variants).
+   */
+  static getEventStyle(
+    event: IMHCalendarEvent,
+    viewType: IMHCalendarViewType,
+    isDragged: boolean,
+    dayHeight?: number,
+    dayOfRendering?: Date,
+  ): any {
+    const eventColor = this.getEventColor(event);
+
+    // When dragged in a time-slot view, ensure full opacity for the preview (original item fades
+    // separately) and let it fill the precisely-sized holder positioned by EventRenderer.
+    if (isDragged && !event.allDay && [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType)) {
+      return {
+        height: '100%',
+        width: '100%',
+        position: 'relative',
+        opacity: '1',
+        borderRadius: '5px', // Ensure border radius is visible
+        overflow: 'hidden', // Ensure content stays within rounded corners
+        background: eventColor,
+        ...store.getInlineStyleForClass('mhCalendarEvent'),
+      };
+    }
+
+    // Dragged all-day preview should also be fully opaque and match regular styling
+    if (isDragged && event.allDay) {
+      return {
+        height: 'var(--monthEventHeight)',
+        width: '100%',
+        opacity: '1',
+        padding: '3px',
+        fontSize: '10px',
+        backgroundColor: eventColor,
+      };
+    }
+
+    const shouldEventHaveCustomHeight =
+      [IMHCalendarViewType.WEEK, IMHCalendarViewType.DAY].includes(viewType) && !event.allDay;
+
+    if (shouldEventHaveCustomHeight) {
+      const height = dayHeight
+        ? this.calculateEventHeight(event.startDate, event.endDate, dayHeight, dayOfRendering, isDragged)
+        : undefined;
+
+      return {
+        height,
+        maxHeight: height,
+        background: eventColor,
+        position: 'relative',
+      };
+    }
+
+    return {
+      height: 'var(--monthEventHeight)',
+      width: '100%',
+      opacity: '1',
+      padding: '3px',
+      fontSize: '10px',
+      backgroundColor: eventColor,
+    };
   }
 
   /**

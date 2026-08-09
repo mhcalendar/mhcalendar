@@ -107,60 +107,13 @@ export class MHCalendarEvent {
   private getMHCalendarEventStyle() {
     if (!this.el || !this.event || !storeState.viewType) return;
 
-    const eventColor = EventStyleManager.getEventColor(this.event);
-
-    // When dragged in a time-slot view, ensure full opacity for the preview (original item fades
-    // separately) and let it fill the precisely-sized holder positioned by EventRenderer.
-    if (
-      this.isDragged &&
-      !this.event?.allDay &&
-      [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(storeState.viewType)
-    ) {
-      return {
-        height: '100%',
-        width: '100%',
-        position: 'relative',
-        opacity: '1',
-        borderRadius: '5px', // Ensure border radius is visible
-        overflow: 'hidden', // Ensure content stays within rounded corners
-        background: eventColor,
-        ...store.getInlineStyleForClass('mhCalendarEvent'),
-      };
-    }
-
-    // Dragged all-day preview should also be fully opaque and match regular styling
-    if (this.isDragged && this.event?.allDay) {
-      return {
-        height: 'var(--monthEventHeight)',
-        width: '100%',
-        opacity: '1',
-        padding: '3px',
-        fontSize: '10px',
-        backgroundColor: eventColor,
-      };
-    }
-
-    const shouldEventHaveCustomHeight =
-      [IMHCalendarViewType.WEEK, IMHCalendarViewType.DAY].includes(storeState.viewType) &&
-      !this.event.allDay;
-
-    if (shouldEventHaveCustomHeight) {
-      return {
-        height: this.calculateEventHeight(),
-        maxHeight: this.calculateEventHeight(),
-        background: eventColor,
-        position: 'relative',
-      };
-    }
-
-    return {
-      height: 'var(--monthEventHeight)',
-      width: '100%',
-      opacity: '1',
-      padding: '3px',
-      fontSize: '10px',
-      backgroundColor: eventColor,
-    };
+    return EventStyleManager.getEventStyle(
+      this.event,
+      storeState.viewType,
+      this.isDragged,
+      this.dayHeight,
+      this.dayOfRendering,
+    );
   }
 
   private getCorrectEventUI() {

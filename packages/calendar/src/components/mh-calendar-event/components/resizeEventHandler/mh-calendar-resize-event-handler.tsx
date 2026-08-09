@@ -165,7 +165,7 @@ export class MHCalendarResizeEventHandler {
       >
         {this.newEndDate && (
           <span class="mhCalendarResizeEventHandler__time-label">
-            {DateUtils.formatTime(this.newEndDate)}
+            {DateUtils.formatDate(this.newEndDate)}
             {typeof this.eventEndDate === 'object' &&
               this.eventEndDate &&
               (() => {

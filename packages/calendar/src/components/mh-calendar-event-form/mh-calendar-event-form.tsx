@@ -3,6 +3,9 @@ import dayjs from 'dayjs';
 import { IMHCalendarEvent } from '../../types';
 import { store } from '../../store/mh-calendar-store';
 import { EventManager } from '../../utils/EventManager';
+import { DateUtils } from '../../utils/DateUtils';
+
+const DATETIME_LOCAL_FORMAT = 'YYYY-MM-DDTHH:mm';
 
 interface IValidationError {
   field: 'title' | 'start' | 'end';
@@ -31,12 +34,8 @@ export class MHCalendarEventForm {
     this.title = this.event.title ?? '';
     this.description = this.event.description ?? '';
     this.allDay = this.event.allDay ?? false;
-    this.startDate = this.formatDateTimeLocal(this.event.startDate);
-    this.endDate = this.formatDateTimeLocal(this.event.endDate);
-  }
-
-  private formatDateTimeLocal(date: Date): string {
-    return dayjs(date).tz(store.mainTimezone).format('YYYY-MM-DDTHH:mm');
+    this.startDate = DateUtils.formatDate(this.event.startDate, DATETIME_LOCAL_FORMAT);
+    this.endDate = DateUtils.formatDate(this.event.endDate, DATETIME_LOCAL_FORMAT);
   }
 
   private errorFor(field: IValidationError['field']): string | undefined {

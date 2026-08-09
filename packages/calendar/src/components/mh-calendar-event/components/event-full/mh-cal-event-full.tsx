@@ -57,8 +57,8 @@ export class MHCalendarEventFull {
                     ...store.getInlineStyleForClass('mhCalendarEventFull__content__date'),
                   }}
                 >
-                  {DateUtils.formatTime(this.event.startDate)}-
-                  {DateUtils.formatTime(this.event.endDate)}
+                  {DateUtils.formatDate(this.event.startDate)}-
+                  {DateUtils.formatDate(this.event.endDate)}
                 </div>
               </>
             )}

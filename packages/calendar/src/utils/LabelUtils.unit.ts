@@ -106,4 +106,59 @@ describe('LabelUtils', () => {
       expect(LabelUtils.viewName(IMHCalendarViewType.WEEK)).toBe('Week');
     });
   });
+
+  describe('simple string labels', () => {
+    const cases: [keyof typeof LabelUtils, string, string, string][] = [
+      ['noEvents', 'noEvents', 'No events scheduled', 'Brak wydarzeń'],
+      ['untitledEvent', 'untitledEvent', 'Untitled Event', 'Wydarzenie bez tytułu'],
+      ['defaultEventTitle', 'defaultEventTitle', 'New Event', 'Nowe wydarzenie'],
+      ['noResources', 'noResources', 'No resources configured', 'Brak skonfigurowanych zasobów'],
+      ['newEventTitle', 'newEventTitle', 'New Event', 'Nowe wydarzenie'],
+      ['editEventTitle', 'editEventTitle', 'Edit Event', 'Edytuj wydarzenie'],
+      ['titleFieldLabel', 'titleFieldLabel', 'Title:', 'Tytuł:'],
+      ['titlePlaceholder', 'titlePlaceholder', 'Enter title', 'Wpisz tytuł'],
+      ['descriptionFieldLabel', 'descriptionFieldLabel', 'Description:', 'Opis:'],
+      [
+        'descriptionPlaceholder',
+        'descriptionPlaceholder',
+        'Enter description (optional)',
+        'Wpisz opis (opcjonalnie)',
+      ],
+      ['dateTimeFieldLabel', 'dateTimeFieldLabel', 'Date and Time:', 'Data i godzina:'],
+      ['fromLabel', 'fromLabel', 'From:', 'Od:'],
+      ['toLabel', 'toLabel', 'To:', 'Do:'],
+      ['allDayLabel', 'allDayLabel', 'All Day', 'Cały dzień'],
+      ['cancelButton', 'cancelButton', 'Cancel', 'Anuluj'],
+      ['saveButton', 'saveButton', 'Save', 'Zapisz'],
+      ['titleRequiredError', 'titleRequiredError', 'Title is required.', 'Tytuł jest wymagany.'],
+      [
+        'startDateInvalidError',
+        'startDateInvalidError',
+        'Start date is invalid.',
+        'Data rozpoczęcia jest nieprawidłowa.',
+      ],
+      [
+        'endDateInvalidError',
+        'endDateInvalidError',
+        'End date is invalid.',
+        'Data zakończenia jest nieprawidłowa.',
+      ],
+      [
+        'endBeforeStartError',
+        'endBeforeStartError',
+        'End date must be after start date.',
+        'Data zakończenia musi być późniejsza niż data rozpoczęcia.',
+      ],
+    ];
+
+    it.each(cases)('%s defaults to the English fallback', (method, _key, defaultValue) => {
+      store.state.labels = undefined;
+      expect((LabelUtils[method] as () => string)()).toBe(defaultValue);
+    });
+
+    it.each(cases)('%s uses the configured override', (method, key, _defaultValue, override) => {
+      store.state.labels = { [key]: override };
+      expect((LabelUtils[method] as () => string)()).toBe(override);
+    });
+  });
 });

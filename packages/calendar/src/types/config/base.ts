@@ -48,6 +48,120 @@ export interface IMHCalendarLabels {
    * @example { WEEK: 'Semaine', MONTH: 'Mois' }
    */
   views: Partial<Record<IMHCalendarViewType, string>>;
+
+  /**
+   * Fallback title used for an event with no title (e.g. in agenda view).
+   * @default 'Untitled Event'
+   */
+  untitledEvent: string;
+
+  /**
+   * Title used for a newly created event before the user renames it.
+   * @default 'New Event'
+   */
+  defaultEventTitle: string;
+
+  /**
+   * Message shown in resource view when no resources are configured.
+   * @default 'No resources configured'
+   */
+  noResources: string;
+
+  /**
+   * Heading of the event form modal when creating a new event.
+   * @default 'New Event'
+   */
+  newEventTitle: string;
+
+  /**
+   * Heading of the event form modal when editing an existing event.
+   * @default 'Edit Event'
+   */
+  editEventTitle: string;
+
+  /**
+   * Label for the event title field in the event form.
+   * @default 'Title:'
+   */
+  titleFieldLabel: string;
+
+  /**
+   * Placeholder for the event title input in the event form.
+   * @default 'Enter title'
+   */
+  titlePlaceholder: string;
+
+  /**
+   * Label for the event description field in the event form.
+   * @default 'Description:'
+   */
+  descriptionFieldLabel: string;
+
+  /**
+   * Placeholder for the event description textarea in the event form.
+   * @default 'Enter description (optional)'
+   */
+  descriptionPlaceholder: string;
+
+  /**
+   * Label for the date/time section of the event form.
+   * @default 'Date and Time:'
+   */
+  dateTimeFieldLabel: string;
+
+  /**
+   * Label for the start date/time input in the event form.
+   * @default 'From:'
+   */
+  fromLabel: string;
+
+  /**
+   * Label for the end date/time input in the event form.
+   * @default 'To:'
+   */
+  toLabel: string;
+
+  /**
+   * Label for the "all day" checkbox in the event form.
+   * @default 'All Day'
+   */
+  allDayLabel: string;
+
+  /**
+   * Label for the cancel button in the event form.
+   * @default 'Cancel'
+   */
+  cancelButton: string;
+
+  /**
+   * Label for the save button in the event form.
+   * @default 'Save'
+   */
+  saveButton: string;
+
+  /**
+   * Validation error shown when the event title is empty.
+   * @default 'Title is required.'
+   */
+  titleRequiredError: string;
+
+  /**
+   * Validation error shown when the start date is invalid.
+   * @default 'Start date is invalid.'
+   */
+  startDateInvalidError: string;
+
+  /**
+   * Validation error shown when the end date is invalid.
+   * @default 'End date is invalid.'
+   */
+  endDateInvalidError: string;
+
+  /**
+   * Validation error shown when the end date is not after the start date.
+   * @default 'End date must be after start date.'
+   */
+  endBeforeStartError: string;
 }
 
 export interface ICalendarBaseConfig {

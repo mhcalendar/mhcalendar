@@ -8,6 +8,7 @@ import { DaysGenerator } from '../../utils/DaysGenerator';
 import { EventManager } from '../../utils/EventManager';
 import { VIEW_HEIGHT } from '../../const/default-theme';
 import { IMHCalendarPopoverAnchorRect } from '../../utils/PopoverPositionUtils';
+import { LabelUtils } from '../../utils/LabelUtils';
 
 const MAX_VISIBLE_EVENTS = 2;
 
@@ -177,7 +178,7 @@ export class MHCalendarResourceView {
           class="mhCalendarResource mhCalendarResource--empty"
           style={{ height: containerHeight }}
         >
-          <div class="mhCalendarResource__emptyMessage">No resources configured</div>
+          <div class="mhCalendarResource__emptyMessage">{LabelUtils.noResources()}</div>
         </div>
       );
     }

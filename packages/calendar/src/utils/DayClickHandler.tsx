@@ -4,6 +4,7 @@ import { store, storeState } from '../store/mh-calendar-store';
 import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarEvent } from '../types';
 import { EventManager } from './EventManager';
+import { LabelUtils } from './LabelUtils';
 
 export class DayClickHandler {
   static handleDayClick(
@@ -55,7 +56,7 @@ export class DayClickHandler {
           id: EventManager.generateEventId(),
           startDate,
           endDate,
-          title: 'New Event',
+          title: LabelUtils.defaultEventTitle(),
           allDay: false,
         };
       } else {
@@ -70,7 +71,7 @@ export class DayClickHandler {
           id: EventManager.generateEventId(),
           startDate,
           endDate,
-          title: 'New Event',
+          title: LabelUtils.defaultEventTitle(),
           allDay: true,
         };
       }

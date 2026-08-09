@@ -4,6 +4,7 @@ import { IMHCalendarEvent } from '../../types';
 import { store } from '../../store/mh-calendar-store';
 import { EventManager } from '../../utils/EventManager';
 import { DateUtils } from '../../utils/DateUtils';
+import { LabelUtils } from '../../utils/LabelUtils';
 
 const DATETIME_LOCAL_FORMAT = 'YYYY-MM-DDTHH:mm';
 
@@ -47,20 +48,20 @@ export class MHCalendarEventForm {
     const errors: IValidationError[] = [];
 
     if (!this.title.trim()) {
-      errors.push({ field: 'title', message: 'Title is required.' });
+      errors.push({ field: 'title', message: LabelUtils.titleRequiredError() });
     }
 
     const startDate = dayjs.tz(this.startDate, store.mainTimezone).toDate();
     const endDate = dayjs.tz(this.endDate, store.mainTimezone).toDate();
 
     if (isNaN(startDate.getTime())) {
-      errors.push({ field: 'start', message: 'Start date is invalid.' });
+      errors.push({ field: 'start', message: LabelUtils.startDateInvalidError() });
     }
     if (isNaN(endDate.getTime())) {
-      errors.push({ field: 'end', message: 'End date is invalid.' });
+      errors.push({ field: 'end', message: LabelUtils.endDateInvalidError() });
     }
     if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime()) && startDate >= endDate) {
-      errors.push({ field: 'end', message: 'End date must be after start date.' });
+      errors.push({ field: 'end', message: LabelUtils.endBeforeStartError() });
     }
 
     return errors;
@@ -108,34 +109,34 @@ export class MHCalendarEventForm {
     return (
       <div class="mhCalendarEventForm">
         <div class="mhCalendarEventForm__header">
-          <h3>{this.isNewEvent ? 'New Event' : 'Edit Event'}</h3>
+          <h3>{this.isNewEvent ? LabelUtils.newEventTitle() : LabelUtils.editEventTitle()}</h3>
         </div>
         <div class="mhCalendarEventForm__body">
           <div class="mhCalendarEventForm__field">
-            <label>Title:</label>
+            <label>{LabelUtils.titleFieldLabel()}</label>
             <input
               type="text"
               value={this.title}
-              placeholder="Enter title"
+              placeholder={LabelUtils.titlePlaceholder()}
               class={{ 'mhCalendarEventForm__input--error': !!this.errorFor('title') }}
               onInput={(e) => (this.title = (e.target as HTMLInputElement).value)}
               onKeyDown={this.handleTitleKeydown}
             />
           </div>
           <div class="mhCalendarEventForm__field">
-            <label>Description:</label>
+            <label>{LabelUtils.descriptionFieldLabel()}</label>
             <textarea
               rows={3}
               value={this.description}
-              placeholder="Enter description (optional)"
+              placeholder={LabelUtils.descriptionPlaceholder()}
               onInput={(e) => (this.description = (e.target as HTMLTextAreaElement).value)}
             />
           </div>
           <div class="mhCalendarEventForm__field">
-            <label>Date and Time:</label>
+            <label>{LabelUtils.dateTimeFieldLabel()}</label>
             <div class="mhCalendarEventForm__datetime">
               <div>
-                <label class="mhCalendarEventForm__datetimeLabel">From:</label>
+                <label class="mhCalendarEventForm__datetimeLabel">{LabelUtils.fromLabel()}</label>
                 <input
                   type="datetime-local"
                   value={this.startDate}
@@ -144,7 +145,7 @@ export class MHCalendarEventForm {
                 />
               </div>
               <div>
-                <label class="mhCalendarEventForm__datetimeLabel">To:</label>
+                <label class="mhCalendarEventForm__datetimeLabel">{LabelUtils.toLabel()}</label>
                 <input
                   type="datetime-local"
                   value={this.endDate}
@@ -161,7 +162,7 @@ export class MHCalendarEventForm {
                 checked={this.allDay}
                 onInput={(e) => (this.allDay = (e.target as HTMLInputElement).checked)}
               />
-              All Day
+              {LabelUtils.allDayLabel()}
             </label>
           </div>
         </div>
@@ -177,13 +178,13 @@ export class MHCalendarEventForm {
             class="mhCalendarEventForm__button mhCalendarEventForm__button--cancel"
             onClick={this.handleCancel}
           >
-            Cancel
+            {LabelUtils.cancelButton()}
           </button>
           <button
             class="mhCalendarEventForm__button mhCalendarEventForm__button--save"
             onClick={this.handleSave}
           >
-            Save
+            {LabelUtils.saveButton()}
           </button>
         </div>
       </div>

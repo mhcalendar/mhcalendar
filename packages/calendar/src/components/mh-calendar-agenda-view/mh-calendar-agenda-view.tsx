@@ -59,9 +59,7 @@ export class MHCalendarAgendaView {
           class="mhCalendarAgendaView mhCalendarAgendaView--empty"
           style={{ height: containerHeight }}
         >
-          <div class="mhCalendarAgendaView__emptyMessage">
-            {storeState.labels?.noEvents ?? 'No events scheduled'}
-          </div>
+          <div class="mhCalendarAgendaView__emptyMessage">{LabelUtils.noEvents()}</div>
         </div>
       );
     }
@@ -100,7 +98,7 @@ export class MHCalendarAgendaView {
                       <div class="mhCalendarAgendaView__eventContent">
                         <>
                           <div class="mhCalendarAgendaView__eventTitle">
-                            {event.title || 'Untitled Event'}
+                            {event.title || LabelUtils.untitledEvent()}
                           </div>
                           {event.description && (
                             <div class="mhCalendarAgendaView__eventDescription">

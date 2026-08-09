@@ -18,6 +18,18 @@ export interface IMHCalendarLabels {
   today: string;
 
   /**
+   * Label for the "Tomorrow" day header in agenda view.
+   * @default 'Tomorrow'
+   */
+  tomorrow: string;
+
+  /**
+   * Label for the "Yesterday" day header in agenda view.
+   * @default 'Yesterday'
+   */
+  yesterday: string;
+
+  /**
    * Label for the overflow indicator shown when a day has more events than fit.
    * @param hiddenCount Number of events hidden behind the indicator.
    * @default (hiddenCount) => `+${hiddenCount} more`

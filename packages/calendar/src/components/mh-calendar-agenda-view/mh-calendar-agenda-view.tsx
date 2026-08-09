@@ -129,34 +129,6 @@ export class MHCalendarAgendaView {
     this.sortedEvents = sortedDays;
   }
 
-  private formatDate(date: Date): string {
-    const d = dayjs(date).locale(storeState.locale);
-    const today = dayjs();
-
-    if (d.isSame(today, 'day')) {
-      return LabelUtils.today();
-    }
-
-    if (d.isSame(today.add(1, 'day'), 'day')) {
-      return 'Tomorrow';
-    }
-
-    if (d.isSame(today.subtract(1, 'day'), 'day')) {
-      return 'Yesterday';
-    }
-
-    // Check if within current week
-    const startOfWeek = today.startOf('week');
-    const endOfWeek = today.endOf('week');
-
-    if (d.isAfter(startOfWeek) && d.isBefore(endOfWeek)) {
-      return d.format('dddd'); // Day name (Monday, Tuesday, etc.)
-    }
-
-    // Default format
-    return d.format('MMMM D, YYYY');
-  }
-
   render() {
     const containerHeight = storeState.fixedHeight ?? VIEW_HEIGHT;
 
@@ -200,9 +172,11 @@ export class MHCalendarAgendaView {
               class="mhCalendarAgendaView__day"
             >
               <div class="mhCalendarAgendaView__dayHeader">
-                <span class="mhCalendarAgendaView__dayDate">{this.formatDate(dayData.date)}</span>
+                <span class="mhCalendarAgendaView__dayDate">
+                  {LabelUtils.dateLabel(dayData.date)}
+                </span>
                 <span class="mhCalendarAgendaView__dayDateFull">
-                  {dayjs(dayData.date).locale(storeState.locale).format('MMM D, YYYY')}
+                  {DateUtils.formatDate(dayData.date, 'MMM D, YYYY')}
                 </span>
               </div>
               <div class="mhCalendarAgendaView__events">

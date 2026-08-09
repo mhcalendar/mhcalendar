@@ -3,7 +3,6 @@ import { IMHCalendarEvent } from '../../types';
 import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
 import { store, storeState } from '../../store/mh-calendar-store';
 import { EventStyleManager } from '../../utils/EventStyleManager';
-import { EventModalHelper } from '../../utils/EventModalHelper';
 
 @Component({
   tag: 'mh-calendar-event',
@@ -29,25 +28,24 @@ export class MHCalendarEvent {
     // Open modal for event editing
     const rect = this.el.getBoundingClientRect();
 
-    const modalContent = EventModalHelper.createEventModalContent(
-      this.event,
-      false, // isNewEvent
-      (updatedEvent) => {
-        // Update event via callback
-        if (typeof storeState.onEventUpdated === 'function') {
-          storeState.onEventUpdated(updatedEvent);
-        }
-        // Also call original onEventClick if provided
-        if (typeof storeState.onEventClick === 'function') {
-          storeState.onEventClick(updatedEvent);
-        }
-      },
-      () => {
-        // Cancel - just call original onEventClick if provided
-        if (typeof storeState.onEventClick === 'function' && this.event) {
-          storeState.onEventClick(this.event);
-        }
-      },
+    const modalContent = (
+      <mh-calendar-event-form
+        event={this.event}
+        isNewEvent={false}
+        onSave={(updatedEvent) => {
+          if (typeof storeState.onEventUpdated === 'function') {
+            storeState.onEventUpdated(updatedEvent);
+          }
+          if (typeof storeState.onEventClick === 'function') {
+            storeState.onEventClick(updatedEvent);
+          }
+        }}
+        onCancel={() => {
+          if (typeof storeState.onEventClick === 'function' && this.event) {
+            storeState.onEventClick(this.event);
+          }
+        }}
+      />
     );
 
     store.openModal(modalContent, {

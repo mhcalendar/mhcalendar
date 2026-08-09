@@ -1,16 +1,6 @@
-import { Component, Element, h, State } from '@stencil/core';
+import { Component, h, State, VNode } from '@stencil/core';
 import { store } from '../../store/mh-calendar-store';
-
-// Export interface for external use
-export interface IModalPosition {
-  x?: number;
-  y?: number;
-  // For element-based positioning, pass the element directly
-  element?: HTMLElement;
-  alignment?: 'top' | 'bottom' | 'left' | 'right' | 'center';
-  // Alternative: pass coordinates from getBoundingClientRect
-  rect?: { top: number; left: number; width: number; height: number };
-}
+import { IModalPosition } from '../../store/mh-calendar-store.types';
 
 @Component({
   tag: 'mh-calendar-modal',
@@ -18,64 +8,34 @@ export interface IModalPosition {
   shadow: false,
 })
 export class MHCalendarModal {
-  @Element() el?: HTMLElement;
-
   @State() isOpen: boolean = false;
-  @State() modalContent: any = null;
+  @State() modalContent: VNode | null = null;
   @State() position: IModalPosition | null = null;
 
   private modalRef?: HTMLElement;
-  private contentContainerRef?: HTMLElement;
+  private storeUnsubscribers: (() => void)[] = [];
 
   componentWillLoad() {
     this.setupStoreSubscriptions();
   }
 
-  componentDidLoad() {
-    this.modalRef = this.el?.querySelector('.mhCalendarModal__content') as HTMLElement;
-    this.updateModalContent();
-  }
-
-  componentDidUpdate() {
-    this.updateModalContent();
-  }
-
-  private updateModalContent() {
-    if (this.contentContainerRef && this.modalContent) {
-      // Clear previous content
-      this.contentContainerRef.innerHTML = '';
-
-      // Append new content
-      if (this.modalContent instanceof HTMLElement) {
-        this.contentContainerRef.appendChild(this.modalContent);
-      } else if (typeof this.modalContent === 'string') {
-        this.contentContainerRef.innerHTML = this.modalContent;
-      } else {
-        // For JSX or other content types
-        this.contentContainerRef.innerHTML = String(this.modalContent || '');
-      }
-    }
-  }
-
   disconnectedCallback() {
     document.removeEventListener('keydown', this.handleEscapeKey);
+
+    this.storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+    this.storeUnsubscribers = [];
   }
 
   private setupStoreSubscriptions() {
     // Subscribe to modal changes
-    store.onChange('modal', (modalState) => {
-      const wasOpen = this.isOpen;
-      this.isOpen = modalState?.isOpen ?? false;
-      this.modalContent = modalState?.content ?? null;
-      this.position = modalState?.position ?? null;
+    this.storeUnsubscribers.push(
+      store.onChange('modal', (modalState) => {
+        this.isOpen = modalState?.isOpen ?? false;
+        this.modalContent = modalState?.content ?? null;
+        this.position = modalState?.position ?? null;
+      }),
+    );
 
-      // Clear content when modal is closed
-      if (wasOpen && !this.isOpen && this.contentContainerRef) {
-        this.contentContainerRef.innerHTML = '';
-      }
-    });
-
-    // Setup escape key listener
     document.addEventListener('keydown', this.handleEscapeKey);
   }
 
@@ -199,16 +159,15 @@ export class MHCalendarModal {
       <div class="mhCalendarModal" onClick={this.handleBackdropClick}>
         <div
           class="mhCalendarModal__content"
-          ref={(el) => {
-            this.modalRef = el;
-            this.contentContainerRef = el;
-          }}
+          ref={(el) => (this.modalRef = el)}
           style={{
             ...positionStyle,
             ...store.getInlineStyleForClass('mhCalendarModal__content'),
           }}
           onClick={(e) => e.stopPropagation()}
-        />
+        >
+          {this.modalContent}
+        </div>
       </div>
     );
   }

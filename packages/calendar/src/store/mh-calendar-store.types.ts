@@ -1,3 +1,4 @@
+import { VNode } from '@stencil/core';
 import { IMHCalendarDateRange, IMHCalendarEvent } from '../types';
 import { ICalendarWeekConfig } from '../types/config/week';
 import { EventBuilderMapByDate } from '../utils/EventManager';
@@ -14,7 +15,7 @@ export interface IModalPosition {
 
 export interface IModalState {
   isOpen: boolean;
-  content?: any;
+  content?: VNode;
   position?: IModalPosition;
 }
 

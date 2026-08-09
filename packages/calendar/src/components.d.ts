@@ -76,6 +76,21 @@ export namespace Components {
          */
         "isDragged": boolean;
     }
+    interface MhCalendarEventForm {
+        "event": IMHCalendarEvent;
+        /**
+          * @default false
+         */
+        "isNewEvent": boolean;
+        /**
+          * @default () => {}
+         */
+        "onCancel": () => void;
+        /**
+          * @default () => {}
+         */
+        "onSave": (updatedEvent: IMHCalendarEvent) => void;
+    }
     interface MhCalendarEventFull {
         "event"?: IMHCalendarEvent;
     }
@@ -178,6 +193,12 @@ declare global {
         prototype: HTMLMhCalendarEventElement;
         new (): HTMLMhCalendarEventElement;
     };
+    interface HTMLMhCalendarEventFormElement extends Components.MhCalendarEventForm, HTMLStencilElement {
+    }
+    var HTMLMhCalendarEventFormElement: {
+        prototype: HTMLMhCalendarEventFormElement;
+        new (): HTMLMhCalendarEventFormElement;
+    };
     interface HTMLMhCalendarEventFullElement extends Components.MhCalendarEventFull, HTMLStencilElement {
     }
     var HTMLMhCalendarEventFullElement: {
@@ -260,6 +281,7 @@ declare global {
         "mh-calendar-day-time-view-events": HTMLMhCalendarDayTimeViewEventsElement;
         "mh-calendar-day-time-view-overlays": HTMLMhCalendarDayTimeViewOverlaysElement;
         "mh-calendar-event": HTMLMhCalendarEventElement;
+        "mh-calendar-event-form": HTMLMhCalendarEventFormElement;
         "mh-calendar-event-full": HTMLMhCalendarEventFullElement;
         "mh-calendar-event-small": HTMLMhCalendarEventSmallElement;
         "mh-calendar-header": HTMLMhCalendarHeaderElement;
@@ -340,6 +362,21 @@ declare namespace LocalJSX {
          */
         "isDragged"?: boolean;
     }
+    interface MhCalendarEventForm {
+        "event": IMHCalendarEvent;
+        /**
+          * @default false
+         */
+        "isNewEvent"?: boolean;
+        /**
+          * @default () => {}
+         */
+        "onCancel"?: () => void;
+        /**
+          * @default () => {}
+         */
+        "onSave"?: (updatedEvent: IMHCalendarEvent) => void;
+    }
     interface MhCalendarEventFull {
         "event"?: IMHCalendarEvent;
     }
@@ -415,6 +452,9 @@ declare namespace LocalJSX {
         "isDragged": boolean;
         "instanceOfEvent": string;
     }
+    interface MhCalendarEventFormAttributes {
+        "isNewEvent": boolean;
+    }
     interface MhCalendarHeaderAttributes {
         "showCurrentDate": boolean;
     }
@@ -437,6 +477,7 @@ declare namespace LocalJSX {
         "mh-calendar-day-time-view-events": Omit<MhCalendarDayTimeViewEvents, keyof MhCalendarDayTimeViewEventsAttributes> & { [K in keyof MhCalendarDayTimeViewEvents & keyof MhCalendarDayTimeViewEventsAttributes]?: MhCalendarDayTimeViewEvents[K] } & { [K in keyof MhCalendarDayTimeViewEvents & keyof MhCalendarDayTimeViewEventsAttributes as `attr:${K}`]?: MhCalendarDayTimeViewEventsAttributes[K] } & { [K in keyof MhCalendarDayTimeViewEvents & keyof MhCalendarDayTimeViewEventsAttributes as `prop:${K}`]?: MhCalendarDayTimeViewEvents[K] };
         "mh-calendar-day-time-view-overlays": Omit<MhCalendarDayTimeViewOverlays, keyof MhCalendarDayTimeViewOverlaysAttributes> & { [K in keyof MhCalendarDayTimeViewOverlays & keyof MhCalendarDayTimeViewOverlaysAttributes]?: MhCalendarDayTimeViewOverlays[K] } & { [K in keyof MhCalendarDayTimeViewOverlays & keyof MhCalendarDayTimeViewOverlaysAttributes as `attr:${K}`]?: MhCalendarDayTimeViewOverlaysAttributes[K] } & { [K in keyof MhCalendarDayTimeViewOverlays & keyof MhCalendarDayTimeViewOverlaysAttributes as `prop:${K}`]?: MhCalendarDayTimeViewOverlays[K] } & OneOf<"calendarDayElementHeight", MhCalendarDayTimeViewOverlays["calendarDayElementHeight"], MhCalendarDayTimeViewOverlaysAttributes["calendarDayElementHeight"]> & OneOf<"isToday", MhCalendarDayTimeViewOverlays["isToday"], MhCalendarDayTimeViewOverlaysAttributes["isToday"]> & OneOf<"isTimeView", MhCalendarDayTimeViewOverlays["isTimeView"], MhCalendarDayTimeViewOverlaysAttributes["isTimeView"]>;
         "mh-calendar-event": Omit<MhCalendarEvent, keyof MhCalendarEventAttributes> & { [K in keyof MhCalendarEvent & keyof MhCalendarEventAttributes]?: MhCalendarEvent[K] } & { [K in keyof MhCalendarEvent & keyof MhCalendarEventAttributes as `attr:${K}`]?: MhCalendarEventAttributes[K] } & { [K in keyof MhCalendarEvent & keyof MhCalendarEventAttributes as `prop:${K}`]?: MhCalendarEvent[K] };
+        "mh-calendar-event-form": Omit<MhCalendarEventForm, keyof MhCalendarEventFormAttributes> & { [K in keyof MhCalendarEventForm & keyof MhCalendarEventFormAttributes]?: MhCalendarEventForm[K] } & { [K in keyof MhCalendarEventForm & keyof MhCalendarEventFormAttributes as `attr:${K}`]?: MhCalendarEventFormAttributes[K] } & { [K in keyof MhCalendarEventForm & keyof MhCalendarEventFormAttributes as `prop:${K}`]?: MhCalendarEventForm[K] };
         "mh-calendar-event-full": MhCalendarEventFull;
         "mh-calendar-event-small": MhCalendarEventSmall;
         "mh-calendar-header": Omit<MhCalendarHeader, keyof MhCalendarHeaderAttributes> & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes]?: MhCalendarHeader[K] } & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes as `attr:${K}`]?: MhCalendarHeaderAttributes[K] } & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes as `prop:${K}`]?: MhCalendarHeader[K] };
@@ -464,6 +505,7 @@ declare module "@stencil/core" {
             "mh-calendar-day-time-view-events": LocalJSX.IntrinsicElements["mh-calendar-day-time-view-events"] & JSXBase.HTMLAttributes<HTMLMhCalendarDayTimeViewEventsElement>;
             "mh-calendar-day-time-view-overlays": LocalJSX.IntrinsicElements["mh-calendar-day-time-view-overlays"] & JSXBase.HTMLAttributes<HTMLMhCalendarDayTimeViewOverlaysElement>;
             "mh-calendar-event": LocalJSX.IntrinsicElements["mh-calendar-event"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventElement>;
+            "mh-calendar-event-form": LocalJSX.IntrinsicElements["mh-calendar-event-form"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventFormElement>;
             "mh-calendar-event-full": LocalJSX.IntrinsicElements["mh-calendar-event-full"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventFullElement>;
             "mh-calendar-event-small": LocalJSX.IntrinsicElements["mh-calendar-event-small"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventSmallElement>;
             "mh-calendar-header": LocalJSX.IntrinsicElements["mh-calendar-header"] & JSXBase.HTMLAttributes<HTMLMhCalendarHeaderElement>;

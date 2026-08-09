@@ -1,3 +1,4 @@
+import { VNode } from '@stencil/core';
 import dayjs from 'dayjs';
 import { MILLISECONDS_IN_MINUTE } from '../components/mh-calendar-day/mh-calendar-day.const';
 import { DEFAULT_THEME, THEMES } from '../const/default-theme';
@@ -263,14 +264,14 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
 
   protected _openModal(
     state: IMHCalendarState,
-    payload: { content: any; position?: IModalPosition },
+    payload: { content: VNode; position?: IModalPosition },
   ): IMHCalendarState {
     state.modal = { isOpen: true, content: payload.content, position: payload.position };
     return { ...state };
   }
 
   protected _closeModal(state: IMHCalendarState): IMHCalendarState {
-    state.modal = { isOpen: false, content: null, position: undefined };
+    state.modal = { isOpen: false, content: undefined, position: undefined };
     return { ...state };
   }
 }

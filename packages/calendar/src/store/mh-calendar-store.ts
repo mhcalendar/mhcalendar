@@ -1,4 +1,5 @@
 import { createStore, ObservableMap } from '@stencil/store';
+import { VNode } from '@stencil/core';
 import { MHCalendarActions } from './mh-calendar-store.actions';
 import {
   IEventDropPayload,
@@ -164,7 +165,7 @@ export class MHCalendarStore extends MHCalendarActions {
     this._handleEventResize(this.state, payload);
   }
 
-  openModal(content: any, position?: IModalPosition): void {
+  openModal(content: VNode, position?: IModalPosition): void {
     this._openModal(this.state, { content, position });
   }
 

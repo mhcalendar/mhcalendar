@@ -12,6 +12,7 @@ import { createComponent } from '@stencil/react-output-target/runtime';
 import React from 'react';
 
 import type { Components } from "@mhcalendar/calendar/dist/components";
+import { MhCalendarEventForm as MhCalendarEventFormElement, defineCustomElement as defineMhCalendarEventForm } from "@mhcalendar/calendar/dist/components/mh-calendar-event-form.js";
 import { MhCalendarMoreEventsIndicator as MhCalendarMoreEventsIndicatorElement, defineCustomElement as defineMhCalendarMoreEventsIndicator } from "@mhcalendar/calendar/dist/components/mh-calendar-more-events-indicator.js";
 import { MhCalendar as MhCalendarElement, defineCustomElement as defineMhCalendar } from "@mhcalendar/calendar/dist/components/mh-calendar.js";
 import { MhViewSwitcher as MhViewSwitcherElement, defineCustomElement as defineMhViewSwitcher } from "@mhcalendar/calendar/dist/components/mh-view-switcher.js";
@@ -25,6 +26,17 @@ export const MhCalendar: StencilReactComponent<MhCalendarElement, MhCalendarEven
     react: React,
     events: {} as MhCalendarEvents,
     defineCustomElement: defineMhCalendar
+});
+
+export type MhCalendarEventFormEvents = NonNullable<unknown>;
+
+export const MhCalendarEventForm: StencilReactComponent<MhCalendarEventFormElement, MhCalendarEventFormEvents, Components.MhCalendarEventForm, 'event'> = /*@__PURE__*/ createComponent<MhCalendarEventFormElement, MhCalendarEventFormEvents, Components.MhCalendarEventForm, 'event'>({
+    tagName: 'mh-calendar-event-form',
+    elementClass: MhCalendarEventFormElement,
+    // @ts-ignore - ignore potential React type mismatches between the Stencil Output Target and your project.
+    react: React,
+    events: {} as MhCalendarEventFormEvents,
+    defineCustomElement: defineMhCalendarEventForm
 });
 
 export type MhCalendarMoreEventsIndicatorEvents = NonNullable<unknown>;

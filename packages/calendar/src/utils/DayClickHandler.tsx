@@ -1,5 +1,5 @@
+import { h } from '@stencil/core';
 import { DateUtils } from './DateUtils';
-import { EventModalHelper } from './EventModalHelper';
 import { store, storeState } from '../store/mh-calendar-store';
 import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarEvent } from '../types';
@@ -79,18 +79,20 @@ export class DayClickHandler {
       const clickTarget = event.target as HTMLElement;
       const rect = clickTarget.getBoundingClientRect();
 
-      const modalContent = EventModalHelper.createEventModalContent(
-        newEvent,
-        true, // isNewEvent
-        (updatedEvent) => {
-          // Save event via callback
-          if (typeof storeState.onEventCreated === 'function') {
-           storeState.onEventCreated(updatedEvent);
-          }
-        },
-        () => {
-          // Cancel - do nothing, event was not created
-        },
+      const modalContent = (
+        <mh-calendar-event-form
+          event={newEvent}
+          isNewEvent={true}
+          onSave={(updatedEvent) => {
+            // Save event via callback
+            if (typeof storeState.onEventCreated === 'function') {
+              storeState.onEventCreated(updatedEvent);
+            }
+          }}
+          onCancel={() => {
+            // Cancel - do nothing, event was not created
+          }}
+        />
       );
 
       store.openModal(modalContent, {

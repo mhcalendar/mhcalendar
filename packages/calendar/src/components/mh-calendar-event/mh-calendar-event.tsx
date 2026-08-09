@@ -32,12 +32,12 @@ export class MHCalendarEvent {
       <mh-calendar-event-form
         event={this.event}
         isNewEvent={false}
-        onSave={(updatedEvent) => {
+        onSave={(e) => {
           if (typeof storeState.onEventUpdated === 'function') {
-            storeState.onEventUpdated(updatedEvent);
+            storeState.onEventUpdated(e.detail);
           }
           if (typeof storeState.onEventClick === 'function') {
-            storeState.onEventClick(updatedEvent);
+            storeState.onEventClick(e.detail);
           }
         }}
         onCancel={() => {

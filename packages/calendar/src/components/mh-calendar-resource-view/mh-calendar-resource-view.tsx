@@ -276,22 +276,12 @@ export class MHCalendarResourceView {
         </div>
 
         {this.morePopover && (
-          <mh-calendar-popover
+          <mh-calendar-event-list-popup
             anchorRect={this.morePopover.anchorRect}
-            alignment="bottom"
+            date={this.morePopover.date}
+            events={this.morePopover.events}
             onClosePopover={this.closeMorePopover}
-          >
-            <div class="mhCalendarResource__morePopup">
-              <div class="mhCalendarResource__morePopupHeader">
-                {dayjs(this.morePopover.date).locale(storeState.locale).format('ddd, MMM D')}
-              </div>
-              <div class="mhCalendarResource__morePopupList">
-                {this.morePopover.events.map((event) => (
-                  <mh-calendar-event key={event.id} event={event} />
-                ))}
-              </div>
-            </div>
-          </mh-calendar-popover>
+          />
         )}
       </div>
     );

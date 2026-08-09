@@ -1,4 +1,4 @@
-import { Component, h, Prop, State } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import dayjs from 'dayjs';
 import { IMHCalendarEvent } from '../../types';
 import { store } from '../../store/mh-calendar-store';
@@ -20,8 +20,9 @@ interface IValidationError {
 export class MHCalendarEventForm {
   @Prop() event!: IMHCalendarEvent;
   @Prop() isNewEvent: boolean = false;
-  @Prop() onSave: (updatedEvent: IMHCalendarEvent) => void = () => {};
-  @Prop() onCancel: () => void = () => {};
+
+  @Event() save!: EventEmitter<IMHCalendarEvent>;
+  @Event() cancel!: EventEmitter<void>;
 
   @State() title: string = '';
   @State() description: string = '';
@@ -85,12 +86,12 @@ export class MHCalendarEventForm {
       EventManager.updateEvent(this.event.id, updatedEvent);
     }
 
-    this.onSave(updatedEvent);
+    this.save.emit(updatedEvent);
     store.closeModal();
   };
 
   private handleCancel = () => {
-    this.onCancel();
+    this.cancel.emit();
     store.closeModal();
   };
 

@@ -1,7 +1,8 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Prop, State, h } from '@stencil/core';
 import { IMHCalendarEvent } from '../../../types';
 import { store, storeState } from '../../../store/mh-calendar-store';
 import { DragDropState } from '../../../utils/DragDropHandler';
+import { IMHCalendarPopoverAnchorRect } from '../../mh-calendar-popover/mh-calendar-popover';
 
 @Component({
   tag: 'mh-calendar-day-month-view-events',
@@ -13,6 +14,18 @@ export class MonthViewEvents {
   @Prop() calendarDayElementHeight?: number;
   @Prop() day?: Date;
   @Prop() dragDropState?: DragDropState;
+
+  @State() morePopoverAnchorRect: IMHCalendarPopoverAnchorRect | null = null;
+
+  private onMoreClick = (e: MouseEvent) => {
+    e.stopPropagation();
+    const { top, left, width, height } = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    this.morePopoverAnchorRect = { top, left, width, height };
+  };
+
+  private closeMorePopover = () => {
+    this.morePopoverAnchorRect = null;
+  };
 
   render() {
     if (!this.calendarDayElementHeight || !this.day || !this.groupedEvents) {
@@ -97,11 +110,22 @@ export class MonthViewEvents {
             class="mhCalendarDay__eventHolder"
             style={{
               width: '100%',
+              cursor: 'pointer',
               ...store.getInlineStyleForClass('mhCalendarDay__eventHolder'),
             }}
+            onClick={this.onMoreClick}
           >
-            {hasMoreEvents && <mh-calendar-more-events-indicator hiddenCount={hiddenCount} />}
+            <mh-calendar-more-events-indicator hiddenCount={hiddenCount} />
           </div>
+        )}
+
+        {this.morePopoverAnchorRect && (
+          <mh-calendar-event-list-popup
+            anchorRect={this.morePopoverAnchorRect}
+            date={this.day}
+            events={sortedEvents}
+            onClosePopover={this.closeMorePopover}
+          />
         )}
       </div>
     );

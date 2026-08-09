@@ -167,24 +167,3 @@
 .mhCalendarResource__moreBtn:hover {
   background: color-mix(in srgb, var(--eventTimeDiffColor) 8%, transparent);
 }
-
-/* More popup (rendered inside modal) */
-.mhCalendarResource__morePopup {
-  min-width: 200px;
-  max-width: 300px;
-}
-
-.mhCalendarResource__morePopupHeader {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--fontColor);
-  padding-bottom: 8px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--bordersColor);
-}
-
-.mhCalendarResource__morePopupList {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}

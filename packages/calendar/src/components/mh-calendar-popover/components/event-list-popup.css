@@ -1,0 +1,19 @@
+.mhCalendarEventListPopup {
+  min-width: 200px;
+  max-width: 300px;
+}
+
+.mhCalendarEventListPopup__header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fontColor);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--bordersColor);
+}
+
+.mhCalendarEventListPopup__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

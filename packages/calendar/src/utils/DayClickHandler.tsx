@@ -83,10 +83,10 @@ export class DayClickHandler {
         <mh-calendar-event-form
           event={newEvent}
           isNewEvent={true}
-          onSave={(updatedEvent) => {
+          onSave={(e) => {
             // Save event via callback
             if (typeof storeState.onEventCreated === 'function') {
-              storeState.onEventCreated(updatedEvent);
+              storeState.onEventCreated(e.detail);
             }
           }}
           onCancel={() => {

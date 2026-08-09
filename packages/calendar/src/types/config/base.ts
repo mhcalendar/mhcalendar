@@ -37,6 +37,12 @@ export interface IMHCalendarLabels {
   moreEvents: (hiddenCount: number) => string;
 
   /**
+   * Label shown in agenda view when there are no events to display.
+   * @default 'No events scheduled'
+   */
+  noEvents: string;
+
+  /**
    * Overrides for the view switcher's view names.
    * Keys not provided fall back to the title-cased IMHCalendarViewType value (e.g. 'Month').
    * @example { WEEK: 'Semaine', MONTH: 'Mois' }

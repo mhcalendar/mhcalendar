@@ -136,36 +136,18 @@ export class MHCalendarAgendaView {
       return (
         <div
           class="mhCalendarAgendaView mhCalendarAgendaView--empty"
-          style={{
-            height: containerHeight,
-            overflow: 'hidden',
-          }}
+          style={{ height: containerHeight }}
         >
-          <div class="mhCalendarAgendaView__emptyMessage">No events scheduled</div>
+          <div class="mhCalendarAgendaView__emptyMessage">
+            {storeState.labels?.noEvents ?? 'No events scheduled'}
+          </div>
         </div>
       );
     }
 
     return (
-      <div
-        style={{
-          height: containerHeight,
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '0',
-        }}
-      >
-        <div
-          class="mhCalendarAgendaView"
-          style={{
-            flex: '1 1 0',
-            minHeight: '0',
-            maxHeight: '100%',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-          }}
-        >
+      <div class="mhCalendarAgendaView__container" style={{ height: containerHeight }}>
+        <div class="mhCalendarAgendaView">
           {this.sortedEvents.map((dayData) => (
             <div
               key={DateUtils.convertDateToString(dayData.date)}

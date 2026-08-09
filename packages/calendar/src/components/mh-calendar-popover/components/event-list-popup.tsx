@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Prop, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Prop, State, h } from '@stencil/core';
 import dayjs from 'dayjs';
 import { storeState } from '../../../store/mh-calendar-store';
 import { IMHCalendarEvent } from '../../../types';
@@ -33,9 +33,14 @@ export class MHCalendarEventListPopup {
 
   @Event() closePopover!: EventEmitter<void>;
 
+  @State() positionOverride: { top: number; left: number } | null = null;
+
+  private popoverRef?: HTMLDivElement;
+
   componentDidLoad() {
     document.addEventListener('mousedown', this.handleOutsideClick, true);
     document.addEventListener('keydown', this.handleKeydown);
+    this.keepWithinViewport();
   }
 
   disconnectedCallback() {
@@ -55,11 +60,22 @@ export class MHCalendarEventListPopup {
     }
   };
 
+  private keepWithinViewport() {
+    if (!this.popoverRef) return;
+    const rect = this.popoverRef.getBoundingClientRect();
+    this.positionOverride = PopoverPositionUtils.clampToViewport(rect);
+  }
+
   render() {
+    const positionStyle = this.positionOverride
+      ? { top: `${this.positionOverride.top}px`, left: `${this.positionOverride.left}px` }
+      : PopoverPositionUtils.getPositionStyle(this.anchorRect, this.alignment);
+
     return (
       <div
+        ref={(el) => (this.popoverRef = el)}
         class="mhCalendarPopover"
-        style={PopoverPositionUtils.getPositionStyle(this.anchorRect, this.alignment)}
+        style={positionStyle}
         onClick={(e) => e.stopPropagation()}
       >
         <div class="mhCalendarEventListPopup__header">

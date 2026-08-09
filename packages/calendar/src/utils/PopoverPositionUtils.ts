@@ -38,4 +38,20 @@ export class PopoverPositionUtils {
         };
     }
   }
+
+  /**
+   * Shifts `rect` back onto the viewport if it overflows any edge.
+   * Returns `null` when it already fits (nothing to adjust).
+   */
+  static clampToViewport(rect: DOMRect, margin: number = 8): { top: number; left: number } | null {
+    const maxLeft = Math.max(window.innerWidth - rect.width - margin, margin);
+    const maxTop = Math.max(window.innerHeight - rect.height - margin, margin);
+
+    const clampedLeft = Math.min(Math.max(rect.left, margin), maxLeft);
+    const clampedTop = Math.min(Math.max(rect.top, margin), maxTop);
+
+    if (clampedLeft === rect.left && clampedTop === rect.top) return null;
+
+    return { top: clampedTop, left: clampedLeft };
+  }
 }

@@ -5,18 +5,9 @@ import { EventBuilderMapByDate } from '../utils/EventManager';
 
 export { IMHCalendarViewType } from '../types/enums';
 
-export interface IModalPosition {
-  x?: number;
-  y?: number;
-  element?: HTMLElement;
-  alignment?: 'top' | 'bottom' | 'left' | 'right' | 'center';
-  rect?: { top: number; left: number; width: number; height: number };
-}
-
 export interface IModalState {
   isOpen: boolean;
   content?: VNode;
-  position?: IModalPosition;
 }
 
 export interface IEventDropPayload {

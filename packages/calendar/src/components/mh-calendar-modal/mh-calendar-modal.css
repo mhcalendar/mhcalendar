@@ -13,7 +13,6 @@
 }
 
 .mhCalendarModal__content {
-  position: absolute;
   background: var(--mainBackgroundColor);
   color: var(--fontColor);
   border-radius: 8px;

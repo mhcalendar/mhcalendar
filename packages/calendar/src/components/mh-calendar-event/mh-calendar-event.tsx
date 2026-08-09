@@ -23,11 +23,9 @@ export class MHCalendarEvent {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!this.event || !this.el) return;
+    if (!this.event) return;
 
     // Open modal for event editing
-    const rect = this.el.getBoundingClientRect();
-
     const modalContent = (
       <mh-calendar-event-form
         event={this.event}
@@ -48,10 +46,7 @@ export class MHCalendarEvent {
       />
     );
 
-    store.openModal(modalContent, {
-      rect,
-      alignment: 'right',
-    });
+    store.openModal(modalContent);
   }
 
   private onRightEventClick(event: MouseEvent) {

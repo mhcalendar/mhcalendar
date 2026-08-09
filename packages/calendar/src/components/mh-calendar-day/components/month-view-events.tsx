@@ -2,7 +2,7 @@ import { Component, Prop, State, h } from '@stencil/core';
 import { IMHCalendarEvent } from '../../../types';
 import { store, storeState } from '../../../store/mh-calendar-store';
 import { DragDropState } from '../../../utils/DragDropHandler';
-import { IMHCalendarPopoverAnchorRect } from '../../mh-calendar-popover/mh-calendar-popover';
+import { IMHCalendarPopoverAnchorRect } from '../../../utils/PopoverPositionUtils';
 
 @Component({
   tag: 'mh-calendar-day-month-view-events',

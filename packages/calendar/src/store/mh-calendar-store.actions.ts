@@ -11,7 +11,6 @@ import {
   IEventResizePayload,
   IMHCalendarState,
   IMHCalendarViewType,
-  IModalPosition,
 } from './mh-calendar-store.types';
 import { MHCalendarStoreUtils } from './mh-calendar-store.utils';
 import { IMHCalendarEvent } from '../types';
@@ -262,16 +261,13 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
     return state;
   }
 
-  protected _openModal(
-    state: IMHCalendarState,
-    payload: { content: VNode; position?: IModalPosition },
-  ): IMHCalendarState {
-    state.modal = { isOpen: true, content: payload.content, position: payload.position };
+  protected _openModal(state: IMHCalendarState, payload: { content: VNode }): IMHCalendarState {
+    state.modal = { isOpen: true, content: payload.content };
     return { ...state };
   }
 
   protected _closeModal(state: IMHCalendarState): IMHCalendarState {
-    state.modal = { isOpen: false, content: undefined, position: undefined };
+    state.modal = { isOpen: false, content: undefined };
     return { ...state };
   }
 }

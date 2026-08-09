@@ -8,7 +8,7 @@ import { DaysGenerator } from '../../utils/DaysGenerator';
 import { EventManager } from '../../utils/EventManager';
 import { VIEW_HEIGHT } from '../../const/default-theme';
 import { LabelUtils } from '../../utils/LabelUtils';
-import { IMHCalendarPopoverAnchorRect } from '../mh-calendar-popover/mh-calendar-popover';
+import { IMHCalendarPopoverAnchorRect } from '../../utils/PopoverPositionUtils';
 
 const MAX_VISIBLE_EVENTS = 2;
 
@@ -32,7 +32,7 @@ export class MHCalendarResourceView {
   @State() morePopover: {
     anchorRect: IMHCalendarPopoverAnchorRect;
     date: Date;
-    events: IMHCalendarEvent[];
+    resourceId: string;
   } | null = null;
 
   private storeUnsubscribers: (() => void)[] = [];
@@ -155,18 +155,13 @@ export class MHCalendarResourceView {
     }
   };
 
-  private onMoreClick = (
-    events: IMHCalendarEvent[],
-    date: Date,
-    _resourceId: string,
-    e: MouseEvent,
-  ) => {
+  private onMoreClick = (date: Date, resourceId: string, e: MouseEvent) => {
     e.stopPropagation();
 
     const target = e.currentTarget as HTMLElement;
     const { top, left, width, height } = target.getBoundingClientRect();
 
-    this.morePopover = { anchorRect: { top, left, width, height }, date, events };
+    this.morePopover = { anchorRect: { top, left, width, height }, date, resourceId };
   };
 
   private closeMorePopover = () => {
@@ -263,7 +258,7 @@ export class MHCalendarResourceView {
                     {hiddenCount > 0 && (
                       <button
                         class="mhCalendarResource__moreBtn"
-                        onClick={(e: MouseEvent) => this.onMoreClick(events, date, resource.id, e)}
+                        onClick={(e: MouseEvent) => this.onMoreClick(date, resource.id, e)}
                       >
                         {LabelUtils.moreEvents(hiddenCount)}
                       </button>
@@ -279,7 +274,7 @@ export class MHCalendarResourceView {
           <mh-calendar-event-list-popup
             anchorRect={this.morePopover.anchorRect}
             date={this.morePopover.date}
-            events={this.morePopover.events}
+            events={this.getEventsForCell(this.morePopover.resourceId, this.morePopover.date)}
             onClosePopover={this.closeMorePopover}
           />
         )}

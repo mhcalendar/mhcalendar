@@ -76,9 +76,6 @@ export class DayClickHandler {
       }
 
       // Open modal for event creation
-      const clickTarget = event.target as HTMLElement;
-      const rect = clickTarget.getBoundingClientRect();
-
       const modalContent = (
         <mh-calendar-event-form
           event={newEvent}
@@ -95,10 +92,7 @@ export class DayClickHandler {
         />
       );
 
-      store.openModal(modalContent, {
-        rect,
-        alignment: 'center',
-      });
+      store.openModal(modalContent);
     }
 
     // Call original onDayClick callback if provided

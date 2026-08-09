@@ -6,7 +6,6 @@ import {
   IEventResizePayload,
   IMHCalendarState,
   IMHCalendarViewType,
-  IModalPosition,
 } from './mh-calendar-store.types';
 import dayjs from 'dayjs';
 import { DaysGenerator } from '../utils/DaysGenerator';
@@ -165,8 +164,8 @@ export class MHCalendarStore extends MHCalendarActions {
     this._handleEventResize(this.state, payload);
   }
 
-  openModal(content: VNode, position?: IModalPosition): void {
-    this._openModal(this.state, { content, position });
+  openModal(content: VNode): void {
+    this._openModal(this.state, { content });
   }
 
   closeModal(): void {

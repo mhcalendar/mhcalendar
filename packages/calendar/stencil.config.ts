@@ -36,7 +36,6 @@ export const config: Config = {
         'mh-calendar-more-events-indicator',
         'mh-calendar-multi-view',
         'mh-calendar-navigation',
-        'mh-calendar-popover',
         'mh-calendar-resize-event-handler',
         'mh-calendar-resource-view',
         'mh-calendar-time-slots',

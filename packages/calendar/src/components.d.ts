@@ -8,13 +8,11 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from "./types";
 import { DragDropState } from "./utils/DragDropHandler";
 import { IMHCalendarViewType } from "./store/mh-calendar-store.types";
-import { IMHCalendarPopoverAlignment, IMHCalendarPopoverAnchorRect } from "./components/mh-calendar-popover/mh-calendar-popover";
-import { IMHCalendarPopoverAlignment as IMHCalendarPopoverAlignment1, IMHCalendarPopoverAnchorRect as IMHCalendarPopoverAnchorRect1 } from "./components/mh-calendar-popover/mh-calendar-popover";
+import { IMHCalendarPopoverAlignment, IMHCalendarPopoverAnchorRect } from "./utils/PopoverPositionUtils";
 export { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from "./types";
 export { DragDropState } from "./utils/DragDropHandler";
 export { IMHCalendarViewType } from "./store/mh-calendar-store.types";
-export { IMHCalendarPopoverAlignment, IMHCalendarPopoverAnchorRect } from "./components/mh-calendar-popover/mh-calendar-popover";
-export { IMHCalendarPopoverAlignment as IMHCalendarPopoverAlignment1, IMHCalendarPopoverAnchorRect as IMHCalendarPopoverAnchorRect1 } from "./components/mh-calendar-popover/mh-calendar-popover";
+export { IMHCalendarPopoverAlignment, IMHCalendarPopoverAnchorRect } from "./utils/PopoverPositionUtils";
 export namespace Components {
     interface MhCalendar {
         /**
@@ -91,9 +89,13 @@ export namespace Components {
         "event"?: IMHCalendarEvent;
     }
     /**
-     * A day/cell's overflowed events shown in a popover — a header with the date
-     * and the full event list. Renders its own `mh-calendar-popover`, so callers
-     * only need this single component (anchored + dismissible out of the box).
+     * A day/cell's overflowed events shown in a backdrop-less popover — a header
+     * with the date and the full event list. Anchored next to `anchorRect` and
+     * dismissible via outside click / Escape.
+     * Renders its own popover chrome directly (no separate slotted custom
+     * element) so the event list stays reactive: a slot host that doesn't get
+     * its own prop changes can fail to re-relocate updated slotted content in
+     * non-shadow Stencil components.
      */
     interface MhCalendarEventListPopup {
         /**
@@ -127,17 +129,6 @@ export namespace Components {
     }
     interface MhCalendarNavigation {
     }
-    /**
-     * Lightweight, backdrop-less popover anchored next to a target element's bounding rect.
-     * Unlike `mh-calendar-modal`, it doesn't dim the page and closes on outside click / Escape.
-     */
-    interface MhCalendarPopover {
-        /**
-          * @default 'bottom'
-         */
-        "alignment": IMHCalendarPopoverAlignment1;
-        "anchorRect": IMHCalendarPopoverAnchorRect1;
-    }
     interface MhCalendarResizeEventHandler {
         /**
           * @default null
@@ -169,10 +160,6 @@ export interface MhCalendarEventFormCustomEvent<T> extends CustomEvent<T> {
 export interface MhCalendarEventListPopupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLMhCalendarEventListPopupElement;
-}
-export interface MhCalendarPopoverCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLMhCalendarPopoverElement;
 }
 declare global {
     interface HTMLMhCalendarElement extends Components.MhCalendar, HTMLStencilElement {
@@ -257,9 +244,13 @@ declare global {
         "closePopover": void;
     }
     /**
-     * A day/cell's overflowed events shown in a popover — a header with the date
-     * and the full event list. Renders its own `mh-calendar-popover`, so callers
-     * only need this single component (anchored + dismissible out of the box).
+     * A day/cell's overflowed events shown in a backdrop-less popover — a header
+     * with the date and the full event list. Anchored next to `anchorRect` and
+     * dismissible via outside click / Escape.
+     * Renders its own popover chrome directly (no separate slotted custom
+     * element) so the event list stays reactive: a slot host that doesn't get
+     * its own prop changes can fail to re-relocate updated slotted content in
+     * non-shadow Stencil components.
      */
     interface HTMLMhCalendarEventListPopupElement extends Components.MhCalendarEventListPopup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLMhCalendarEventListPopupElementEventMap>(type: K, listener: (this: HTMLMhCalendarEventListPopupElement, ev: MhCalendarEventListPopupCustomEvent<HTMLMhCalendarEventListPopupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -317,27 +308,6 @@ declare global {
         prototype: HTMLMhCalendarNavigationElement;
         new (): HTMLMhCalendarNavigationElement;
     };
-    interface HTMLMhCalendarPopoverElementEventMap {
-        "closePopover": void;
-    }
-    /**
-     * Lightweight, backdrop-less popover anchored next to a target element's bounding rect.
-     * Unlike `mh-calendar-modal`, it doesn't dim the page and closes on outside click / Escape.
-     */
-    interface HTMLMhCalendarPopoverElement extends Components.MhCalendarPopover, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLMhCalendarPopoverElementEventMap>(type: K, listener: (this: HTMLMhCalendarPopoverElement, ev: MhCalendarPopoverCustomEvent<HTMLMhCalendarPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLMhCalendarPopoverElementEventMap>(type: K, listener: (this: HTMLMhCalendarPopoverElement, ev: MhCalendarPopoverCustomEvent<HTMLMhCalendarPopoverElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLMhCalendarPopoverElement: {
-        prototype: HTMLMhCalendarPopoverElement;
-        new (): HTMLMhCalendarPopoverElement;
-    };
     interface HTMLMhCalendarResizeEventHandlerElement extends Components.MhCalendarResizeEventHandler, HTMLStencilElement {
     }
     var HTMLMhCalendarResizeEventHandlerElement: {
@@ -382,7 +352,6 @@ declare global {
         "mh-calendar-more-events-indicator": HTMLMhCalendarMoreEventsIndicatorElement;
         "mh-calendar-multi-view": HTMLMhCalendarMultiViewElement;
         "mh-calendar-navigation": HTMLMhCalendarNavigationElement;
-        "mh-calendar-popover": HTMLMhCalendarPopoverElement;
         "mh-calendar-resize-event-handler": HTMLMhCalendarResizeEventHandlerElement;
         "mh-calendar-resource-view": HTMLMhCalendarResourceViewElement;
         "mh-calendar-time-slots": HTMLMhCalendarTimeSlotsElement;
@@ -468,9 +437,13 @@ declare namespace LocalJSX {
         "event"?: IMHCalendarEvent;
     }
     /**
-     * A day/cell's overflowed events shown in a popover — a header with the date
-     * and the full event list. Renders its own `mh-calendar-popover`, so callers
-     * only need this single component (anchored + dismissible out of the box).
+     * A day/cell's overflowed events shown in a backdrop-less popover — a header
+     * with the date and the full event list. Anchored next to `anchorRect` and
+     * dismissible via outside click / Escape.
+     * Renders its own popover chrome directly (no separate slotted custom
+     * element) so the event list stays reactive: a slot host that doesn't get
+     * its own prop changes can fail to re-relocate updated slotted content in
+     * non-shadow Stencil components.
      */
     interface MhCalendarEventListPopup {
         /**
@@ -504,18 +477,6 @@ declare namespace LocalJSX {
     interface MhCalendarMultiView {
     }
     interface MhCalendarNavigation {
-    }
-    /**
-     * Lightweight, backdrop-less popover anchored next to a target element's bounding rect.
-     * Unlike `mh-calendar-modal`, it doesn't dim the page and closes on outside click / Escape.
-     */
-    interface MhCalendarPopover {
-        /**
-          * @default 'bottom'
-         */
-        "alignment"?: IMHCalendarPopoverAlignment1;
-        "anchorRect": IMHCalendarPopoverAnchorRect1;
-        "onClosePopover"?: (event: MhCalendarPopoverCustomEvent<void>) => void;
     }
     interface MhCalendarResizeEventHandler {
         /**
@@ -581,9 +542,6 @@ declare namespace LocalJSX {
     interface MhCalendarMoreEventsIndicatorAttributes {
         "hiddenCount": number;
     }
-    interface MhCalendarPopoverAttributes {
-        "alignment": IMHCalendarPopoverAlignment;
-    }
     interface MhCalendarResizeEventHandlerAttributes {
         "eventId": string;
         "eventHeight": string;
@@ -610,7 +568,6 @@ declare namespace LocalJSX {
         "mh-calendar-more-events-indicator": Omit<MhCalendarMoreEventsIndicator, keyof MhCalendarMoreEventsIndicatorAttributes> & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes]?: MhCalendarMoreEventsIndicator[K] } & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes as `attr:${K}`]?: MhCalendarMoreEventsIndicatorAttributes[K] } & { [K in keyof MhCalendarMoreEventsIndicator & keyof MhCalendarMoreEventsIndicatorAttributes as `prop:${K}`]?: MhCalendarMoreEventsIndicator[K] } & OneOf<"hiddenCount", MhCalendarMoreEventsIndicator["hiddenCount"], MhCalendarMoreEventsIndicatorAttributes["hiddenCount"]>;
         "mh-calendar-multi-view": MhCalendarMultiView;
         "mh-calendar-navigation": MhCalendarNavigation;
-        "mh-calendar-popover": Omit<MhCalendarPopover, keyof MhCalendarPopoverAttributes> & { [K in keyof MhCalendarPopover & keyof MhCalendarPopoverAttributes]?: MhCalendarPopover[K] } & { [K in keyof MhCalendarPopover & keyof MhCalendarPopoverAttributes as `attr:${K}`]?: MhCalendarPopoverAttributes[K] } & { [K in keyof MhCalendarPopover & keyof MhCalendarPopoverAttributes as `prop:${K}`]?: MhCalendarPopover[K] };
         "mh-calendar-resize-event-handler": Omit<MhCalendarResizeEventHandler, keyof MhCalendarResizeEventHandlerAttributes> & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes]?: MhCalendarResizeEventHandler[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `attr:${K}`]?: MhCalendarResizeEventHandlerAttributes[K] } & { [K in keyof MhCalendarResizeEventHandler & keyof MhCalendarResizeEventHandlerAttributes as `prop:${K}`]?: MhCalendarResizeEventHandler[K] } & OneOf<"eventId", MhCalendarResizeEventHandler["eventId"], MhCalendarResizeEventHandlerAttributes["eventId"]> & OneOf<"eventHeight", MhCalendarResizeEventHandler["eventHeight"], MhCalendarResizeEventHandlerAttributes["eventHeight"]>;
         "mh-calendar-resource-view": MhCalendarResourceView;
         "mh-calendar-time-slots": MhCalendarTimeSlots;
@@ -633,9 +590,13 @@ declare module "@stencil/core" {
             "mh-calendar-event-form": LocalJSX.IntrinsicElements["mh-calendar-event-form"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventFormElement>;
             "mh-calendar-event-full": LocalJSX.IntrinsicElements["mh-calendar-event-full"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventFullElement>;
             /**
-             * A day/cell's overflowed events shown in a popover — a header with the date
-             * and the full event list. Renders its own `mh-calendar-popover`, so callers
-             * only need this single component (anchored + dismissible out of the box).
+             * A day/cell's overflowed events shown in a backdrop-less popover — a header
+             * with the date and the full event list. Anchored next to `anchorRect` and
+             * dismissible via outside click / Escape.
+             * Renders its own popover chrome directly (no separate slotted custom
+             * element) so the event list stays reactive: a slot host that doesn't get
+             * its own prop changes can fail to re-relocate updated slotted content in
+             * non-shadow Stencil components.
              */
             "mh-calendar-event-list-popup": LocalJSX.IntrinsicElements["mh-calendar-event-list-popup"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventListPopupElement>;
             "mh-calendar-event-small": LocalJSX.IntrinsicElements["mh-calendar-event-small"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventSmallElement>;
@@ -645,11 +606,6 @@ declare module "@stencil/core" {
             "mh-calendar-more-events-indicator": LocalJSX.IntrinsicElements["mh-calendar-more-events-indicator"] & JSXBase.HTMLAttributes<HTMLMhCalendarMoreEventsIndicatorElement>;
             "mh-calendar-multi-view": LocalJSX.IntrinsicElements["mh-calendar-multi-view"] & JSXBase.HTMLAttributes<HTMLMhCalendarMultiViewElement>;
             "mh-calendar-navigation": LocalJSX.IntrinsicElements["mh-calendar-navigation"] & JSXBase.HTMLAttributes<HTMLMhCalendarNavigationElement>;
-            /**
-             * Lightweight, backdrop-less popover anchored next to a target element's bounding rect.
-             * Unlike `mh-calendar-modal`, it doesn't dim the page and closes on outside click / Escape.
-             */
-            "mh-calendar-popover": LocalJSX.IntrinsicElements["mh-calendar-popover"] & JSXBase.HTMLAttributes<HTMLMhCalendarPopoverElement>;
             "mh-calendar-resize-event-handler": LocalJSX.IntrinsicElements["mh-calendar-resize-event-handler"] & JSXBase.HTMLAttributes<HTMLMhCalendarResizeEventHandlerElement>;
             "mh-calendar-resource-view": LocalJSX.IntrinsicElements["mh-calendar-resource-view"] & JSXBase.HTMLAttributes<HTMLMhCalendarResourceViewElement>;
             "mh-calendar-time-slots": LocalJSX.IntrinsicElements["mh-calendar-time-slots"] & JSXBase.HTMLAttributes<HTMLMhCalendarTimeSlotsElement>;

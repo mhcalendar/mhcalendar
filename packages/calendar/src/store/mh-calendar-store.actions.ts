@@ -90,6 +90,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       'createEventOnClick',
       'resources',
       'resourceDays',
+      'resourceRowHeight',
       'availableViews',
       'locale',
       'labels',

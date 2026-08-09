@@ -9,8 +9,7 @@ import { EventManager } from '../../utils/EventManager';
 import { VIEW_HEIGHT } from '../../const/default-theme';
 import { IMHCalendarPopoverAnchorRect } from '../../utils/PopoverPositionUtils';
 import { LabelUtils } from '../../utils/LabelUtils';
-
-const MAX_VISIBLE_EVENTS = 2;
+import { ResourceRowHeightUtils } from '../../utils/ResourceRowHeightUtils';
 
 interface DragOverCell {
   resourceId: string;
@@ -228,61 +227,74 @@ export class MHCalendarResourceView {
           </div>
 
           {/* Resource rows */}
-          {this.resources.map((resource) => (
-            <div key={resource.id} class="mhCalendarResource__row">
-              <div class="mhCalendarResource__resourceLabel">{resource.title}</div>
-              {this.dates.map((date) => {
-                const events = this.getEventsForCell(resource.id, date);
-                const dateKey = DateUtils.convertDateToString(date);
-                const isDragOver =
-                  this.dragOverCell?.resourceId === resource.id &&
-                  this.dragOverCell?.dateKey === dateKey;
-                const isWeekend = DateUtils.isWeekend(date);
-                const isToday = DateUtils.isToday(date);
+          {this.resources.map((resource) => {
+            const rowHeight = resource.rowHeight ?? storeState.resourceRowHeight;
+            const maxVisibleEvents = ResourceRowHeightUtils.getMaxVisibleEvents(rowHeight);
 
-                const previewEvent = isDragOver ? this.buildPreviewEvent(resource.id, date) : null;
+            return (
+              <div
+                key={resource.id}
+                class="mhCalendarResource__row"
+                style={{ '--resource-row-height': `${rowHeight}px` } as any}
+              >
+                <div class="mhCalendarResource__resourceLabel">{resource.title}</div>
+                {this.dates.map((date) => {
+                  const events = this.getEventsForCell(resource.id, date);
+                  const dateKey = DateUtils.convertDateToString(date);
+                  const isDragOver =
+                    this.dragOverCell?.resourceId === resource.id &&
+                    this.dragOverCell?.dateKey === dateKey;
+                  const isWeekend = DateUtils.isWeekend(date);
+                  const isToday = DateUtils.isToday(date);
 
-                // The dragged preview counts as one more slot (shown first) so the "+N more"
-                // indicator reflects what the cell will actually look like once dropped.
-                const effectiveCount = events.length + (previewEvent ? 1 : 0);
-                const hasMoreEvents = effectiveCount > MAX_VISIBLE_EVENTS;
-                const visibleSlots = hasMoreEvents ? MAX_VISIBLE_EVENTS - 1 : effectiveCount;
-                const visibleRealEvents = previewEvent ? Math.max(visibleSlots - 1, 0) : visibleSlots;
-                const visibleEvents = events.slice(0, visibleRealEvents);
-                const hiddenCount = effectiveCount - visibleSlots;
+                  const previewEvent = isDragOver
+                    ? this.buildPreviewEvent(resource.id, date)
+                    : null;
 
-                return (
-                  <div
-                    key={dateKey}
-                    class={{
-                      mhCalendarResource__cell: true,
-                      'mhCalendarResource__cell--dragOver': isDragOver,
-                      'mhCalendarResource__cell--weekend': isWeekend,
-                      'mhCalendarResource__cell--today': isToday,
-                    }}
-                    onDragOver={(e: DragEvent) => this.onDragOver(resource.id, date, e)}
-                    onDragLeave={this.onDragLeave}
-                    onDrop={(e: DragEvent) => this.onDrop(resource.id, date, e)}
-                    onClick={() => {
-                      if (events.length === 0) this.onCellClick(date, resource.id);
-                    }}
-                  >
-                    {previewEvent && <mh-calendar-event event={previewEvent} isDragged={true} />}
-                    {visibleEvents.map(
-                      (event) =>
-                        !event.isHidden && <mh-calendar-event key={event.id} event={event} />,
-                    )}
-                    {hiddenCount > 0 && (
-                      <mh-calendar-more-events-indicator
-                        hiddenCount={hiddenCount}
-                        onMoreClick={(e) => this.onMoreClick(date, resource.id, e)}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
+                  // The dragged preview counts as one more slot (shown first) so the "+N more"
+                  // indicator reflects what the cell will actually look like once dropped.
+                  const effectiveCount = events.length + (previewEvent ? 1 : 0);
+                  const hasMoreEvents = effectiveCount > maxVisibleEvents;
+                  const visibleSlots = hasMoreEvents ? maxVisibleEvents - 1 : effectiveCount;
+                  const visibleRealEvents = previewEvent
+                    ? Math.max(visibleSlots - 1, 0)
+                    : visibleSlots;
+                  const visibleEvents = events.slice(0, visibleRealEvents);
+                  const hiddenCount = effectiveCount - visibleSlots;
+
+                  return (
+                    <div
+                      key={dateKey}
+                      class={{
+                        mhCalendarResource__cell: true,
+                        'mhCalendarResource__cell--dragOver': isDragOver,
+                        'mhCalendarResource__cell--weekend': isWeekend,
+                        'mhCalendarResource__cell--today': isToday,
+                      }}
+                      onDragOver={(e: DragEvent) => this.onDragOver(resource.id, date, e)}
+                      onDragLeave={this.onDragLeave}
+                      onDrop={(e: DragEvent) => this.onDrop(resource.id, date, e)}
+                      onClick={() => {
+                        if (events.length === 0) this.onCellClick(date, resource.id);
+                      }}
+                    >
+                      {previewEvent && <mh-calendar-event event={previewEvent} isDragged={true} />}
+                      {visibleEvents.map(
+                        (event) =>
+                          !event.isHidden && <mh-calendar-event key={event.id} event={event} />,
+                      )}
+                      {hiddenCount > 0 && (
+                        <mh-calendar-more-events-indicator
+                          hiddenCount={hiddenCount}
+                          onMoreClick={(e) => this.onMoreClick(date, resource.id, e)}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
 
         {this.morePopover && (

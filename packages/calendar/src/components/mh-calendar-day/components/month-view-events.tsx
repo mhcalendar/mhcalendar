@@ -3,6 +3,7 @@ import { IMHCalendarEvent } from '../../../types';
 import { store, storeState } from '../../../store/mh-calendar-store';
 import { DragDropState } from '../../../utils/DragDropHandler';
 import { IMHCalendarPopoverAnchorRect } from '../../../utils/PopoverPositionUtils';
+import { MONTH_VIEW_EVENTS_GAP, MONTH_VIEW_EVENTS_PADDING } from '../../../const/default-theme';
 
 @Component({
   tag: 'mh-calendar-day-month-view-events',
@@ -65,8 +66,8 @@ export class MonthViewEvents {
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
-          gap: '2px',
-          padding: '2px',
+          gap: `${MONTH_VIEW_EVENTS_GAP}px`,
+          padding: `${MONTH_VIEW_EVENTS_PADDING}px`,
         }}
       >
         {draggedEvent && (

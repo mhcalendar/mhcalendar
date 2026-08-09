@@ -12,14 +12,18 @@ const EVENT_MARGIN = 2; // pixels
 
 export class EventStyleManager {
   static getEventColor(event?: { color?: string }): string {
-    return event?.color ||storeState.properties.eventBackgroundColor;
+    return event?.color || storeState.properties.eventBackgroundColor;
   }
 
   /**
    * Calculates optimal width and position for overlapping events (side-by-side mode)
-   * Based on the maximum number of events that overlap at any given time
+   * Based on the maximum number of events that overlap at any given time.
    */
-  static calculateEventWidth(events: IMHCalendarEvent[], currentEventIndex: number) {
+  static calculateEventWidth(
+    events: IMHCalendarEvent[],
+    currentEventIndex: number,
+    columnAssignments: Map<string, number>,
+  ) {
     if (events.length === 1) {
       return {
         width: `${DEFAULT_EVENT_WIDTH}%`,
@@ -30,9 +34,6 @@ export class EventStyleManager {
     }
 
     const currentEvent = events[currentEventIndex];
-
-    // Assign columns to all events using greedy graph coloring
-    const columnAssignments = EventStyleManager.assignColumns(events);
     const currentEventColumn = columnAssignments.get(currentEvent.id) || 0;
 
     // Find overlapping events (including self) and determine local column count
@@ -216,13 +217,14 @@ export class EventStyleManager {
       return a.id.localeCompare(b.id);
     });
 
+    const eventsById = new Map(events.map((event) => [event.id, event]));
     const columnAssignments = new Map<string, number>();
 
     for (const event of sorted) {
       // Find columns used by overlapping events that already have assignments
       const usedColumns = new Set<number>();
       for (const [id, col] of columnAssignments) {
-        const other = events.find((e) => e.id === id);
+        const other = eventsById.get(id);
         if (other && EventUtils.areEventsOverlapping(event, other)) {
           usedColumns.add(col);
         }

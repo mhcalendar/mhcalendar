@@ -1,7 +1,7 @@
 import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
 import { EventStyleManager } from './EventStyleManager';
 import { DateUtils } from './DateUtils';
-import { store, storeState } from '../store/mh-calendar-store';
+import { storeState } from '../store/mh-calendar-store';
 
 export class EventRenderer {
   /**
@@ -88,14 +88,11 @@ export class EventRenderer {
       const { newStartDate, newEndDate } = draggedDates;
 
       // Calculate height using full event duration (not clamped to visible time window)
-      const { showTimeFrom = 10, showTimeTo = 24 } = store.state;
       const eventHeight = EventStyleManager.calculateEventHeight(
         newStartDate,
         newEndDate,
         calendarDayElementHeight,
         day,
-        showTimeFrom,
-        showTimeTo,
         true, // useFullDuration = true for dragged events
       );
 

@@ -246,13 +246,14 @@ export class EventStyleManager {
     endDate: Date,
     dayHeight: number,
     currentDate?: Date,
-    showTimeFrom: number = 10,
-    showTimeTo: number = 24,
     useFullDuration: boolean = false,
   ): string {
     if (!currentDate) {
       return '0px';
     }
+
+    const showTimeFrom = storeState.showTimeFrom ?? 10;
+    const showTimeTo = storeState.showTimeTo ?? 24;
 
     // Get the top margin for all-day events (same logic as position calculation)
     const topMarginOfAllDayEvents = store.headerMargin;

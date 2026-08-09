@@ -63,18 +63,15 @@ export class MHCalendarEvent {
   private calculateEventHeight() {
     if (!this.event || !this.dayHeight) return;
 
-    const height = this.event.allDay
-      ? '40px'
-      : EventStyleManager.calculateEventHeight(
-          this.event?.startDate,
-          this.event?.endDate,
-          this.dayHeight,
-          this.dayOfRendering, // Always use dayOfRendering, not endDate
-          storeState.showTimeFrom,
-          storeState.showTimeTo,
-          this.isDragged, // useFullDuration = true when dragged
-        );
-    return height;
+    // Only called for non-all-day events (see shouldEventHaveCustomHeight and the
+    // resize-handler render guard), so no allDay branch is needed here.
+    return EventStyleManager.calculateEventHeight(
+      this.event.startDate,
+      this.event.endDate,
+      this.dayHeight,
+      this.dayOfRendering, // Always use dayOfRendering, not endDate
+      this.isDragged, // useFullDuration = true when dragged
+    );
   }
 
   private onDragStart = (event: DragEvent | TouchEvent) => {

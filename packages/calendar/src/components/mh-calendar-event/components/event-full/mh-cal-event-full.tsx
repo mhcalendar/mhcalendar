@@ -12,6 +12,7 @@ import { EventStyleManager } from '../../../../utils/EventStyleManager';
 })
 export class MHCalendarEventFull {
   @Prop() event?: IMHCalendarEvent;
+  @Prop() resizePreviewEndDate?: Date | null;
 
   render() {
     if (!this.event) return null;
@@ -58,7 +59,7 @@ export class MHCalendarEventFull {
                   }}
                 >
                   {DateUtils.formatDate(this.event.startDate)}-
-                  {DateUtils.formatDate(this.event.endDate)}
+                  {DateUtils.formatDate(this.resizePreviewEndDate ?? this.event.endDate)}
                 </div>
               </>
             )}

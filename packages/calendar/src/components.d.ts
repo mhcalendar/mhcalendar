@@ -87,6 +87,7 @@ export namespace Components {
     }
     interface MhCalendarEventFull {
         "event"?: IMHCalendarEvent;
+        "resizePreviewEndDate"?: Date | null;
     }
     /**
      * A day/cell's overflowed events shown in a backdrop-less popover — a header
@@ -164,6 +165,10 @@ export interface MhCalendarEventListPopupCustomEvent<T> extends CustomEvent<T> {
 export interface MhCalendarMoreEventsIndicatorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLMhCalendarMoreEventsIndicatorElement;
+}
+export interface MhCalendarResizeEventHandlerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMhCalendarResizeEventHandlerElement;
 }
 declare global {
     interface HTMLMhCalendarElement extends Components.MhCalendar, HTMLStencilElement {
@@ -323,7 +328,18 @@ declare global {
         prototype: HTMLMhCalendarNavigationElement;
         new (): HTMLMhCalendarNavigationElement;
     };
+    interface HTMLMhCalendarResizeEventHandlerElementEventMap {
+        "resizePreview": Date | null;
+    }
     interface HTMLMhCalendarResizeEventHandlerElement extends Components.MhCalendarResizeEventHandler, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMhCalendarResizeEventHandlerElementEventMap>(type: K, listener: (this: HTMLMhCalendarResizeEventHandlerElement, ev: MhCalendarResizeEventHandlerCustomEvent<HTMLMhCalendarResizeEventHandlerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMhCalendarResizeEventHandlerElementEventMap>(type: K, listener: (this: HTMLMhCalendarResizeEventHandlerElement, ev: MhCalendarResizeEventHandlerCustomEvent<HTMLMhCalendarResizeEventHandlerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLMhCalendarResizeEventHandlerElement: {
         prototype: HTMLMhCalendarResizeEventHandlerElement;
@@ -450,6 +466,7 @@ declare namespace LocalJSX {
     }
     interface MhCalendarEventFull {
         "event"?: IMHCalendarEvent;
+        "resizePreviewEndDate"?: Date | null;
     }
     /**
      * A day/cell's overflowed events shown in a backdrop-less popover — a header
@@ -510,6 +527,7 @@ declare namespace LocalJSX {
           * @default null
          */
         "eventStartDate"?: null | Date;
+        "onResizePreview"?: (event: MhCalendarResizeEventHandlerCustomEvent<Date | null>) => void;
     }
     interface MhCalendarResourceView {
     }

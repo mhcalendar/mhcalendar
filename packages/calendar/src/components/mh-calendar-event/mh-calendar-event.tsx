@@ -1,4 +1,4 @@
-import { Component, Element, h, Prop } from '@stencil/core';
+import { Component, Element, h, Prop, State } from '@stencil/core';
 import { IMHCalendarEvent } from '../../types';
 import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
 import { store, storeState } from '../../store/mh-calendar-store';
@@ -18,6 +18,8 @@ export class MHCalendarEvent {
   @Prop() instanceOfEvent?: string;
 
   @Element() el?: HTMLElement;
+
+  @State() resizePreviewEndDate: Date | null = null;
 
   private onEventClick(event: MouseEvent) {
     event.preventDefault();
@@ -170,7 +172,7 @@ export class MHCalendarEvent {
       [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(storeState.viewType) &&
       !this.event.allDay
     ) {
-      return <mh-calendar-event-full event={this.event} />;
+      return <mh-calendar-event-full event={this.event} resizePreviewEndDate={this.resizePreviewEndDate} />;
     }
 
     return <mh-calendar-event-small event={this.event} />;
@@ -223,6 +225,7 @@ export class MHCalendarEvent {
             eventStartDate={this.event?.startDate}
             dayOfRendering={this.dayOfRendering}
             eventColor={this.event?.color}
+            onResizePreview={(e) => (this.resizePreviewEndDate = e.detail)}
           />
         )}
       </div>

@@ -1,4 +1,4 @@
-import { Component, Element, h, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import { store, storeState } from '../../../../store/mh-calendar-store';
 import { IMHCalendarViewType } from '../../../../store/mh-calendar-store.types';
 import { DateUtils } from '../../../../utils/DateUtils';
@@ -28,6 +28,8 @@ export class MHCalendarResizeEventHandler {
   @State() currentHeight: number = DEFAULT_RESIZE_HANDLE_HEIGHT;
   @State() topPosition: number | null = null;
   @State() newEndDate: Date | null = null;
+
+  @Event() resizePreview!: EventEmitter<Date | null>;
 
   componentDidLoad(): void {
     if (!this.el) return;
@@ -93,6 +95,7 @@ export class MHCalendarResizeEventHandler {
       } else {
         this.newEndDate = generatedEndDate;
       }
+      this.resizePreview.emit(this.newEndDate);
     }
 
     // Block resizing if user is dragging the event outside of the calendar day
@@ -128,6 +131,8 @@ export class MHCalendarResizeEventHandler {
 
     this.topPosition = null;
     this.currentHeight = DEFAULT_RESIZE_HANDLE_HEIGHT;
+    this.newEndDate = null;
+    this.resizePreview.emit(null);
 
     // Release pointer capture
     const target = event.target as HTMLElement;
@@ -163,25 +168,21 @@ export class MHCalendarResizeEventHandler {
         style={inlineStyle}
         onPointerDown={(e: PointerEvent) => this.onResizeStart(e)}
       >
-        {this.newEndDate && (
-          <span class="mhCalendarResizeEventHandler__time-label">
-            {DateUtils.formatDate(this.newEndDate)}
-            {typeof this.eventEndDate === 'object' &&
-              this.eventEndDate &&
-              (() => {
-                const diffMs = this.newEndDate.getTime() - this.eventEndDate.getTime();
-                const diffMin = Math.round(diffMs / 60000);
-                if (diffMin === 0) return '';
-                const sign = diffMin > 0 ? '+' : '';
-                return (
-                  <span class="mhCalendarResizeEventHandler__time-diff">
-                    {sign}
-                    {diffMin} min
-                  </span>
-                );
-              })()}
-          </span>
-        )}
+        {this.newEndDate &&
+          typeof this.eventEndDate === 'object' &&
+          this.eventEndDate &&
+          (() => {
+            const diffMs = this.newEndDate.getTime() - this.eventEndDate.getTime();
+            const diffMin = Math.round(diffMs / 60000);
+            if (diffMin === 0) return null;
+            const sign = diffMin > 0 ? '+' : '-';
+            return (
+              <span class="mhCalendarResizeEventHandler__time-label">
+                {sign}
+                {Math.abs(diffMin)} min
+              </span>
+            );
+          })()}
       </div>
     );
   }

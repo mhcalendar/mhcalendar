@@ -7,13 +7,15 @@
 
 /* eslint-disable */
 
-import type { StencilReactComponent } from '@stencil/react-output-target/runtime';
+import type { EventName, StencilReactComponent } from '@stencil/react-output-target/runtime';
 import { createComponent } from '@stencil/react-output-target/runtime';
 import React from 'react';
 
+import { type MhCalendarPopoverCustomEvent } from "@mhcalendar/calendar";
 import type { Components } from "@mhcalendar/calendar/dist/components";
 import { MhCalendarEventForm as MhCalendarEventFormElement, defineCustomElement as defineMhCalendarEventForm } from "@mhcalendar/calendar/dist/components/mh-calendar-event-form.js";
 import { MhCalendarMoreEventsIndicator as MhCalendarMoreEventsIndicatorElement, defineCustomElement as defineMhCalendarMoreEventsIndicator } from "@mhcalendar/calendar/dist/components/mh-calendar-more-events-indicator.js";
+import { MhCalendarPopover as MhCalendarPopoverElement, defineCustomElement as defineMhCalendarPopover } from "@mhcalendar/calendar/dist/components/mh-calendar-popover.js";
 import { MhCalendar as MhCalendarElement, defineCustomElement as defineMhCalendar } from "@mhcalendar/calendar/dist/components/mh-calendar.js";
 import { MhViewSwitcher as MhViewSwitcherElement, defineCustomElement as defineMhViewSwitcher } from "@mhcalendar/calendar/dist/components/mh-view-switcher.js";
 
@@ -48,6 +50,17 @@ export const MhCalendarMoreEventsIndicator: StencilReactComponent<MhCalendarMore
     react: React,
     events: {} as MhCalendarMoreEventsIndicatorEvents,
     defineCustomElement: defineMhCalendarMoreEventsIndicator
+});
+
+export type MhCalendarPopoverEvents = { onClosePopover: EventName<MhCalendarPopoverCustomEvent<void>> };
+
+export const MhCalendarPopover: StencilReactComponent<MhCalendarPopoverElement, MhCalendarPopoverEvents, Components.MhCalendarPopover, 'anchorRect'> = /*@__PURE__*/ createComponent<MhCalendarPopoverElement, MhCalendarPopoverEvents, Components.MhCalendarPopover, 'anchorRect'>({
+    tagName: 'mh-calendar-popover',
+    elementClass: MhCalendarPopoverElement,
+    // @ts-ignore - ignore potential React type mismatches between the Stencil Output Target and your project.
+    react: React,
+    events: { onClosePopover: 'closePopover' } as MhCalendarPopoverEvents,
+    defineCustomElement: defineMhCalendarPopover
 });
 
 export type MhViewSwitcherEvents = NonNullable<unknown>;

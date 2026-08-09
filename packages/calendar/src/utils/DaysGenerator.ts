@@ -64,29 +64,36 @@ export class DaysGenerator {
     return daysInMonth;
   };
 
+  /**
+   * Generates every date from `fromDate` to `toDate` (inclusive), one per day.
+   */
+  static generateDateRange(fromDate: Date, toDate: Date): Date[] {
+    const dates: Date[] = [];
+    let current = dayjs(fromDate);
+    const end = dayjs(toDate);
+
+    while (current.isBefore(end, 'day') || current.isSame(end, 'day')) {
+      dates.push(current.toDate());
+      current = current.add(1, 'day');
+    }
+
+    return dates;
+  }
+
   static getDatesForMultiView(): Date[] {
-    const generatedDays: Date[] = [];
     const fromDate = storeState.calendarDateRange.fromDate;
     const toDate = storeState.calendarDateRange.toDate;
-    if (dayjs(fromDate).isAfter(toDate, 'day')) return generatedDays;
-    if (dayjs(fromDate).isSame(toDate, 'day')) return fromDate ? [fromDate] : [];
+    if (!fromDate || !toDate) return [];
+    if (dayjs(fromDate).isAfter(toDate, 'day')) return [];
+    if (dayjs(fromDate).isSame(toDate, 'day')) return [fromDate];
 
     const hiddenDays = storeState.hiddenDays || [];
     // Normalize hiddenDays: convert 7 to 0 (Sunday), keep others as is
     const normalizedHiddenDays = hiddenDays.map((day) => (day === 7 ? 0 : day));
 
-    let current = dayjs(fromDate);
-
-    while (current.isBefore(toDate, 'day') || current.isSame(toDate, 'day')) {
-      const dayOfWeek = current.day(); // 0 = Sunday, 6 = Saturday
-      // Only add day if it's not in the hiddenDays array
-      if (!normalizedHiddenDays.includes(dayOfWeek)) {
-        generatedDays.push(current.toDate());
-      }
-      current = current.add(1, 'day');
-    }
-
-    return generatedDays;
+    return DaysGenerator.generateDateRange(fromDate, toDate).filter(
+      (date) => !normalizedHiddenDays.includes(date.getDay()),
+    );
   }
 
   public static generateSlotHours(userInput: { hours: number; minutes: number }): string[] {

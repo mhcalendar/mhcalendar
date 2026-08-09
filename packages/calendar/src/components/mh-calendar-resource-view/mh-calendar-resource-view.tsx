@@ -4,9 +4,11 @@ import { store, storeState } from '../../store/mh-calendar-store';
 import { IMHCalendarResource } from '../../types';
 import { IMHCalendarEvent } from '../../types';
 import { DateUtils } from '../../utils/DateUtils';
+import { DaysGenerator } from '../../utils/DaysGenerator';
 import { EventManager } from '../../utils/EventManager';
 import { VIEW_HEIGHT } from '../../const/default-theme';
 import { LabelUtils } from '../../utils/LabelUtils';
+import { IMHCalendarPopoverAnchorRect } from '../mh-calendar-popover/mh-calendar-popover';
 
 const MAX_VISIBLE_EVENTS = 2;
 
@@ -27,6 +29,11 @@ export class MHCalendarResourceView {
   @State() dates: Date[] = [];
   @State() resources: IMHCalendarResource[] = [];
   @State() eventMap: Map<string, IMHCalendarEvent[]> = new Map();
+  @State() morePopover: {
+    anchorRect: IMHCalendarPopoverAnchorRect;
+    date: Date;
+    events: IMHCalendarEvent[];
+  } | null = null;
 
   private storeUnsubscribers: (() => void)[] = [];
 
@@ -61,16 +68,7 @@ export class MHCalendarResourceView {
     const { fromDate, toDate } = storeState.calendarDateRange;
     if (!fromDate || !toDate) return [];
 
-    const dates: Date[] = [];
-    let current = dayjs(fromDate);
-    const end = dayjs(toDate);
-
-    while (current.isBefore(end, 'day') || current.isSame(end, 'day')) {
-      dates.push(current.toDate());
-      current = current.add(1, 'day');
-    }
-
-    return dates;
+    return DaysGenerator.generateDateRange(fromDate, toDate);
   }
 
   private updateEventMap() {
@@ -166,25 +164,13 @@ export class MHCalendarResourceView {
     e.stopPropagation();
 
     const target = e.currentTarget as HTMLElement;
-    const rect = target.getBoundingClientRect();
+    const { top, left, width, height } = target.getBoundingClientRect();
 
-    const modalContent = (
-      <div class="mhCalendarResource__morePopup">
-        <div class="mhCalendarResource__morePopupHeader">
-          {dayjs(date).locale(storeState.locale).format('ddd, MMM D')}
-        </div>
-        <div class="mhCalendarResource__morePopupList">
-          {events.map((event) => (
-            <mh-calendar-event key={event.id} event={event} />
-          ))}
-        </div>
-      </div>
-    );
+    this.morePopover = { anchorRect: { top, left, width, height }, date, events };
+  };
 
-    store.openModal(modalContent, {
-      rect,
-      alignment: 'bottom',
-    });
+  private closeMorePopover = () => {
+    this.morePopover = null;
   };
 
   render() {
@@ -288,6 +274,25 @@ export class MHCalendarResourceView {
             </div>
           ))}
         </div>
+
+        {this.morePopover && (
+          <mh-calendar-popover
+            anchorRect={this.morePopover.anchorRect}
+            alignment="bottom"
+            onClosePopover={this.closeMorePopover}
+          >
+            <div class="mhCalendarResource__morePopup">
+              <div class="mhCalendarResource__morePopupHeader">
+                {dayjs(this.morePopover.date).locale(storeState.locale).format('ddd, MMM D')}
+              </div>
+              <div class="mhCalendarResource__morePopupList">
+                {this.morePopover.events.map((event) => (
+                  <mh-calendar-event key={event.id} event={event} />
+                ))}
+              </div>
+            </div>
+          </mh-calendar-popover>
+        )}
       </div>
     );
   }

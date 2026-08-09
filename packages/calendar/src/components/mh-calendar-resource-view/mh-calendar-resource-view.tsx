@@ -120,12 +120,9 @@ export class MHCalendarResourceView {
     this.dragOverCell = null;
   };
 
-  private onDrop = (resourceId: string, date: Date, e: DragEvent) => {
-    e.preventDefault();
-    this.dragOverCell = null;
-
+  private buildPreviewEvent(resourceId: string, date: Date): IMHCalendarEvent | null {
     const draggedEvent = storeState.draggedEvent;
-    if (!draggedEvent) return;
+    if (!draggedEvent) return null;
 
     const originalStart = draggedEvent.startDate;
     const originalEnd = draggedEvent.endDate;
@@ -141,12 +138,22 @@ export class MHCalendarResourceView {
 
     const newEndDate = new Date(newStartDate.getTime() + durationMs);
 
-    const updatedEvent = {
+    return {
       ...draggedEvent,
       resourceId,
+      startDate: newStartDate,
+      endDate: newEndDate,
     };
+  }
 
-    EventManager.handleEventDateChange(newStartDate, newEndDate, updatedEvent);
+  private onDrop = (resourceId: string, date: Date, e: DragEvent) => {
+    e.preventDefault();
+    this.dragOverCell = null;
+
+    const previewEvent = this.buildPreviewEvent(resourceId, date);
+    if (!previewEvent) return;
+
+    EventManager.handleEventDateChange(previewEvent.startDate, previewEvent.endDate, previewEvent);
   };
 
   private onCellClick = (date: Date, resourceId: string) => {
@@ -233,8 +240,16 @@ export class MHCalendarResourceView {
                 const isWeekend = DateUtils.isWeekend(date);
                 const isToday = DateUtils.isToday(date);
 
-                const visibleEvents = events.slice(0, MAX_VISIBLE_EVENTS);
-                const hiddenCount = events.length - MAX_VISIBLE_EVENTS;
+                const previewEvent = isDragOver ? this.buildPreviewEvent(resource.id, date) : null;
+
+                // The dragged preview counts as one more slot (shown first) so the "+N more"
+                // indicator reflects what the cell will actually look like once dropped.
+                const effectiveCount = events.length + (previewEvent ? 1 : 0);
+                const hasMoreEvents = effectiveCount > MAX_VISIBLE_EVENTS;
+                const visibleSlots = hasMoreEvents ? MAX_VISIBLE_EVENTS - 1 : effectiveCount;
+                const visibleRealEvents = previewEvent ? Math.max(visibleSlots - 1, 0) : visibleSlots;
+                const visibleEvents = events.slice(0, visibleRealEvents);
+                const hiddenCount = effectiveCount - visibleSlots;
 
                 return (
                   <div
@@ -252,6 +267,7 @@ export class MHCalendarResourceView {
                       if (events.length === 0) this.onCellClick(date, resource.id);
                     }}
                   >
+                    {previewEvent && <mh-calendar-event event={previewEvent} isDragged={true} />}
                     {visibleEvents.map(
                       (event) =>
                         !event.isHidden && <mh-calendar-event key={event.id} event={event} />,

@@ -112,11 +112,12 @@ export class MHCalendarEvent {
 
     const eventColor = EventStyleManager.getEventColor(this.event);
 
-    // When dragged, ensure full opacity for the preview (original item fades separately)
+    // When dragged in a time-slot view, ensure full opacity for the preview (original item fades
+    // separately) and let it fill the precisely-sized holder positioned by EventRenderer.
     if (
       this.isDragged &&
       !this.event?.allDay &&
-      storeState.viewType !== IMHCalendarViewType.MONTH
+      [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(storeState.viewType)
     ) {
       return {
         height: '100%',

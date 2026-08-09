@@ -141,8 +141,6 @@
 
 .mhCalendarResource__cell--dragOver {
   background: color-mix(in srgb, var(--headerTodayBackgroundColor) 15%, transparent);
-  outline: 2px dashed var(--headerTodayBackgroundColor);
-  outline-offset: -2px;
 }
 
 /* Event inside cell */

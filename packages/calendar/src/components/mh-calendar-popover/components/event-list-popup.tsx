@@ -81,10 +81,10 @@ export class MHCalendarEventListPopup {
         <div class="mhCalendarEventListPopup__header">
           {dayjs(this.date).locale(storeState.locale).format('ddd, MMM D')}
         </div>
-        <div class="mhCalendarEventListPopup__list">
-          {this.events.map((event) => (
-            <mh-calendar-event key={event.id} event={event} />
-          ))}
+        <div class="mhCalendarEventListPopup__  list">
+          {this.events.map(
+            (event) => !event.isHidden && <mh-calendar-event key={event.id} event={event} />,
+          )}
         </div>
       </div>
     );

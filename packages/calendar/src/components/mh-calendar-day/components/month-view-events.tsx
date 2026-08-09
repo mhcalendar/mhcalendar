@@ -17,9 +17,12 @@ export class MonthViewEvents {
 
   @State() morePopoverAnchorRect: IMHCalendarPopoverAnchorRect | null = null;
 
-  private onMoreClick = (e: MouseEvent) => {
-    e.stopPropagation();
-    const { top, left, width, height } = (e.currentTarget as HTMLElement).getBoundingClientRect();
+  private onMoreClick = (e: CustomEvent<MouseEvent>) => {
+    const event = e.detail;
+    event.stopPropagation();
+    const { top, left, width, height } = (
+      event.currentTarget as HTMLElement
+    ).getBoundingClientRect();
     this.morePopoverAnchorRect = { top, left, width, height };
   };
 
@@ -110,12 +113,10 @@ export class MonthViewEvents {
             class="mhCalendarDay__eventHolder"
             style={{
               width: '100%',
-              cursor: 'pointer',
               ...store.getInlineStyleForClass('mhCalendarDay__eventHolder'),
             }}
-            onClick={this.onMoreClick}
           >
-            <mh-calendar-more-events-indicator hiddenCount={hiddenCount} />
+            <mh-calendar-more-events-indicator hiddenCount={hiddenCount} onMoreClick={this.onMoreClick} />
           </div>
         )}
 

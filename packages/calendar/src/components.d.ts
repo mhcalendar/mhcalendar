@@ -161,6 +161,10 @@ export interface MhCalendarEventListPopupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLMhCalendarEventListPopupElement;
 }
+export interface MhCalendarMoreEventsIndicatorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMhCalendarMoreEventsIndicatorElement;
+}
 declare global {
     interface HTMLMhCalendarElement extends Components.MhCalendar, HTMLStencilElement {
     }
@@ -290,7 +294,18 @@ declare global {
         prototype: HTMLMhCalendarMonthElement;
         new (): HTMLMhCalendarMonthElement;
     };
+    interface HTMLMhCalendarMoreEventsIndicatorElementEventMap {
+        "moreClick": MouseEvent;
+    }
     interface HTMLMhCalendarMoreEventsIndicatorElement extends Components.MhCalendarMoreEventsIndicator, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMhCalendarMoreEventsIndicatorElementEventMap>(type: K, listener: (this: HTMLMhCalendarMoreEventsIndicatorElement, ev: MhCalendarMoreEventsIndicatorCustomEvent<HTMLMhCalendarMoreEventsIndicatorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMhCalendarMoreEventsIndicatorElementEventMap>(type: K, listener: (this: HTMLMhCalendarMoreEventsIndicatorElement, ev: MhCalendarMoreEventsIndicatorCustomEvent<HTMLMhCalendarMoreEventsIndicatorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLMhCalendarMoreEventsIndicatorElement: {
         prototype: HTMLMhCalendarMoreEventsIndicatorElement;
@@ -473,6 +488,7 @@ declare namespace LocalJSX {
     }
     interface MhCalendarMoreEventsIndicator {
         "hiddenCount": number;
+        "onMoreClick"?: (event: MhCalendarMoreEventsIndicatorCustomEvent<MouseEvent>) => void;
     }
     interface MhCalendarMultiView {
     }

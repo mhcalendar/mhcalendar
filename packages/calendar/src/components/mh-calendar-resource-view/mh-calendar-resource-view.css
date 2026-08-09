@@ -150,20 +150,3 @@
   width: 100%;
 }
 
-/* "+N more" button */
-.mhCalendarResource__moreBtn {
-  background: none;
-  border: none;
-  padding: 2px 4px;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--eventTimeDiffColor);
-  cursor: pointer;
-  text-align: left;
-  border-radius: 4px;
-  transition: background-color 0.15s;
-}
-
-.mhCalendarResource__moreBtn:hover {
-  background: color-mix(in srgb, var(--eventTimeDiffColor) 8%, transparent);
-}

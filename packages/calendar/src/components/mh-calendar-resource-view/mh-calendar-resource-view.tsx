@@ -7,7 +7,6 @@ import { DateUtils } from '../../utils/DateUtils';
 import { DaysGenerator } from '../../utils/DaysGenerator';
 import { EventManager } from '../../utils/EventManager';
 import { VIEW_HEIGHT } from '../../const/default-theme';
-import { LabelUtils } from '../../utils/LabelUtils';
 import { IMHCalendarPopoverAnchorRect } from '../../utils/PopoverPositionUtils';
 
 const MAX_VISIBLE_EVENTS = 2;
@@ -155,10 +154,11 @@ export class MHCalendarResourceView {
     }
   };
 
-  private onMoreClick = (date: Date, resourceId: string, e: MouseEvent) => {
-    e.stopPropagation();
+  private onMoreClick = (date: Date, resourceId: string, e: CustomEvent<MouseEvent>) => {
+    const event = e.detail;
+    event.stopPropagation();
 
-    const target = e.currentTarget as HTMLElement;
+    const target = event.currentTarget as HTMLElement;
     const { top, left, width, height } = target.getBoundingClientRect();
 
     this.morePopover = { anchorRect: { top, left, width, height }, date, resourceId };
@@ -256,12 +256,10 @@ export class MHCalendarResourceView {
                         !event.isHidden && <mh-calendar-event key={event.id} event={event} />,
                     )}
                     {hiddenCount > 0 && (
-                      <button
-                        class="mhCalendarResource__moreBtn"
-                        onClick={(e: MouseEvent) => this.onMoreClick(date, resource.id, e)}
-                      >
-                        {LabelUtils.moreEvents(hiddenCount)}
-                      </button>
+                      <mh-calendar-more-events-indicator
+                        hiddenCount={hiddenCount}
+                        onMoreClick={(e) => this.onMoreClick(date, resource.id, e)}
+                      />
                     )}
                   </div>
                 );

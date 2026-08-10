@@ -150,7 +150,11 @@ export class MHCalendarResizeEventHandler {
   }
 
   render() {
-    if (!storeState.allowEventResize || storeState.viewType === IMHCalendarViewType.MONTH)
+    if (
+      !storeState.allowEventResize ||
+      storeState.viewType === IMHCalendarViewType.MONTH ||
+      storeState.viewType === IMHCalendarViewType.RESOURCE
+    )
       return null;
 
     const inlineStyle = {

@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import { MINUTES_IN_HOUR } from './mh-calendar-day.const';
 import { IMHCalendarEvent } from '../../types';
 import { store, storeState } from '../../store/mh-calendar-store';
-import { EventUtils } from '../../utils/EventUtils';
 import { DateUtils } from '../../utils/DateUtils';
 
 export class DayUtils {
@@ -53,63 +52,53 @@ export class DayUtils {
     const regularEvents: IMHCalendarEvent[] = [];
 
     for (const event of events) {
-      (event.allDay ? allDayEvents : regularEvents).push(event);
+      if (event.allDay) {
+        allDayEvents.push(event);
+      } else {
+        regularEvents.push(event);
+      }
     }
+
+    regularEvents.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     const groups: IMHCalendarEvent[][] = [];
 
-    // Process only regular events (not all-day events)
-    regularEvents.forEach((currentEvent) => {
-      const overlappingGroupIndices: number[] = [];
+    let currentGroup: IMHCalendarEvent[] | undefined;
+    let maxEnd = -Infinity;
 
-      // Find ALL existing groups that currentEvent overlaps with
-      for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
-        // Check if currentEvent overlaps with ANY event in this group
-        if (group.some((groupEvent) => EventUtils.areEventsOverlapping(currentEvent, groupEvent))) {
-          overlappingGroupIndices.push(i);
-        }
-      }
+    for (const event of regularEvents) {
+      const start = event.startDate.getTime();
+      const end = event.endDate.getTime();
 
-      if (overlappingGroupIndices.length === 0) {
-        // No overlapping group found, create a new group
-        groups.push([currentEvent]);
+      if (!currentGroup || start >= maxEnd) {
+        currentGroup = [event];
+        groups.push(currentGroup);
+        maxEnd = end;
       } else {
-        // Current event overlaps with one or more existing groups.
-        // Add currentEvent to the first overlapping group.
-        const targetGroupIndex = overlappingGroupIndices[0];
-        groups[targetGroupIndex].push(currentEvent);
-
-        // If currentEvent overlapped with multiple groups, these groups now need to be merged.
-        // Merge other overlapping groups (beyond the first one) into the targetGroup.
-        // Iterate backwards because we are modifying the 'groups' array by splicing.
-        for (let i = overlappingGroupIndices.length - 1; i > 0; i--) {
-          const groupToMergeIndex = overlappingGroupIndices[i];
-          groups[targetGroupIndex].push(...groups[groupToMergeIndex]);
-          groups.splice(groupToMergeIndex, 1); // Remove the merged group
-        }
+        currentGroup.push(event);
+        maxEnd = Math.max(maxEnd, end);
       }
-    });
+    }
 
-    // Convert groups to Map format (dayEvents)
     const dayEventsMap = new Map<string, IMHCalendarEvent[]>();
-    groups.forEach((group, index) => {
-      // Sort events within the group by start date for consistent key generation (optional but good)
-      group.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
-      const earliestStartTime = group[0].startDate.getTime(); // Assumes sorted or you can use Math.min
-      const keyDate = new Date(earliestStartTime);
 
-      // Using UTC methods for keys can make them more consistent across timezones
-      const timeKey = `${keyDate.getUTCHours()}:${String(keyDate.getUTCMinutes()).padStart(2, '0')}-group-${index}`;
+    groups.forEach((group, index) => {
+      const earliestStartTime = group[0].startDate.getTime();
+      const date = new Date(earliestStartTime);
+
+      const timeKey = `${date.getUTCHours()}:${String(date.getUTCMinutes()).padStart(
+        2,
+        '0',
+      )}-group-${index}`;
+
       dayEventsMap.set(timeKey, group);
     });
 
-    // Sort all-day events by start date for consistency
     allDayEvents.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
     return {
       dayEvents: dayEventsMap,
-      allDayEvents: allDayEvents,
+      allDayEvents,
     };
   }
 

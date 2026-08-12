@@ -1,5 +1,13 @@
 # @mhcalendar/example-react-19-vite
 
+## 0.1.2
+
+### Patch Changes
+
+- 54f8840: Fix resource view update
+- Updated dependencies [54f8840]
+  - @mhcalendar/react@0.3.2
+
 ## 0.1.1
 
 ### Patch Changes

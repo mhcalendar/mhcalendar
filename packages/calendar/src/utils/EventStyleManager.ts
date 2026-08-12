@@ -29,6 +29,19 @@ export class EventStyleManager {
   ): any {
     const eventColor = this.getEventColor(event);
 
+    // RESOURCE view has no fixed time axis — each event fills its host, and the host tags
+    // equally divide the cell's height via flex (see mh-calendar-resource-view.css).
+    if (viewType === IMHCalendarViewType.RESOURCE) {
+      return {
+        height: '100%',
+        width: '100%',
+        opacity: '1',
+        padding: '3px',
+        fontSize: '10px',
+        backgroundColor: eventColor,
+      };
+    }
+
     // When dragged in a time-slot view, ensure full opacity for the preview (original item fades
     // separately) and let it fill the precisely-sized holder positioned by EventRenderer.
     if (isDragged && !event.allDay && [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType)) {

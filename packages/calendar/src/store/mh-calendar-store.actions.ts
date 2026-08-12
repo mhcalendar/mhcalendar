@@ -91,6 +91,8 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
       'resources',
       'resourceDays',
       'resourceRowHeight',
+      'resourceColumnWidth',
+      'resourceLabelColumnWidth',
       'availableViews',
       'locale',
       'labels',

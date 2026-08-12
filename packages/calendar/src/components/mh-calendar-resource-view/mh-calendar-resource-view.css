@@ -18,7 +18,8 @@
 
 .mhCalendarResource__grid {
   display: grid;
-  grid-template-columns: 160px repeat(var(--resource-cols, 7), 1fr);
+  grid-template-columns: var(--resource-label-col-width, 160px)
+    repeat(var(--resource-cols, 7), var(--resource-col-width, 1fr));
   min-width: 100%;
 }
 
@@ -29,6 +30,7 @@
 
 .mhCalendarResource__cornerCell {
   position: sticky;
+  top: 0;
   left: 0;
   z-index: 3;
   background: var(--mainBackgroundColor);
@@ -145,6 +147,11 @@
 }
 
 /* Event inside cell */
+.mhCalendarResource__cell mh-calendar-event {
+  flex: 1;
+  min-height: 0;
+}
+
 .mhCalendarResource__cell .mhCalendarEvent {
   width: 100%;
 }

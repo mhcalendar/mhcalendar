@@ -1,7 +1,7 @@
 import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarConfigBase, IMHCalendarWeekConfig } from '../types';
 import { EventDisplayMode } from '../types/enums';
-import { DEFAULT_RESOURCE_ROW_HEIGHT } from './default-theme';
+import { DEFAULT_RESOURCE_LABEL_COLUMN_WIDTH, DEFAULT_RESOURCE_ROW_HEIGHT } from './default-theme';
 
 export const MIN_EVENT_DURATION_MINUTES = 15;
 
@@ -53,4 +53,6 @@ export const DEFAULT_WEEK_VIEW_CONFIG: IMHCalendarWeekConfig = {
   resources: [],
   resourceDays: 7,
   resourceRowHeight: DEFAULT_RESOURCE_ROW_HEIGHT,
+  resourceColumnWidth: undefined,
+  resourceLabelColumnWidth: DEFAULT_RESOURCE_LABEL_COLUMN_WIDTH,
 };

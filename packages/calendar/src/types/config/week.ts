@@ -30,6 +30,22 @@ export interface ICalendarWeekConfig extends ICalendarMultiViewConfig {
    * @default 64
    */
   resourceRowHeight: number;
+
+  /**
+   * Fixed width (px) of each day column in RESOURCE view. When set, day columns no longer
+   * stretch to fill the available width — if `resourceDays * resourceColumnWidth` exceeds
+   * the container width, the view scrolls horizontally instead of shrinking the columns.
+   * If omitted, columns stretch evenly to fill the available width and no horizontal
+   * scroll occurs.
+   * @default undefined
+   */
+  resourceColumnWidth: number | undefined;
+
+  /**
+   * Fixed width (px) of the resource label column in RESOURCE view.
+   * @default 160
+   */
+  resourceLabelColumnWidth: number;
 }
 
 /**

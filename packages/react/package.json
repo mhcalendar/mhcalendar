@@ -25,6 +25,7 @@
     "prebuild": "rm -rf dist",
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "yalc:watch": "nodemon --watch dist --exec 'yalc push --sig'",
     "lint": "eslint src --ext .ts,.tsx",
     "format": "prettier --write ."
   },

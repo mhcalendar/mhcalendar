@@ -21,6 +21,7 @@ export const RESOURCE_CELL_GAP = 2;
 export const RESOURCE_CELL_PADDING = 4;
 // Fits exactly 2 events by default, matching the view's previous fixed capacity.
 export const DEFAULT_RESOURCE_ROW_HEIGHT = 55;
+export const DEFAULT_RESOURCE_LABEL_COLUMN_WIDTH = 160;
 
 const DARK_PROPERTIES: ConfigCSSProperites = {
   timeSlotWidth: '60px',

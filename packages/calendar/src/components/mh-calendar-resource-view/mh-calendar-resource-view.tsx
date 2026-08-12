@@ -6,7 +6,6 @@ import { IMHCalendarEvent } from '../../types';
 import { DateUtils } from '../../utils/DateUtils';
 import { DaysGenerator } from '../../utils/DaysGenerator';
 import { EventManager } from '../../utils/EventManager';
-import { VIEW_HEIGHT } from '../../const/default-theme';
 import { IMHCalendarPopoverAnchorRect } from '../../utils/PopoverPositionUtils';
 import { LabelUtils } from '../../utils/LabelUtils';
 import { ResourceRowHeightUtils } from '../../utils/ResourceRowHeightUtils';
@@ -182,8 +181,7 @@ export class MHCalendarResourceView {
   };
 
   render() {
-    const containerHeight = storeState.fixedHeight ?? VIEW_HEIGHT;
-
+    const containerHeight = storeState.fixedHeight ?? '100%';
     if (this.resources.length === 0) {
       return (
         <div
@@ -196,6 +194,7 @@ export class MHCalendarResourceView {
     }
 
     const colCount = this.dates.length;
+    const columnWidth = storeState.resourceColumnWidth;
 
     return (
       <div
@@ -204,6 +203,8 @@ export class MHCalendarResourceView {
           {
             height: containerHeight,
             '--resource-cols': `${colCount}`,
+            '--resource-col-width': columnWidth ? `${columnWidth}px` : '1fr',
+            '--resource-label-col-width': `${storeState.resourceLabelColumnWidth}px`,
           } as any
         }
       >

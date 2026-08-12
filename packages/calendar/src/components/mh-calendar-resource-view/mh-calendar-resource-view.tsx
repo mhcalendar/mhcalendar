@@ -244,7 +244,12 @@ export class MHCalendarResourceView {
                 class="mhCalendarResource__row"
                 style={{ '--resource-row-height': `${rowHeight}px` } as any}
               >
-                <div class="mhCalendarResource__resourceLabel">{resource.title}</div>
+                <div class="mhCalendarResource__resourceLabel">
+                  {resource.image && (
+                    <img class="mhCalendarResource__resourceImage" src={resource.image} alt="" />
+                  )}
+                  <span class="mhCalendarResource__resourceTitle">{resource.title}</span>
+                </div>
                 {this.dates.map((date) => {
                   const events = this.getEventsForCell(resource.id, date);
                   const dateKey = DateUtils.convertDateToString(date);

@@ -4,7 +4,7 @@ import { IMHCalendarDayClickPayload, IMHCalendarEvent } from './event';
 import { ConfigCSSProperites } from './properties';
 
 export type IMHCalendarConfigBaseStyle = {
-  properties: ConfigCSSProperites;
+  properties: Partial<ConfigCSSProperites>;
   styles: CssStyles;
 };
 

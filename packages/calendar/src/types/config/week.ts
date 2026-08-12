@@ -9,6 +9,12 @@ export interface IMHCalendarResource {
    * resource more vertical space than the rest).
    */
   rowHeight?: number;
+
+  /**
+   * URL of an image shown as a circular avatar to the left of the resource's title in the
+   * label column of RESOURCE view.
+   */
+  image?: string;
 }
 
 export interface ICalendarWeekConfig extends ICalendarMultiViewConfig {

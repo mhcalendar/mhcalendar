@@ -125,8 +125,7 @@ Contributions are welcome! If you'd like to report a bug, suggest a feature, or 
 
 ## Changelog
 
-- [packages/calendar/CHANGELOG.md](./packages/calendar/CHANGELOG.md)
-- [packages/react/CHANGELOG.md](./packages/react/CHANGELOG.md)
+- [CHANGELOG.md](./packages/calendar/CHANGELOG.md)
 
 ## License
 

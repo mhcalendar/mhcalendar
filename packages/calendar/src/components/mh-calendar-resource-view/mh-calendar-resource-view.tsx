@@ -50,6 +50,12 @@ export class MHCalendarResourceView {
         this.updateEventMap();
       }),
     );
+
+    this.storeUnsubscribers.push(
+      store.onChange('resources', () => {
+        this.updateView();
+      }),
+    );
   }
 
   disconnectedCallback() {

@@ -1,4 +1,4 @@
-import { Component, h, Prop } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Prop } from '@stencil/core';
 import store from '../../../store/mh-calendar-store';
 import { LabelUtils } from '../../../utils/LabelUtils';
 
@@ -9,16 +9,19 @@ import { LabelUtils } from '../../../utils/LabelUtils';
 export class MoreEventsIndicator {
   @Prop() hiddenCount!: number;
 
+  @Event() moreClick!: EventEmitter<MouseEvent>;
+
   render() {
     return (
-      <div
+      <button
         class="mhCalendarDay__eventsLeftIndicator"
         style={{
           ...store.getInlineStyleForClass('mhCalendarDay__eventsLeftIndicator'),
         }}
+        onClick={(e) => this.moreClick.emit(e)}
       >
         {LabelUtils.moreEvents(this.hiddenCount)}
-      </div>
+      </button>
     );
   }
 }

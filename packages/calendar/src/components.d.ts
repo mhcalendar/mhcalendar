@@ -8,9 +8,11 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from "./types";
 import { DragDropState } from "./utils/DragDropHandler";
 import { IMHCalendarViewType } from "./store/mh-calendar-store.types";
+import { IMHCalendarPopoverAlignment, IMHCalendarPopoverAnchorRect } from "./utils/PopoverPositionUtils";
 export { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from "./types";
 export { DragDropState } from "./utils/DragDropHandler";
 export { IMHCalendarViewType } from "./store/mh-calendar-store.types";
+export { IMHCalendarPopoverAlignment, IMHCalendarPopoverAnchorRect } from "./utils/PopoverPositionUtils";
 export namespace Components {
     interface MhCalendar {
         /**
@@ -76,8 +78,37 @@ export namespace Components {
          */
         "isDragged": boolean;
     }
+    interface MhCalendarEventForm {
+        "event": IMHCalendarEvent;
+        /**
+          * @default false
+         */
+        "isNewEvent": boolean;
+    }
     interface MhCalendarEventFull {
         "event"?: IMHCalendarEvent;
+        "resizePreviewEndDate"?: Date | null;
+    }
+    /**
+     * A day/cell's overflowed events shown in a backdrop-less popover — a header
+     * with the date and the full event list. Anchored next to `anchorRect` and
+     * dismissible via outside click / Escape.
+     * Renders its own popover chrome directly (no separate slotted custom
+     * element) so the event list stays reactive: a slot host that doesn't get
+     * its own prop changes can fail to re-relocate updated slotted content in
+     * non-shadow Stencil components.
+     */
+    interface MhCalendarEventListPopup {
+        /**
+          * @default 'bottom'
+         */
+        "alignment": IMHCalendarPopoverAlignment;
+        "anchorRect": IMHCalendarPopoverAnchorRect;
+        "date": Date;
+        /**
+          * @default []
+         */
+        "events": IMHCalendarEvent[];
     }
     interface MhCalendarEventSmall {
         "event"?: IMHCalendarEvent;
@@ -122,6 +153,22 @@ export namespace Components {
     }
     interface MhViewSwitcher {
     }
+}
+export interface MhCalendarEventFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMhCalendarEventFormElement;
+}
+export interface MhCalendarEventListPopupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMhCalendarEventListPopupElement;
+}
+export interface MhCalendarMoreEventsIndicatorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMhCalendarMoreEventsIndicatorElement;
+}
+export interface MhCalendarResizeEventHandlerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLMhCalendarResizeEventHandlerElement;
 }
 declare global {
     interface HTMLMhCalendarElement extends Components.MhCalendar, HTMLStencilElement {
@@ -178,11 +225,55 @@ declare global {
         prototype: HTMLMhCalendarEventElement;
         new (): HTMLMhCalendarEventElement;
     };
+    interface HTMLMhCalendarEventFormElementEventMap {
+        "save": IMHCalendarEvent;
+        "cancel": void;
+    }
+    interface HTMLMhCalendarEventFormElement extends Components.MhCalendarEventForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMhCalendarEventFormElementEventMap>(type: K, listener: (this: HTMLMhCalendarEventFormElement, ev: MhCalendarEventFormCustomEvent<HTMLMhCalendarEventFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMhCalendarEventFormElementEventMap>(type: K, listener: (this: HTMLMhCalendarEventFormElement, ev: MhCalendarEventFormCustomEvent<HTMLMhCalendarEventFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLMhCalendarEventFormElement: {
+        prototype: HTMLMhCalendarEventFormElement;
+        new (): HTMLMhCalendarEventFormElement;
+    };
     interface HTMLMhCalendarEventFullElement extends Components.MhCalendarEventFull, HTMLStencilElement {
     }
     var HTMLMhCalendarEventFullElement: {
         prototype: HTMLMhCalendarEventFullElement;
         new (): HTMLMhCalendarEventFullElement;
+    };
+    interface HTMLMhCalendarEventListPopupElementEventMap {
+        "closePopover": void;
+    }
+    /**
+     * A day/cell's overflowed events shown in a backdrop-less popover — a header
+     * with the date and the full event list. Anchored next to `anchorRect` and
+     * dismissible via outside click / Escape.
+     * Renders its own popover chrome directly (no separate slotted custom
+     * element) so the event list stays reactive: a slot host that doesn't get
+     * its own prop changes can fail to re-relocate updated slotted content in
+     * non-shadow Stencil components.
+     */
+    interface HTMLMhCalendarEventListPopupElement extends Components.MhCalendarEventListPopup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMhCalendarEventListPopupElementEventMap>(type: K, listener: (this: HTMLMhCalendarEventListPopupElement, ev: MhCalendarEventListPopupCustomEvent<HTMLMhCalendarEventListPopupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMhCalendarEventListPopupElementEventMap>(type: K, listener: (this: HTMLMhCalendarEventListPopupElement, ev: MhCalendarEventListPopupCustomEvent<HTMLMhCalendarEventListPopupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLMhCalendarEventListPopupElement: {
+        prototype: HTMLMhCalendarEventListPopupElement;
+        new (): HTMLMhCalendarEventListPopupElement;
     };
     interface HTMLMhCalendarEventSmallElement extends Components.MhCalendarEventSmall, HTMLStencilElement {
     }
@@ -208,7 +299,18 @@ declare global {
         prototype: HTMLMhCalendarMonthElement;
         new (): HTMLMhCalendarMonthElement;
     };
+    interface HTMLMhCalendarMoreEventsIndicatorElementEventMap {
+        "moreClick": MouseEvent;
+    }
     interface HTMLMhCalendarMoreEventsIndicatorElement extends Components.MhCalendarMoreEventsIndicator, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMhCalendarMoreEventsIndicatorElementEventMap>(type: K, listener: (this: HTMLMhCalendarMoreEventsIndicatorElement, ev: MhCalendarMoreEventsIndicatorCustomEvent<HTMLMhCalendarMoreEventsIndicatorElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMhCalendarMoreEventsIndicatorElementEventMap>(type: K, listener: (this: HTMLMhCalendarMoreEventsIndicatorElement, ev: MhCalendarMoreEventsIndicatorCustomEvent<HTMLMhCalendarMoreEventsIndicatorElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLMhCalendarMoreEventsIndicatorElement: {
         prototype: HTMLMhCalendarMoreEventsIndicatorElement;
@@ -226,7 +328,18 @@ declare global {
         prototype: HTMLMhCalendarNavigationElement;
         new (): HTMLMhCalendarNavigationElement;
     };
+    interface HTMLMhCalendarResizeEventHandlerElementEventMap {
+        "resizePreview": Date | null;
+    }
     interface HTMLMhCalendarResizeEventHandlerElement extends Components.MhCalendarResizeEventHandler, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLMhCalendarResizeEventHandlerElementEventMap>(type: K, listener: (this: HTMLMhCalendarResizeEventHandlerElement, ev: MhCalendarResizeEventHandlerCustomEvent<HTMLMhCalendarResizeEventHandlerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLMhCalendarResizeEventHandlerElementEventMap>(type: K, listener: (this: HTMLMhCalendarResizeEventHandlerElement, ev: MhCalendarResizeEventHandlerCustomEvent<HTMLMhCalendarResizeEventHandlerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLMhCalendarResizeEventHandlerElement: {
         prototype: HTMLMhCalendarResizeEventHandlerElement;
@@ -260,7 +373,9 @@ declare global {
         "mh-calendar-day-time-view-events": HTMLMhCalendarDayTimeViewEventsElement;
         "mh-calendar-day-time-view-overlays": HTMLMhCalendarDayTimeViewOverlaysElement;
         "mh-calendar-event": HTMLMhCalendarEventElement;
+        "mh-calendar-event-form": HTMLMhCalendarEventFormElement;
         "mh-calendar-event-full": HTMLMhCalendarEventFullElement;
+        "mh-calendar-event-list-popup": HTMLMhCalendarEventListPopupElement;
         "mh-calendar-event-small": HTMLMhCalendarEventSmallElement;
         "mh-calendar-header": HTMLMhCalendarHeaderElement;
         "mh-calendar-modal": HTMLMhCalendarModalElement;
@@ -340,8 +455,40 @@ declare namespace LocalJSX {
          */
         "isDragged"?: boolean;
     }
+    interface MhCalendarEventForm {
+        "event": IMHCalendarEvent;
+        /**
+          * @default false
+         */
+        "isNewEvent"?: boolean;
+        "onCancel"?: (event: MhCalendarEventFormCustomEvent<void>) => void;
+        "onSave"?: (event: MhCalendarEventFormCustomEvent<IMHCalendarEvent>) => void;
+    }
     interface MhCalendarEventFull {
         "event"?: IMHCalendarEvent;
+        "resizePreviewEndDate"?: Date | null;
+    }
+    /**
+     * A day/cell's overflowed events shown in a backdrop-less popover — a header
+     * with the date and the full event list. Anchored next to `anchorRect` and
+     * dismissible via outside click / Escape.
+     * Renders its own popover chrome directly (no separate slotted custom
+     * element) so the event list stays reactive: a slot host that doesn't get
+     * its own prop changes can fail to re-relocate updated slotted content in
+     * non-shadow Stencil components.
+     */
+    interface MhCalendarEventListPopup {
+        /**
+          * @default 'bottom'
+         */
+        "alignment"?: IMHCalendarPopoverAlignment;
+        "anchorRect": IMHCalendarPopoverAnchorRect;
+        "date": Date;
+        /**
+          * @default []
+         */
+        "events"?: IMHCalendarEvent[];
+        "onClosePopover"?: (event: MhCalendarEventListPopupCustomEvent<void>) => void;
     }
     interface MhCalendarEventSmall {
         "event"?: IMHCalendarEvent;
@@ -358,6 +505,7 @@ declare namespace LocalJSX {
     }
     interface MhCalendarMoreEventsIndicator {
         "hiddenCount": number;
+        "onMoreClick"?: (event: MhCalendarMoreEventsIndicatorCustomEvent<MouseEvent>) => void;
     }
     interface MhCalendarMultiView {
     }
@@ -379,6 +527,7 @@ declare namespace LocalJSX {
           * @default null
          */
         "eventStartDate"?: null | Date;
+        "onResizePreview"?: (event: MhCalendarResizeEventHandlerCustomEvent<Date | null>) => void;
     }
     interface MhCalendarResourceView {
     }
@@ -415,6 +564,12 @@ declare namespace LocalJSX {
         "isDragged": boolean;
         "instanceOfEvent": string;
     }
+    interface MhCalendarEventFormAttributes {
+        "isNewEvent": boolean;
+    }
+    interface MhCalendarEventListPopupAttributes {
+        "alignment": IMHCalendarPopoverAlignment;
+    }
     interface MhCalendarHeaderAttributes {
         "showCurrentDate": boolean;
     }
@@ -437,7 +592,9 @@ declare namespace LocalJSX {
         "mh-calendar-day-time-view-events": Omit<MhCalendarDayTimeViewEvents, keyof MhCalendarDayTimeViewEventsAttributes> & { [K in keyof MhCalendarDayTimeViewEvents & keyof MhCalendarDayTimeViewEventsAttributes]?: MhCalendarDayTimeViewEvents[K] } & { [K in keyof MhCalendarDayTimeViewEvents & keyof MhCalendarDayTimeViewEventsAttributes as `attr:${K}`]?: MhCalendarDayTimeViewEventsAttributes[K] } & { [K in keyof MhCalendarDayTimeViewEvents & keyof MhCalendarDayTimeViewEventsAttributes as `prop:${K}`]?: MhCalendarDayTimeViewEvents[K] };
         "mh-calendar-day-time-view-overlays": Omit<MhCalendarDayTimeViewOverlays, keyof MhCalendarDayTimeViewOverlaysAttributes> & { [K in keyof MhCalendarDayTimeViewOverlays & keyof MhCalendarDayTimeViewOverlaysAttributes]?: MhCalendarDayTimeViewOverlays[K] } & { [K in keyof MhCalendarDayTimeViewOverlays & keyof MhCalendarDayTimeViewOverlaysAttributes as `attr:${K}`]?: MhCalendarDayTimeViewOverlaysAttributes[K] } & { [K in keyof MhCalendarDayTimeViewOverlays & keyof MhCalendarDayTimeViewOverlaysAttributes as `prop:${K}`]?: MhCalendarDayTimeViewOverlays[K] } & OneOf<"calendarDayElementHeight", MhCalendarDayTimeViewOverlays["calendarDayElementHeight"], MhCalendarDayTimeViewOverlaysAttributes["calendarDayElementHeight"]> & OneOf<"isToday", MhCalendarDayTimeViewOverlays["isToday"], MhCalendarDayTimeViewOverlaysAttributes["isToday"]> & OneOf<"isTimeView", MhCalendarDayTimeViewOverlays["isTimeView"], MhCalendarDayTimeViewOverlaysAttributes["isTimeView"]>;
         "mh-calendar-event": Omit<MhCalendarEvent, keyof MhCalendarEventAttributes> & { [K in keyof MhCalendarEvent & keyof MhCalendarEventAttributes]?: MhCalendarEvent[K] } & { [K in keyof MhCalendarEvent & keyof MhCalendarEventAttributes as `attr:${K}`]?: MhCalendarEventAttributes[K] } & { [K in keyof MhCalendarEvent & keyof MhCalendarEventAttributes as `prop:${K}`]?: MhCalendarEvent[K] };
+        "mh-calendar-event-form": Omit<MhCalendarEventForm, keyof MhCalendarEventFormAttributes> & { [K in keyof MhCalendarEventForm & keyof MhCalendarEventFormAttributes]?: MhCalendarEventForm[K] } & { [K in keyof MhCalendarEventForm & keyof MhCalendarEventFormAttributes as `attr:${K}`]?: MhCalendarEventFormAttributes[K] } & { [K in keyof MhCalendarEventForm & keyof MhCalendarEventFormAttributes as `prop:${K}`]?: MhCalendarEventForm[K] };
         "mh-calendar-event-full": MhCalendarEventFull;
+        "mh-calendar-event-list-popup": Omit<MhCalendarEventListPopup, keyof MhCalendarEventListPopupAttributes> & { [K in keyof MhCalendarEventListPopup & keyof MhCalendarEventListPopupAttributes]?: MhCalendarEventListPopup[K] } & { [K in keyof MhCalendarEventListPopup & keyof MhCalendarEventListPopupAttributes as `attr:${K}`]?: MhCalendarEventListPopupAttributes[K] } & { [K in keyof MhCalendarEventListPopup & keyof MhCalendarEventListPopupAttributes as `prop:${K}`]?: MhCalendarEventListPopup[K] };
         "mh-calendar-event-small": MhCalendarEventSmall;
         "mh-calendar-header": Omit<MhCalendarHeader, keyof MhCalendarHeaderAttributes> & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes]?: MhCalendarHeader[K] } & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes as `attr:${K}`]?: MhCalendarHeaderAttributes[K] } & { [K in keyof MhCalendarHeader & keyof MhCalendarHeaderAttributes as `prop:${K}`]?: MhCalendarHeader[K] };
         "mh-calendar-modal": MhCalendarModal;
@@ -464,7 +621,18 @@ declare module "@stencil/core" {
             "mh-calendar-day-time-view-events": LocalJSX.IntrinsicElements["mh-calendar-day-time-view-events"] & JSXBase.HTMLAttributes<HTMLMhCalendarDayTimeViewEventsElement>;
             "mh-calendar-day-time-view-overlays": LocalJSX.IntrinsicElements["mh-calendar-day-time-view-overlays"] & JSXBase.HTMLAttributes<HTMLMhCalendarDayTimeViewOverlaysElement>;
             "mh-calendar-event": LocalJSX.IntrinsicElements["mh-calendar-event"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventElement>;
+            "mh-calendar-event-form": LocalJSX.IntrinsicElements["mh-calendar-event-form"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventFormElement>;
             "mh-calendar-event-full": LocalJSX.IntrinsicElements["mh-calendar-event-full"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventFullElement>;
+            /**
+             * A day/cell's overflowed events shown in a backdrop-less popover — a header
+             * with the date and the full event list. Anchored next to `anchorRect` and
+             * dismissible via outside click / Escape.
+             * Renders its own popover chrome directly (no separate slotted custom
+             * element) so the event list stays reactive: a slot host that doesn't get
+             * its own prop changes can fail to re-relocate updated slotted content in
+             * non-shadow Stencil components.
+             */
+            "mh-calendar-event-list-popup": LocalJSX.IntrinsicElements["mh-calendar-event-list-popup"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventListPopupElement>;
             "mh-calendar-event-small": LocalJSX.IntrinsicElements["mh-calendar-event-small"] & JSXBase.HTMLAttributes<HTMLMhCalendarEventSmallElement>;
             "mh-calendar-header": LocalJSX.IntrinsicElements["mh-calendar-header"] & JSXBase.HTMLAttributes<HTMLMhCalendarHeaderElement>;
             "mh-calendar-modal": LocalJSX.IntrinsicElements["mh-calendar-modal"] & JSXBase.HTMLAttributes<HTMLMhCalendarModalElement>;

@@ -11,12 +11,22 @@ export const MONTH_EVENT_HEIGHT = 20;
 export const ALL_DAY_EVENT_GAP = 3;
 export const ALL_DAY_CONTAINER_PADDING = 4;
 export const ALL_DAY_MIN_HEIGHT = 40;
+// Must match the gap/padding used by .mhCalendarDay__eventsContainer's inline style
+// (month-view-events.tsx) so MonthViewCalculator's fit calculation stays accurate.
+export const MONTH_VIEW_EVENTS_GAP = 2;
+export const MONTH_VIEW_EVENTS_PADDING = 2;
+// Must match .mhCalendarResource__cell's gap/padding so ResourceRowHeightUtils' fit
+// calculation stays accurate.
+export const RESOURCE_CELL_GAP = 2;
+export const RESOURCE_CELL_PADDING = 4;
+// Fits exactly 2 events by default, matching the view's previous fixed capacity.
+export const DEFAULT_RESOURCE_ROW_HEIGHT = 55;
 
 const DARK_PROPERTIES: ConfigCSSProperites = {
   timeSlotWidth: '60px',
   eventBackgroundColor: DEFAULT_THEME_COLOR,
   /*
-   Set to undefined at purpose as user may want
+   Set to undefined at purpose as user may want 
    to match resize handle style with event color
    */
   eventResizeHandleColor: undefined,

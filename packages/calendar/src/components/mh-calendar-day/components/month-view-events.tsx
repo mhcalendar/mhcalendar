@@ -1,7 +1,9 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Prop, State, h } from '@stencil/core';
 import { IMHCalendarEvent } from '../../../types';
 import { store, storeState } from '../../../store/mh-calendar-store';
 import { DragDropState } from '../../../utils/DragDropHandler';
+import { IMHCalendarPopoverAnchorRect } from '../../../utils/PopoverPositionUtils';
+import { MONTH_VIEW_EVENTS_GAP, MONTH_VIEW_EVENTS_PADDING } from '../../../const/default-theme';
 
 @Component({
   tag: 'mh-calendar-day-month-view-events',
@@ -13,6 +15,21 @@ export class MonthViewEvents {
   @Prop() calendarDayElementHeight?: number;
   @Prop() day?: Date;
   @Prop() dragDropState?: DragDropState;
+
+  @State() morePopoverAnchorRect: IMHCalendarPopoverAnchorRect | null = null;
+
+  private onMoreClick = (e: CustomEvent<MouseEvent>) => {
+    const event = e.detail;
+    event.stopPropagation();
+    const { top, left, width, height } = (
+      event.currentTarget as HTMLElement
+    ).getBoundingClientRect();
+    this.morePopoverAnchorRect = { top, left, width, height };
+  };
+
+  private closeMorePopover = () => {
+    this.morePopoverAnchorRect = null;
+  };
 
   render() {
     if (!this.calendarDayElementHeight || !this.day || !this.groupedEvents) {
@@ -49,8 +66,8 @@ export class MonthViewEvents {
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
-          gap: '2px',
-          padding: '2px',
+          gap: `${MONTH_VIEW_EVENTS_GAP}px`,
+          padding: `${MONTH_VIEW_EVENTS_PADDING}px`,
         }}
       >
         {draggedEvent && (
@@ -100,8 +117,17 @@ export class MonthViewEvents {
               ...store.getInlineStyleForClass('mhCalendarDay__eventHolder'),
             }}
           >
-            {hasMoreEvents && <mh-calendar-more-events-indicator hiddenCount={hiddenCount} />}
+            <mh-calendar-more-events-indicator hiddenCount={hiddenCount} onMoreClick={this.onMoreClick} />
           </div>
+        )}
+
+        {this.morePopoverAnchorRect && (
+          <mh-calendar-event-list-popup
+            anchorRect={this.morePopoverAnchorRect}
+            date={this.day}
+            events={sortedEvents}
+            onClosePopover={this.closeMorePopover}
+          />
         )}
       </div>
     );

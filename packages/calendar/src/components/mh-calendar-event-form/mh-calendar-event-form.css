@@ -1,0 +1,135 @@
+.mhCalendarEventForm {
+  min-width: min(400px, calc(90vw - 40px));
+  max-width: 600px;
+}
+
+.mhCalendarEventForm__header {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--bordersColor);
+}
+
+.mhCalendarEventForm__header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.mhCalendarEventForm__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mhCalendarEventForm__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mhCalendarEventForm__field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dateFontColor);
+}
+
+.mhCalendarEventForm__checkboxLabel {
+  flex-direction: row;
+  align-items: center;
+}
+
+.mhCalendarEventForm__field input[type='text'],
+.mhCalendarEventForm__field textarea {
+  padding: 8px 12px;
+  border: 1px solid var(--bordersColor);
+  border-radius: 4px;
+  font-size: 14px;
+  background: var(--mainBackgroundColor);
+  color: var(--fontColor);
+}
+
+.mhCalendarEventForm__field input[type='text']:focus,
+.mhCalendarEventForm__field textarea:focus {
+  outline: none;
+  border-color: var(--eventBackgroundColor);
+}
+
+.mhCalendarEventForm__input--error {
+  border-color: #dc3545 !important;
+}
+
+.mhCalendarEventForm__field input[type='checkbox'] {
+  margin-right: 8px;
+}
+
+.mhCalendarEventForm__datetime {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.mhCalendarEventForm__datetime > div {
+  flex: 1 1 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mhCalendarEventForm__datetimeLabel {
+  font-size: 12px;
+}
+
+.mhCalendarEventForm__datetime input[type='datetime-local'] {
+  padding: 8px 12px;
+  border: 1px solid var(--bordersColor);
+  border-radius: 4px;
+  font-size: 14px;
+  background: var(--mainBackgroundColor);
+  color: var(--fontColor);
+}
+
+.mhCalendarEventForm__errors {
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mhCalendarEventForm__footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bordersColor);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.mhCalendarEventForm__button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mhCalendarEventForm__button--cancel {
+  background-color: var(--buttonsColor);
+  color: var(--fontColor);
+}
+
+.mhCalendarEventForm__button--cancel:hover {
+  background-color: color-mix(in srgb, var(--buttonsColor), white 10%);
+}
+
+.mhCalendarEventForm__button--save {
+  background-color: var(--eventBackgroundColor);
+  color: white;
+}
+
+.mhCalendarEventForm__button--save:hover {
+  background-color: color-mix(in srgb, var(--eventBackgroundColor), black 15%);
+}

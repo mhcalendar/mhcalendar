@@ -4,11 +4,12 @@ import { store, storeState } from '../../store/mh-calendar-store';
 import { IMHCalendarResource } from '../../types';
 import { IMHCalendarEvent } from '../../types';
 import { DateUtils } from '../../utils/DateUtils';
+import { DaysGenerator } from '../../utils/DaysGenerator';
 import { EventManager } from '../../utils/EventManager';
 import { VIEW_HEIGHT } from '../../const/default-theme';
+import { IMHCalendarPopoverAnchorRect } from '../../utils/PopoverPositionUtils';
 import { LabelUtils } from '../../utils/LabelUtils';
-
-const MAX_VISIBLE_EVENTS = 2;
+import { ResourceRowHeightUtils } from '../../utils/ResourceRowHeightUtils';
 
 interface DragOverCell {
   resourceId: string;
@@ -27,6 +28,11 @@ export class MHCalendarResourceView {
   @State() dates: Date[] = [];
   @State() resources: IMHCalendarResource[] = [];
   @State() eventMap: Map<string, IMHCalendarEvent[]> = new Map();
+  @State() morePopover: {
+    anchorRect: IMHCalendarPopoverAnchorRect;
+    date: Date;
+    resourceId: string;
+  } | null = null;
 
   private storeUnsubscribers: (() => void)[] = [];
 
@@ -61,16 +67,7 @@ export class MHCalendarResourceView {
     const { fromDate, toDate } = storeState.calendarDateRange;
     if (!fromDate || !toDate) return [];
 
-    const dates: Date[] = [];
-    let current = dayjs(fromDate);
-    const end = dayjs(toDate);
-
-    while (current.isBefore(end, 'day') || current.isSame(end, 'day')) {
-      dates.push(current.toDate());
-      current = current.add(1, 'day');
-    }
-
-    return dates;
+    return DaysGenerator.generateDateRange(fromDate, toDate);
   }
 
   private updateEventMap() {
@@ -122,12 +119,9 @@ export class MHCalendarResourceView {
     this.dragOverCell = null;
   };
 
-  private onDrop = (resourceId: string, date: Date, e: DragEvent) => {
-    e.preventDefault();
-    this.dragOverCell = null;
-
+  private buildPreviewEvent(resourceId: string, date: Date): IMHCalendarEvent | null {
     const draggedEvent = storeState.draggedEvent;
-    if (!draggedEvent) return;
+    if (!draggedEvent) return null;
 
     const originalStart = draggedEvent.startDate;
     const originalEnd = draggedEvent.endDate;
@@ -143,12 +137,22 @@ export class MHCalendarResourceView {
 
     const newEndDate = new Date(newStartDate.getTime() + durationMs);
 
-    const updatedEvent = {
+    return {
       ...draggedEvent,
       resourceId,
+      startDate: newStartDate,
+      endDate: newEndDate,
     };
+  }
 
-    EventManager.handleEventDateChange(newStartDate, newEndDate, updatedEvent);
+  private onDrop = (resourceId: string, date: Date, e: DragEvent) => {
+    e.preventDefault();
+    this.dragOverCell = null;
+
+    const previewEvent = this.buildPreviewEvent(resourceId, date);
+    if (!previewEvent) return;
+
+    EventManager.handleEventDateChange(previewEvent.startDate, previewEvent.endDate, previewEvent);
   };
 
   private onCellClick = (date: Date, resourceId: string) => {
@@ -157,34 +161,18 @@ export class MHCalendarResourceView {
     }
   };
 
-  private onMoreClick = (
-    events: IMHCalendarEvent[],
-    date: Date,
-    _resourceId: string,
-    e: MouseEvent,
-  ) => {
-    e.stopPropagation();
+  private onMoreClick = (date: Date, resourceId: string, e: CustomEvent<MouseEvent>) => {
+    const event = e.detail;
+    event.stopPropagation();
 
-    const target = e.currentTarget as HTMLElement;
-    const rect = target.getBoundingClientRect();
+    const target = event.currentTarget as HTMLElement;
+    const { top, left, width, height } = target.getBoundingClientRect();
 
-    const modalContent = (
-      <div class="mhCalendarResource__morePopup">
-        <div class="mhCalendarResource__morePopupHeader">
-          {dayjs(date).locale(storeState.locale).format('ddd, MMM D')}
-        </div>
-        <div class="mhCalendarResource__morePopupList">
-          {events.map((event) => (
-            <mh-calendar-event key={event.id} event={event} />
-          ))}
-        </div>
-      </div>
-    );
+    this.morePopover = { anchorRect: { top, left, width, height }, date, resourceId };
+  };
 
-    store.openModal(modalContent, {
-      rect,
-      alignment: 'bottom',
-    });
+  private closeMorePopover = () => {
+    this.morePopover = null;
   };
 
   render() {
@@ -196,7 +184,7 @@ export class MHCalendarResourceView {
           class="mhCalendarResource mhCalendarResource--empty"
           style={{ height: containerHeight }}
         >
-          <div class="mhCalendarResource__emptyMessage">No resources configured</div>
+          <div class="mhCalendarResource__emptyMessage">{LabelUtils.noResources()}</div>
         </div>
       );
     }
@@ -239,55 +227,84 @@ export class MHCalendarResourceView {
           </div>
 
           {/* Resource rows */}
-          {this.resources.map((resource) => (
-            <div key={resource.id} class="mhCalendarResource__row">
-              <div class="mhCalendarResource__resourceLabel">{resource.title}</div>
-              {this.dates.map((date) => {
-                const events = this.getEventsForCell(resource.id, date);
-                const dateKey = DateUtils.convertDateToString(date);
-                const isDragOver =
-                  this.dragOverCell?.resourceId === resource.id &&
-                  this.dragOverCell?.dateKey === dateKey;
-                const isWeekend = DateUtils.isWeekend(date);
-                const isToday = DateUtils.isToday(date);
+          {this.resources.map((resource) => {
+            const rowHeight = resource.rowHeight ?? storeState.resourceRowHeight;
+            const maxVisibleEvents = ResourceRowHeightUtils.getMaxVisibleEvents(rowHeight);
 
-                const visibleEvents = events.slice(0, MAX_VISIBLE_EVENTS);
-                const hiddenCount = events.length - MAX_VISIBLE_EVENTS;
+            return (
+              <div
+                key={resource.id}
+                class="mhCalendarResource__row"
+                style={{ '--resource-row-height': `${rowHeight}px` } as any}
+              >
+                <div class="mhCalendarResource__resourceLabel">{resource.title}</div>
+                {this.dates.map((date) => {
+                  const events = this.getEventsForCell(resource.id, date);
+                  const dateKey = DateUtils.convertDateToString(date);
+                  const isDragOver =
+                    this.dragOverCell?.resourceId === resource.id &&
+                    this.dragOverCell?.dateKey === dateKey;
+                  const isWeekend = DateUtils.isWeekend(date);
+                  const isToday = DateUtils.isToday(date);
 
-                return (
-                  <div
-                    key={dateKey}
-                    class={{
-                      mhCalendarResource__cell: true,
-                      'mhCalendarResource__cell--dragOver': isDragOver,
-                      'mhCalendarResource__cell--weekend': isWeekend,
-                      'mhCalendarResource__cell--today': isToday,
-                    }}
-                    onDragOver={(e: DragEvent) => this.onDragOver(resource.id, date, e)}
-                    onDragLeave={this.onDragLeave}
-                    onDrop={(e: DragEvent) => this.onDrop(resource.id, date, e)}
-                    onClick={() => {
-                      if (events.length === 0) this.onCellClick(date, resource.id);
-                    }}
-                  >
-                    {visibleEvents.map(
-                      (event) =>
-                        !event.isHidden && <mh-calendar-event key={event.id} event={event} />,
-                    )}
-                    {hiddenCount > 0 && (
-                      <button
-                        class="mhCalendarResource__moreBtn"
-                        onClick={(e: MouseEvent) => this.onMoreClick(events, date, resource.id, e)}
-                      >
-                        {LabelUtils.moreEvents(hiddenCount)}
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
+                  const previewEvent = isDragOver
+                    ? this.buildPreviewEvent(resource.id, date)
+                    : null;
+
+                  // The dragged preview counts as one more slot (shown first) so the "+N more"
+                  // indicator reflects what the cell will actually look like once dropped.
+                  const effectiveCount = events.length + (previewEvent ? 1 : 0);
+                  const hasMoreEvents = effectiveCount > maxVisibleEvents;
+                  const visibleSlots = hasMoreEvents ? maxVisibleEvents - 1 : effectiveCount;
+                  const visibleRealEvents = previewEvent
+                    ? Math.max(visibleSlots - 1, 0)
+                    : visibleSlots;
+                  const visibleEvents = events.slice(0, visibleRealEvents);
+                  const hiddenCount = effectiveCount - visibleSlots;
+
+                  return (
+                    <div
+                      key={dateKey}
+                      class={{
+                        mhCalendarResource__cell: true,
+                        'mhCalendarResource__cell--dragOver': isDragOver,
+                        'mhCalendarResource__cell--weekend': isWeekend,
+                        'mhCalendarResource__cell--today': isToday,
+                      }}
+                      onDragOver={(e: DragEvent) => this.onDragOver(resource.id, date, e)}
+                      onDragLeave={this.onDragLeave}
+                      onDrop={(e: DragEvent) => this.onDrop(resource.id, date, e)}
+                      onClick={() => {
+                        if (events.length === 0) this.onCellClick(date, resource.id);
+                      }}
+                    >
+                      {previewEvent && <mh-calendar-event event={previewEvent} isDragged={true} />}
+                      {visibleEvents.map(
+                        (event) =>
+                          !event.isHidden && <mh-calendar-event key={event.id} event={event} />,
+                      )}
+                      {hiddenCount > 0 && (
+                        <mh-calendar-more-events-indicator
+                          hiddenCount={hiddenCount}
+                          onMoreClick={(e) => this.onMoreClick(date, resource.id, e)}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
+
+        {this.morePopover && (
+          <mh-calendar-event-list-popup
+            anchorRect={this.morePopover.anchorRect}
+            date={this.morePopover.date}
+            events={this.getEventsForCell(this.morePopover.resourceId, this.morePopover.date)}
+            onClosePopover={this.closeMorePopover}
+          />
+        )}
       </div>
     );
   }

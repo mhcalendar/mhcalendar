@@ -110,7 +110,7 @@
   font-size: 13px;
   font-weight: 500;
   color: var(--fontColor);
-  min-height: 48px;
+  height: var(--resource-row-height, 64px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -121,12 +121,13 @@
   border-bottom: 1px solid var(--bordersColor);
   border-right: 1px solid var(--bordersColor);
   padding: 4px;
-  min-height: 48px;
+  height: var(--resource-row-height, 64px);
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
   gap: 2px;
+  overflow: hidden;
   cursor: pointer;
   transition: background-color 0.15s;
 }
@@ -141,8 +142,6 @@
 
 .mhCalendarResource__cell--dragOver {
   background: color-mix(in srgb, var(--headerTodayBackgroundColor) 15%, transparent);
-  outline: 2px dashed var(--headerTodayBackgroundColor);
-  outline-offset: -2px;
 }
 
 /* Event inside cell */
@@ -150,41 +149,3 @@
   width: 100%;
 }
 
-/* "+N more" button */
-.mhCalendarResource__moreBtn {
-  background: none;
-  border: none;
-  padding: 2px 4px;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--eventTimeDiffColor);
-  cursor: pointer;
-  text-align: left;
-  border-radius: 4px;
-  transition: background-color 0.15s;
-}
-
-.mhCalendarResource__moreBtn:hover {
-  background: color-mix(in srgb, var(--eventTimeDiffColor) 8%, transparent);
-}
-
-/* More popup (rendered inside modal) */
-.mhCalendarResource__morePopup {
-  min-width: 200px;
-  max-width: 300px;
-}
-
-.mhCalendarResource__morePopupHeader {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--fontColor);
-  padding-bottom: 8px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--bordersColor);
-}
-
-.mhCalendarResource__morePopupList {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}

@@ -85,7 +85,7 @@ describe('DateUtils', () => {
     });
   });
 
-  describe('formatTime', () => {
+  describe('formatDate', () => {
     const originalTimezones = store.state.timezones;
 
     beforeEach(() => {
@@ -96,9 +96,15 @@ describe('DateUtils', () => {
       store.state.timezones = originalTimezones;
     });
 
-    it('formats the time in the configured main timezone', () => {
+    it('formats the date in the configured main timezone using the default format', () => {
       // 18:30 UTC -> 14:30 EDT (UTC-4 in July)
-      expect(DateUtils.formatTime(new Date('2026-07-10T18:30:00Z'))).toBe('2 PM');
+      expect(DateUtils.formatDate(new Date('2026-07-10T18:30:00Z'))).toBe('2 PM');
+    });
+
+    it('formats the date using a custom format when provided', () => {
+      expect(DateUtils.formatDate(new Date('2026-07-10T18:30:00Z'), 'YYYY-MM-DD')).toBe(
+        '2026-07-10',
+      );
     });
   });
 

@@ -1,0 +1,35 @@
+name: Bug report
+description: Report a bug or unexpected behavior
+labels: ['bug']
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Link to reproduction
+      description: >
+        A link to a minimal, working example that reproduces the issue
+        (e.g. StackBlitz, CodeSandbox, or a fork of one of the
+        [examples](https://github.com/mhcalendar/mhcalendar/tree/main/examples)).
+        Issues without a reproduction link will be closed.
+      placeholder: link
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: What did you expect to happen instead?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: '@mhcalendar/calendar@0.3.0'
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Browser, OS, framework (React / vanilla), etc.

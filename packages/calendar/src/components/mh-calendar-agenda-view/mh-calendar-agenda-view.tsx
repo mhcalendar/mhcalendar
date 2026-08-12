@@ -1,11 +1,9 @@
-import { Component, Element, State, h, Watch } from '@stencil/core';
-import dayjs from 'dayjs';
+import { Component, Element, forceUpdate, h } from '@stencil/core';
 import { store, storeState } from '../../store/mh-calendar-store';
 import { DaysGenerator } from '../../utils/DaysGenerator';
 import { EventManager } from '../../utils/EventManager';
 import { DateUtils } from '../../utils/DateUtils';
 import { EventStyleManager } from '../../utils/EventStyleManager';
-import { IMHCalendarEvent } from '../../types';
 import { VIEW_HEIGHT } from '../../const/default-theme';
 import { LabelUtils } from '../../utils/LabelUtils';
 
@@ -17,26 +15,12 @@ import { LabelUtils } from '../../utils/LabelUtils';
 export class MHCalendarAgendaView {
   @Element() el?: HTMLElement;
 
-  @State() sortedEvents: Array<{
-    date: Date;
-    events: IMHCalendarEvent[];
-  }> = [];
-
   private storeUnsubscribers: (() => void)[] = [];
 
   componentWillLoad() {
-    this.updateEvents();
-
     this.storeUnsubscribers.push(
-      store.onChange('calendarDateRange', () => {
-        this.updateEvents();
-      }),
-    );
-
-    this.storeUnsubscribers.push(
-      store.onChange('reactiveEvents', () => {
-        this.updateEvents();
-      }),
+      store.onChange('calendarDateRange', () => forceUpdate(this)),
+      store.onChange('reactiveEvents', () => forceUpdate(this)),
     );
   }
 
@@ -45,164 +29,55 @@ export class MHCalendarAgendaView {
     this.storeUnsubscribers = [];
   }
 
-  @Watch('sortedEvents')
-  handleEventsChange() {
-    // Force re-render if needed
-  }
-
-  private updateEvents() {
+  private getSortedEvents() {
     const { fromDate, toDate } = storeState.calendarDateRange;
-    if (!fromDate || !toDate) return;
+    if (!fromDate || !toDate) return [];
 
-    // Agenda view works for DAY and WEEK - use calendarDateRange
-    // For DAY: fromDate === toDate (single day)
-    // For WEEK: fromDate to toDate (week range)
-    let dates: Date[];
+    // getDatesForMultiView already covers a single day and respects hiddenDays
+    const dates = DaysGenerator.getDatesForMultiView();
 
-    if (dayjs(fromDate).isSame(toDate, 'day')) {
-      // Single day
-      dates = [fromDate];
-    } else {
-      // Week range - use getDatesForMultiView to respect hiddenDays
-      dates = DaysGenerator.getDatesForMultiView();
-
-      // If getDatesForMultiView doesn't return dates (e.g., hiddenDays filter all days),
-      // fallback to generating dates from range
-      if (dates.length === 0) {
-        dates = [];
-        let current = dayjs(fromDate);
-        const end = dayjs(toDate);
-        while (current.isBefore(end, 'day') || current.isSame(end, 'day')) {
-          dates.push(current.toDate());
-          current = current.add(1, 'day');
-        }
-      }
-    }
-
-    // Get all events for the date range and sort them
-    const allEvents: Array<{ date: Date; event: IMHCalendarEvent }> = [];
-
-    dates.forEach((date) => {
-      const eventsForDate = EventManager.getEventsForDate(date);
-
-      eventsForDate.forEach((event) => {
-        allEvents.push({ date, event });
-      });
-    });
-
-    // Group events by date
-    const eventsByDate = new Map<string, { date: Date; events: IMHCalendarEvent[] }>();
-
-    allEvents.forEach(({ date, event }) => {
-      const dateKey = DateUtils.convertDateToString(date);
-
-      if (!eventsByDate.has(dateKey)) {
-        eventsByDate.set(dateKey, { date, events: [] });
-      }
-
-      const dayData = eventsByDate.get(dateKey)!;
-
-      // Check if event is not already added (to avoid duplicates)
-      if (!dayData.events.find((e) => e.id === event.id)) {
-        dayData.events.push(event);
-      }
-    });
-
-    // Sort events within each day by start time
-    // All-day events come first, then timed events sorted by start time
-    eventsByDate.forEach((dayData) => {
-      dayData.events.sort((a, b) => {
-        // All-day events come first
-        if (a.allDay && !b.allDay) return -1;
-        if (!a.allDay && b.allDay) return 1;
-
-        // If both all-day or both timed, sort by start time
-        return a.startDate.getTime() - b.startDate.getTime();
-      });
-    });
-
-    // Sort days chronologically
-    const sortedDays = Array.from(eventsByDate.values()).sort((a, b) => {
-      return a.date.getTime() - b.date.getTime();
-    });
-
-    this.sortedEvents = sortedDays;
-  }
-
-  private formatDate(date: Date): string {
-    const d = dayjs(date).locale(storeState.locale);
-    const today = dayjs();
-
-    if (d.isSame(today, 'day')) {
-      return LabelUtils.today();
-    }
-
-    if (d.isSame(today.add(1, 'day'), 'day')) {
-      return 'Tomorrow';
-    }
-
-    if (d.isSame(today.subtract(1, 'day'), 'day')) {
-      return 'Yesterday';
-    }
-
-    // Check if within current week
-    const startOfWeek = today.startOf('week');
-    const endOfWeek = today.endOf('week');
-
-    if (d.isAfter(startOfWeek) && d.isBefore(endOfWeek)) {
-      return d.format('dddd'); // Day name (Monday, Tuesday, etc.)
-    }
-
-    // Default format
-    return d.format('MMMM D, YYYY');
+    return dates
+      .map((date) => ({
+        date,
+        // All-day events come first, then timed events sorted by start time
+        events: EventManager.getEventsForDate(date).sort((a, b) => {
+          if (a.allDay && !b.allDay) return -1;
+          if (!a.allDay && b.allDay) return 1;
+          return a.startDate.getTime() - b.startDate.getTime();
+        }),
+      }))
+      .filter((dayData) => dayData.events.length > 0);
   }
 
   render() {
     const containerHeight = storeState.fixedHeight ?? VIEW_HEIGHT;
+    const sortedEvents = this.getSortedEvents();
 
-    if (this.sortedEvents.length === 0) {
+    if (sortedEvents.length === 0) {
       return (
         <div
           class="mhCalendarAgendaView mhCalendarAgendaView--empty"
-          style={{
-            height: containerHeight,
-            overflow: 'hidden',
-          }}
+          style={{ height: containerHeight }}
         >
-          <div class="mhCalendarAgendaView__emptyMessage">No events scheduled</div>
+          <div class="mhCalendarAgendaView__emptyMessage">{LabelUtils.noEvents()}</div>
         </div>
       );
     }
 
     return (
-      <div
-        style={{
-          height: containerHeight,
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '0',
-        }}
-      >
-        <div
-          class="mhCalendarAgendaView"
-          style={{
-            flex: '1 1 0',
-            minHeight: '0',
-            maxHeight: '100%',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-          }}
-        >
-          {this.sortedEvents.map((dayData) => (
+      <div class="mhCalendarAgendaView__container" style={{ height: containerHeight }}>
+        <div class="mhCalendarAgendaView">
+          {sortedEvents.map((dayData) => (
             <div
               key={DateUtils.convertDateToString(dayData.date)}
               class="mhCalendarAgendaView__day"
             >
               <div class="mhCalendarAgendaView__dayHeader">
-                <span class="mhCalendarAgendaView__dayDate">{this.formatDate(dayData.date)}</span>
+                <span class="mhCalendarAgendaView__dayDate">
+                  {LabelUtils.dateLabel(dayData.date)}
+                </span>
                 <span class="mhCalendarAgendaView__dayDateFull">
-                  {dayjs(dayData.date).locale(storeState.locale).format('MMM D, YYYY')}
+                  {DateUtils.formatDate(dayData.date, 'MMM D, YYYY')}
                 </span>
               </div>
               <div class="mhCalendarAgendaView__events">
@@ -223,7 +98,7 @@ export class MHCalendarAgendaView {
                       <div class="mhCalendarAgendaView__eventContent">
                         <>
                           <div class="mhCalendarAgendaView__eventTitle">
-                            {event.title || 'Untitled Event'}
+                            {event.title || LabelUtils.untitledEvent()}
                           </div>
                           {event.description && (
                             <div class="mhCalendarAgendaView__eventDescription">

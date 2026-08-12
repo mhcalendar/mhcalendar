@@ -35,11 +35,8 @@ export class DateUtils {
     return `${fromStr} - ${toStr}${yearStr}`;
   }
 
-  static formatTime(date: Date): string {
-    return dayjs(date)
-      .tz(store.mainTimezone)
-      .locale(storeState.locale)
-      .format(storeState.hoursDisplayFormat);
+  static formatDate(date: Date, format: string = storeState.hoursDisplayFormat): string {
+    return dayjs(date).tz(store.mainTimezone).locale(storeState.locale).format(format);
   }
 
   static formatEventTime(event: IMHCalendarEvent): string {
@@ -52,7 +49,7 @@ export class DateUtils {
     const endTime = dayjs(event.endDate).tz(tz).locale(storeState.locale);
 
     if (startTime.isSame(endTime, 'day')) {
-      return `${DateUtils.formatTime(event.startDate)} - ${DateUtils.formatTime(event.endDate)}`;
+      return `${DateUtils.formatDate(event.startDate)} - ${DateUtils.formatDate(event.endDate)}`;
     }
 
     const fmt = storeState.hoursDisplayFormat;

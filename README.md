@@ -8,10 +8,9 @@
   <a href="https://www.npmjs.com/package/@mhcalendar/calendar"><img src="https://img.shields.io/npm/v/@mhcalendar/calendar.svg?style=flat-square&color=blue" alt="NPM Version"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square" alt="License: MIT"></a>
   <a href="https://github.com/mhcalendar/mhcalendar/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mhcalendar/mhcalendar/ci.yml?style=flat-square" alt="CI Status"></a>
-  <a href="https://bundlephobia.com/package/@mhcalendar/calendar"><img src="https://img.shields.io/bundlephobia/minzip/@mhcalendar/calendar?style=flat-square&color=green" alt="Bundle Size"></a>
 </p>
 
-A hybrid, highly customizable, full-sized event calendar built with TypeScript, Stencil, and Day.js.
+A Modern, Highly customizable, calendar with full-sized event, multiple views and more.
 
 <p align="center">
   <img src="assets/demo.gif" alt="mhcalendar demo: switching views and dragging events" width="800" />
@@ -22,13 +21,12 @@ A hybrid, highly customizable, full-sized event calendar built with TypeScript, 
 
 ## Why mhcalendar?
 
-mhcalendar is built around easy **customization as a first-class feature**. You get full, unrestricted access to the calendar's styling. You can style it exactly how you want by using CSS variables, overriding inline styles, or utilizing our custom properties.
+mhcalendar is built around easy **customization as a first-class feature**. You get full, unrestricted access to the calendar's styling. You can style it exactly how you want by overriding inline styles, or utilizing our custom properties.
 
 ### Key Features
 
 - **Customization**: style it your way.
 - **Framework Agnostic**: built as a Web Component with Stencil.
-- **Lightweight by Design**: keeps the dependency footprint tiny.
 - **Advanced Timezones**: supports multiple IANA timezones simultaneously.
 - **Localization**: configurable day/month names (`locale`) and UI text (`labels`).
 - **Fully Interactive**: drag & drop event management and event resizing.
@@ -47,7 +45,7 @@ release. If you notice something missing or inaccurate, please
 If you are using React, you might want to check out our official React component:
 👉 [**@mhcalendar/react**](https://www.npmjs.com/package/@mhcalendar/react)
 
-If you are building a Vanilla JS project, install the core package via your preferred package manager:
+If you are building a Vanilla JS/TS project, install the core package via your preferred package manager:
 
 ```bash
 # npm
@@ -66,7 +64,7 @@ pnpm add @mhcalendar/calendar
 
 Import and initialize the web component in your app's entry file (e.g., `main.ts`):
 
-```javascript
+```typescript
 import { defineCustomElements } from '@mhcalendar/calendar/loader';
 
 // Registers the <mh-calendar> custom element in the browser
@@ -83,33 +81,41 @@ Example usage:
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
-    <script type="module" src="/src/main.js"></script>
     <mh-calendar id="my-calendar"></mh-calendar>
-    <script type="module">
-      const mhcalendar = document.getElementById('my-calendar');
-
-      const now = new Date();
-      const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0);
-      const endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 11, 30);
-
-      mhcalendar.config = {
-        viewType: 'WEEK',
-        showTimeFrom: 9,
-        showTimeTo: 18,
-        allowEventDragging: true,
-      };
-      mhcalendar.events = [
-        {
-          id: '1',
-          title: 'Team Meeting',
-          startDate,
-          endDate,
-        },
-      ];
-    </script>
+    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/mhcalendar.ts" defer></script>
   </body>
 </html>
 ```
+
+```typescript
+import type { IMHCalendarEvent, IMHCalendarViewType } from '@mhcalendar/calendar';
+
+const mhcalendar = document.getElementById('my-calendar') as HTMLMhCalendarElement;
+
+const now = new Date();
+const startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0);
+const endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 11, 30);
+
+mhcalendar.config = {
+  viewType: 'WEEK' as IMHCalendarViewType,
+  showTimeFrom: 9,
+  showTimeTo: 18,
+  allowEventDragging: true,
+};
+
+const events: IMHCalendarEvent[] = [
+  {
+    id: '1',
+    title: 'Team Meeting',
+    startDate,
+    endDate,
+  },
+];
+mhcalendar.events = events;
+```
+
+👉 See [`examples/vanilla-ts`](./examples/vanilla-ts) for a full working app.
 
 ## Contributing
 
@@ -117,8 +123,7 @@ Contributions are welcome! If you'd like to report a bug, suggest a feature, or 
 
 ## Changelog
 
-- [packages/calendar/CHANGELOG.md](./packages/calendar/CHANGELOG.md)
-- [packages/react/CHANGELOG.md](./packages/react/CHANGELOG.md)
+- [CHANGELOG.md](./packages/calendar/CHANGELOG.md)
 
 ## License
 

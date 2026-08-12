@@ -62,6 +62,16 @@ describe('MonthViewCalculator', () => {
       const el = createDayCellElement({ offsetHeight: 5000, dateElementHeight: 0 });
       expect(MonthViewCalculator.calculateMaxVisibleEvents(el)).toBe(10);
     });
+
+    it('accounts for the inter-row gap so the last "fitting" event is not clipped', () => {
+      // available = 182 - 40 (date) - 2 (padding) = 140.
+      // Naively dividing by the 20px event height alone gives floor(140/20) = 7, but 7 rows
+      // need 7*20 + 6*2(gaps) = 152px, which overflows the 140px available — the 7th row would
+      // render a few px past the cell. Folding the gap into the divisor gives floor(140/22) = 6,
+      // which actually fits: 6*20 + 5*2 = 130px.
+      const el = createDayCellElement({ offsetHeight: 182, dateElementHeight: 40 });
+      expect(MonthViewCalculator.calculateMaxVisibleEvents(el)).toBe(6);
+    });
   });
 
   describe('calculateFromElementHeight', () => {

@@ -47,10 +47,8 @@ export class MHCalendarStoreUtils {
         return { fromDate: new Date(year, month, 1), toDate: new Date(year, month + 1, 0) };
       }
       case IMHCalendarViewType.WEEK:
-      case IMHCalendarViewType.AGENDA: {
-        const { fromDate: weekFrom, toDate: weekTo } = this.getDatesForWeekView(anchorDate);
-        return { fromDate: weekFrom, toDate: weekTo };
-      }
+      case IMHCalendarViewType.AGENDA:
+        return this.getDatesForWeekView(anchorDate);
       case IMHCalendarViewType.RESOURCE: {
         const to = new Date(anchorDate);
         to.setDate(anchorDate.getDate() + resourceDays - 1);

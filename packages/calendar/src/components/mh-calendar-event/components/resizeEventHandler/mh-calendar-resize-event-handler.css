@@ -48,11 +48,3 @@
   opacity: 1;
   display: block;
 }
-
-.mhCalendarResizeEventHandler__time-diff {
-  margin-left: 4px;
-  color: var(--eventTimeDiffColor);
-  font-weight: 600;
-  font-size: 10px;
-  display: inline;
-}

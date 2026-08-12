@@ -1,9 +1,10 @@
+import { h } from '@stencil/core';
 import { DateUtils } from './DateUtils';
-import { EventModalHelper } from './EventModalHelper';
 import { store, storeState } from '../store/mh-calendar-store';
 import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarEvent } from '../types';
 import { EventManager } from './EventManager';
+import { LabelUtils } from './LabelUtils';
 
 export class DayClickHandler {
   static handleDayClick(
@@ -55,7 +56,7 @@ export class DayClickHandler {
           id: EventManager.generateEventId(),
           startDate,
           endDate,
-          title: 'New Event',
+          title: LabelUtils.defaultEventTitle(),
           allDay: false,
         };
       } else {
@@ -70,33 +71,29 @@ export class DayClickHandler {
           id: EventManager.generateEventId(),
           startDate,
           endDate,
-          title: 'New Event',
+          title: LabelUtils.defaultEventTitle(),
           allDay: true,
         };
       }
 
       // Open modal for event creation
-      const clickTarget = event.target as HTMLElement;
-      const rect = clickTarget.getBoundingClientRect();
-
-      const modalContent = EventModalHelper.createEventModalContent(
-        newEvent,
-        true, // isNewEvent
-        (updatedEvent) => {
-          // Save event via callback
-          if (typeof storeState.onEventCreated === 'function') {
-           storeState.onEventCreated(updatedEvent);
-          }
-        },
-        () => {
-          // Cancel - do nothing, event was not created
-        },
+      const modalContent = (
+        <mh-calendar-event-form
+          event={newEvent}
+          isNewEvent={true}
+          onSave={(e) => {
+            // Save event via callback
+            if (typeof storeState.onEventCreated === 'function') {
+              storeState.onEventCreated(e.detail);
+            }
+          }}
+          onCancel={() => {
+            // Cancel - do nothing, event was not created
+          }}
+        />
       );
 
-      store.openModal(modalContent, {
-        rect,
-        alignment: 'center',
-      });
+      store.openModal(modalContent);
     }
 
     // Call original onDayClick callback if provided

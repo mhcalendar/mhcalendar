@@ -12,6 +12,7 @@ export const initialState: IMHCalendarState = {
   style: {} as IMHCalendarConfigBaseStyle,
 
   // Runtime-only internal state
+  anchorDate: undefined,
   calendarDateRange: {
     fromDate: undefined,
     toDate: undefined,
@@ -24,7 +25,7 @@ export const initialState: IMHCalendarState = {
   properties: {},
   modal: {
     isOpen: false,
-    content: null,
+    content: undefined,
     position: undefined,
   },
 } as IMHCalendarState;

@@ -4,6 +4,7 @@ import {
   MINUTES_IN_HOUR,
 } from '../components/mh-calendar-day/mh-calendar-day.const';
 import { store, storeState } from '../store/mh-calendar-store';
+import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarEvent } from '../types';
 import { EventUtils } from './EventUtils';
 
@@ -12,14 +13,84 @@ const EVENT_MARGIN = 2; // pixels
 
 export class EventStyleManager {
   static getEventColor(event?: { color?: string }): string {
-    return event?.color ||storeState.properties.eventBackgroundColor;
+    return event?.color || storeState.properties.eventBackgroundColor;
+  }
+
+  /**
+   * Computes the inline style for an event's container element across all view types
+   * (month/week/day, regular and dragged-preview variants).
+   */
+  static getEventStyle(
+    event: IMHCalendarEvent,
+    viewType: IMHCalendarViewType,
+    isDragged: boolean,
+    dayHeight?: number,
+    dayOfRendering?: Date,
+  ): any {
+    const eventColor = this.getEventColor(event);
+
+    // When dragged in a time-slot view, ensure full opacity for the preview (original item fades
+    // separately) and let it fill the precisely-sized holder positioned by EventRenderer.
+    if (isDragged && !event.allDay && [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType)) {
+      return {
+        height: '100%',
+        width: '100%',
+        position: 'relative',
+        opacity: '1',
+        borderRadius: '5px', // Ensure border radius is visible
+        overflow: 'hidden', // Ensure content stays within rounded corners
+        background: eventColor,
+        ...store.getInlineStyleForClass('mhCalendarEvent'),
+      };
+    }
+
+    // Dragged all-day preview should also be fully opaque and match regular styling
+    if (isDragged && event.allDay) {
+      return {
+        height: 'var(--monthEventHeight)',
+        width: '100%',
+        opacity: '1',
+        padding: '3px',
+        fontSize: '10px',
+        backgroundColor: eventColor,
+      };
+    }
+
+    const shouldEventHaveCustomHeight =
+      [IMHCalendarViewType.WEEK, IMHCalendarViewType.DAY].includes(viewType) && !event.allDay;
+
+    if (shouldEventHaveCustomHeight) {
+      const height = dayHeight
+        ? this.calculateEventHeight(event.startDate, event.endDate, dayHeight, dayOfRendering, isDragged)
+        : undefined;
+
+      return {
+        height,
+        maxHeight: height,
+        background: eventColor,
+        position: 'relative',
+      };
+    }
+
+    return {
+      height: 'var(--monthEventHeight)',
+      width: '100%',
+      opacity: '1',
+      padding: '3px',
+      fontSize: '10px',
+      backgroundColor: eventColor,
+    };
   }
 
   /**
    * Calculates optimal width and position for overlapping events (side-by-side mode)
-   * Based on the maximum number of events that overlap at any given time
+   * Based on the maximum number of events that overlap at any given time.
    */
-  static calculateEventWidth(events: IMHCalendarEvent[], currentEventIndex: number) {
+  static calculateEventWidth(
+    events: IMHCalendarEvent[],
+    currentEventIndex: number,
+    columnAssignments: Map<string, number>,
+  ) {
     if (events.length === 1) {
       return {
         width: `${DEFAULT_EVENT_WIDTH}%`,
@@ -30,9 +101,6 @@ export class EventStyleManager {
     }
 
     const currentEvent = events[currentEventIndex];
-
-    // Assign columns to all events using greedy graph coloring
-    const columnAssignments = EventStyleManager.assignColumns(events);
     const currentEventColumn = columnAssignments.get(currentEvent.id) || 0;
 
     // Find overlapping events (including self) and determine local column count
@@ -216,13 +284,14 @@ export class EventStyleManager {
       return a.id.localeCompare(b.id);
     });
 
+    const eventsById = new Map(events.map((event) => [event.id, event]));
     const columnAssignments = new Map<string, number>();
 
     for (const event of sorted) {
       // Find columns used by overlapping events that already have assignments
       const usedColumns = new Set<number>();
       for (const [id, col] of columnAssignments) {
-        const other = events.find((e) => e.id === id);
+        const other = eventsById.get(id);
         if (other && EventUtils.areEventsOverlapping(event, other)) {
           usedColumns.add(col);
         }
@@ -244,13 +313,14 @@ export class EventStyleManager {
     endDate: Date,
     dayHeight: number,
     currentDate?: Date,
-    showTimeFrom: number = 10,
-    showTimeTo: number = 24,
     useFullDuration: boolean = false,
   ): string {
     if (!currentDate) {
       return '0px';
     }
+
+    const showTimeFrom = storeState.showTimeFrom ?? 10;
+    const showTimeTo = storeState.showTimeTo ?? 24;
 
     // Get the top margin for all-day events (same logic as position calculation)
     const topMarginOfAllDayEvents = store.headerMargin;

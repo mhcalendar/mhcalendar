@@ -1,9 +1,8 @@
-import { Component, Element, h, Prop } from '@stencil/core';
+import { Component, Element, h, Prop, State } from '@stencil/core';
 import { IMHCalendarEvent } from '../../types';
 import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
 import { store, storeState } from '../../store/mh-calendar-store';
 import { EventStyleManager } from '../../utils/EventStyleManager';
-import { EventModalHelper } from '../../utils/EventModalHelper';
 
 @Component({
   tag: 'mh-calendar-event',
@@ -20,40 +19,36 @@ export class MHCalendarEvent {
 
   @Element() el?: HTMLElement;
 
+  @State() resizePreviewEndDate: Date | null = null;
+
   private onEventClick(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!this.event || !this.el) return;
+    if (!this.event) return;
 
     // Open modal for event editing
-    const rect = this.el.getBoundingClientRect();
-
-    const modalContent = EventModalHelper.createEventModalContent(
-      this.event,
-      false, // isNewEvent
-      (updatedEvent) => {
-        // Update event via callback
-        if (typeof storeState.onEventUpdated === 'function') {
-          storeState.onEventUpdated(updatedEvent);
-        }
-        // Also call original onEventClick if provided
-        if (typeof storeState.onEventClick === 'function') {
-          storeState.onEventClick(updatedEvent);
-        }
-      },
-      () => {
-        // Cancel - just call original onEventClick if provided
-        if (typeof storeState.onEventClick === 'function' && this.event) {
-          storeState.onEventClick(this.event);
-        }
-      },
+    const modalContent = (
+      <mh-calendar-event-form
+        event={this.event}
+        isNewEvent={false}
+        onSave={(e) => {
+          if (typeof storeState.onEventUpdated === 'function') {
+            storeState.onEventUpdated(e.detail);
+          }
+          if (typeof storeState.onEventClick === 'function') {
+            storeState.onEventClick(e.detail);
+          }
+        }}
+        onCancel={() => {
+          if (typeof storeState.onEventClick === 'function' && this.event) {
+            storeState.onEventClick(this.event);
+          }
+        }}
+      />
     );
 
-    store.openModal(modalContent, {
-      rect,
-      alignment: 'right',
-    });
+    store.openModal(modalContent);
   }
 
   private onRightEventClick(event: MouseEvent) {
@@ -68,18 +63,15 @@ export class MHCalendarEvent {
   private calculateEventHeight() {
     if (!this.event || !this.dayHeight) return;
 
-    const height = this.event.allDay
-      ? '40px'
-      : EventStyleManager.calculateEventHeight(
-          this.event?.startDate,
-          this.event?.endDate,
-          this.dayHeight,
-          this.dayOfRendering, // Always use dayOfRendering, not endDate
-          storeState.showTimeFrom,
-          storeState.showTimeTo,
-          this.isDragged, // useFullDuration = true when dragged
-        );
-    return height;
+    // Only called for non-all-day events (see shouldEventHaveCustomHeight and the
+    // resize-handler render guard), so no allDay branch is needed here.
+    return EventStyleManager.calculateEventHeight(
+      this.event.startDate,
+      this.event.endDate,
+      this.dayHeight,
+      this.dayOfRendering, // Always use dayOfRendering, not endDate
+      this.isDragged, // useFullDuration = true when dragged
+    );
   }
 
   private onDragStart = (event: DragEvent | TouchEvent) => {
@@ -115,59 +107,13 @@ export class MHCalendarEvent {
   private getMHCalendarEventStyle() {
     if (!this.el || !this.event || !storeState.viewType) return;
 
-    const eventColor = EventStyleManager.getEventColor(this.event);
-
-    // When dragged, ensure full opacity for the preview (original item fades separately)
-    if (
-      this.isDragged &&
-      !this.event?.allDay &&
-      storeState.viewType !== IMHCalendarViewType.MONTH
-    ) {
-      return {
-        height: '100%',
-        width: '100%',
-        position: 'relative',
-        opacity: '1',
-        borderRadius: '5px', // Ensure border radius is visible
-        overflow: 'hidden', // Ensure content stays within rounded corners
-        background: eventColor,
-        ...store.getInlineStyleForClass('mhCalendarEvent'),
-      };
-    }
-
-    // Dragged all-day preview should also be fully opaque and match regular styling
-    if (this.isDragged && this.event?.allDay) {
-      return {
-        height: 'var(--monthEventHeight)',
-        width: '100%',
-        opacity: '1',
-        padding: '3px',
-        fontSize: '10px',
-        backgroundColor: eventColor,
-      };
-    }
-
-    const shouldEventHaveCustomHeight =
-      [IMHCalendarViewType.WEEK, IMHCalendarViewType.DAY].includes(storeState.viewType) &&
-      !this.event.allDay;
-
-    if (shouldEventHaveCustomHeight) {
-      return {
-        height: this.calculateEventHeight(),
-        maxHeight: this.calculateEventHeight(),
-        background: eventColor,
-        position: 'relative',
-      };
-    }
-
-    return {
-      height: 'var(--monthEventHeight)',
-      width: '100%',
-      opacity: '1',
-      padding: '3px',
-      fontSize: '10px',
-      backgroundColor: eventColor,
-    };
+    return EventStyleManager.getEventStyle(
+      this.event,
+      storeState.viewType,
+      this.isDragged,
+      this.dayHeight,
+      this.dayOfRendering,
+    );
   }
 
   private getCorrectEventUI() {
@@ -177,7 +123,7 @@ export class MHCalendarEvent {
       [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(storeState.viewType) &&
       !this.event.allDay
     ) {
-      return <mh-calendar-event-full event={this.event} />;
+      return <mh-calendar-event-full event={this.event} resizePreviewEndDate={this.resizePreviewEndDate} />;
     }
 
     return <mh-calendar-event-small event={this.event} />;
@@ -230,6 +176,7 @@ export class MHCalendarEvent {
             eventStartDate={this.event?.startDate}
             dayOfRendering={this.dayOfRendering}
             eventColor={this.event?.color}
+            onResizePreview={(e) => (this.resizePreviewEndDate = e.detail)}
           />
         )}
       </div>

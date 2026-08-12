@@ -155,21 +155,19 @@ export class EventManager {
     newEndDate: Date,
     event?: IMHCalendarEvent,
   ): void {
-    let originalEvent: IMHCalendarEvent | null = event ?? null;
     const { reactiveEvents, draggedEvent } = store.state;
+    const targetId = event?.id ?? draggedEvent?.id;
 
-    if (!event) {
-      if (!draggedEvent?.id) {
-        console.error('No dragged event found');
-        return;
-      }
+    if (!targetId) {
+      console.error('No dragged event found');
+      return;
+    }
 
-      // Find the original event data (get from any date key that contains it)
-      for (const [_, eventsMap] of reactiveEvents) {
-        if (eventsMap.has(draggedEvent.id)) {
-          originalEvent = eventsMap.get(draggedEvent.id)!;
-          break;
-        }
+    let originalEvent: IMHCalendarEvent | null = null;
+    for (const [_, eventsMap] of reactiveEvents) {
+      if (eventsMap.has(targetId)) {
+        originalEvent = eventsMap.get(targetId)!;
+        break;
       }
     }
     if (!originalEvent) {
@@ -198,9 +196,9 @@ export class EventManager {
       }
     });
 
-    // Update the event with new dates
     const updatedEvent: IMHCalendarEvent = {
       ...originalEvent,
+      ...event,
       startDate: newStartDate,
       endDate: newEndDate,
       isHidden: false,

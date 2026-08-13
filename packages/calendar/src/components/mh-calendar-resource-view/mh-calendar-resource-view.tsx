@@ -105,6 +105,14 @@ export class MHCalendarResourceView {
     return this.eventMap.get(this.getCellKey(resourceId, date)) ?? [];
   }
 
+  private getEventsForResource(resourceId: string): IMHCalendarEvent[] {
+    const eventsById = new Map<string, IMHCalendarEvent>();
+    this.dates.forEach((date) => {
+      this.getEventsForCell(resourceId, date).forEach((event) => eventsById.set(event.id, event));
+    });
+    return Array.from(eventsById.values());
+  }
+
   // Drag & Drop on cells
 
   private onDragOver = (resourceId: string, date: Date, e: DragEvent) => {
@@ -195,20 +203,21 @@ export class MHCalendarResourceView {
 
     const colCount = this.dates.length;
     const columnWidth = storeState.resourceColumnWidth;
+    const extraColumns = storeState.resourceExtraColumns ?? [];
+
+    const dayColTemplate = columnWidth ? `${columnWidth}px` : '1fr';
+    const extraColsTemplate = extraColumns.map((col) => `${col.width ?? 160}px`).join(' ');
+    const gridTemplateColumns = [
+      `${storeState.resourceLabelColumnWidth}px`,
+      `repeat(${colCount}, ${dayColTemplate})`,
+      extraColsTemplate,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     return (
-      <div
-        class="mhCalendarResource"
-        style={
-          {
-            height: containerHeight,
-            '--resource-cols': `${colCount}`,
-            '--resource-col-width': columnWidth ? `${columnWidth}px` : '1fr',
-            '--resource-label-col-width': `${storeState.resourceLabelColumnWidth}px`,
-          } as any
-        }
-      >
-        <div class="mhCalendarResource__grid">
+      <div class="mhCalendarResource" style={{ height: containerHeight }}>
+        <div class="mhCalendarResource__grid" style={{ gridTemplateColumns }}>
           {/* Header row */}
           <div class="mhCalendarResource__headerRow">
             <div class="mhCalendarResource__cornerCell" />
@@ -231,6 +240,11 @@ export class MHCalendarResourceView {
                 </div>
               );
             })}
+            {extraColumns.map((col) => (
+              <div key={col.id} class="mhCalendarResource__extraHeaderCell">
+                {col.title}
+              </div>
+            ))}
           </div>
 
           {/* Resource rows */}
@@ -304,6 +318,13 @@ export class MHCalendarResourceView {
                     </div>
                   );
                 })}
+                {extraColumns.map((col) => (
+                  <div
+                    key={col.id}
+                    class="mhCalendarResource__extraCell"
+                    innerHTML={col.render(resource, this.getEventsForResource(resource.id))}
+                  />
+                ))}
               </div>
             );
           })}

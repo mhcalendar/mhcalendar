@@ -11,7 +11,11 @@ export type {
 // Config types — internal (for store / implementation use)
 export type { ICalendarBaseConfig, IMHCalendarConfigBaseStyle } from './config/base';
 export type { ICalendarMultiViewConfig, SlotOption, BusinessHoursConfig } from './config/multiview';
-export type { ICalendarWeekConfig, IMHCalendarResource } from './config/week';
+export type {
+  ICalendarWeekConfig,
+  IMHCalendarResource,
+  IMHCalendarResourceExtraColumn,
+} from './config/week';
 
 // Config types — public (user-facing, all Partial<>)
 export type { IMHCalendarConfigBase, MHCalendarTheme, IMHCalendarLabels } from './config/base';

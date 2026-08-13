@@ -1,4 +1,29 @@
 import { ICalendarMultiViewConfig } from './multiview';
+import { IMHCalendarEvent } from './event';
+
+export interface IMHCalendarResourceExtraColumn {
+  /**
+   * Unique identifier for this column (used as the render key).
+   */
+  id: string;
+
+  /**
+   * Header text shown for this column in RESOURCE view.
+   */
+  title: string;
+
+  /**
+   * Fixed width (px) of this column.
+   * @default 160
+   */
+  width?: number;
+
+  /**
+   * Returns the HTML markup to render in this column's cell for a given resource.
+   * `events` are all events for that resource within the currently visible date range.
+   */
+  render: (resource: IMHCalendarResource, events: IMHCalendarEvent[]) => string;
+}
 
 export interface IMHCalendarResource {
   id: string;
@@ -52,6 +77,13 @@ export interface ICalendarWeekConfig extends ICalendarMultiViewConfig {
    * @default 160
    */
   resourceLabelColumnWidth: number;
+
+  /**
+   * Extra columns appended after the day columns in RESOURCE view (e.g. a "Summary" column
+   * with a value computed per resource).
+   * @default undefined
+   */
+  resourceExtraColumns: IMHCalendarResourceExtraColumn[] | undefined;
 }
 
 /**

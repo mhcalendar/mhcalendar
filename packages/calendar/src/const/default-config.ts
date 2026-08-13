@@ -55,4 +55,5 @@ export const DEFAULT_WEEK_VIEW_CONFIG: IMHCalendarWeekConfig = {
   resourceRowHeight: DEFAULT_RESOURCE_ROW_HEIGHT,
   resourceColumnWidth: undefined,
   resourceLabelColumnWidth: DEFAULT_RESOURCE_LABEL_COLUMN_WIDTH,
+  resourceExtraColumns: undefined,
 };

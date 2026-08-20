@@ -53,6 +53,7 @@ export class MHCalendar {
 
   render() {
     if (!storeState.reactiveEvents) return null;
+
     return (
       <div
         class="mhCalendar"

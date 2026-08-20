@@ -5,6 +5,7 @@ import { IMHCalendarResource } from '../../types';
 import { IMHCalendarEvent } from '../../types';
 import { DateUtils } from '../../utils/DateUtils';
 import { DaysGenerator } from '../../utils/DaysGenerator';
+import { DayClickHandler } from '../../utils/DayClickHandler';
 import { EventManager } from '../../utils/EventManager';
 import { IMHCalendarPopoverAnchorRect } from '../../utils/PopoverPositionUtils';
 import { LabelUtils } from '../../utils/LabelUtils';
@@ -168,10 +169,14 @@ export class MHCalendarResourceView {
     EventManager.handleEventDateChange(previewEvent.startDate, previewEvent.endDate, previewEvent);
   };
 
-  private onCellClick = (date: Date, resourceId: string) => {
-    if (typeof storeState.onDayClick === 'function') {
-      storeState.onDayClick({ date, resourceId });
-    }
+  private onCellClick = (event: MouseEvent, date: Date, resourceId: string) => {
+    DayClickHandler.handleDayClick(
+      event,
+      event.currentTarget as HTMLElement,
+      date,
+      false,
+      resourceId,
+    );
   };
 
   private onMoreClick = (date: Date, resourceId: string, e: CustomEvent<MouseEvent>) => {
@@ -214,7 +219,6 @@ export class MHCalendarResourceView {
     ]
       .filter(Boolean)
       .join(' ');
-
     return (
       <div class="mhCalendarResource" style={{ height: containerHeight }}>
         <div class="mhCalendarResource__grid" style={{ gridTemplateColumns }}>
@@ -300,8 +304,8 @@ export class MHCalendarResourceView {
                       onDragOver={(e: DragEvent) => this.onDragOver(resource.id, date, e)}
                       onDragLeave={this.onDragLeave}
                       onDrop={(e: DragEvent) => this.onDrop(resource.id, date, e)}
-                      onClick={() => {
-                        if (events.length === 0) this.onCellClick(date, resource.id);
+                      onClick={(e: MouseEvent) => {
+                        if (events.length === 0) this.onCellClick(e, date, resource.id);
                       }}
                     >
                       {previewEvent && <mh-calendar-event event={previewEvent} isDragged={true} />}

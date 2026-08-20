@@ -42,4 +42,4 @@ registerView({ type: IMHCalendarViewType.DAY, tagName: 'mh-calendar-multi-view' 
 registerView({ type: IMHCalendarViewType.WEEK, tagName: 'mh-calendar-multi-view' });
 registerView({ type: IMHCalendarViewType.MONTH, tagName: 'mh-calendar-month' });
 registerView({ type: IMHCalendarViewType.AGENDA, tagName: 'mh-calendar-agenda-view' });
-// registerView({ type: IMHCalendarViewType.RESOURCE, tagName: 'mh-calendar-resource-view' });
+registerView({ type: IMHCalendarViewType.RESOURCE, tagName: 'mh-calendar-resource-view' });

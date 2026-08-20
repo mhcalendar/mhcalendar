@@ -76,7 +76,13 @@ export class EventStyleManager {
 
     if (shouldEventHaveCustomHeight) {
       const height = dayHeight
-        ? this.calculateEventHeight(event.startDate, event.endDate, dayHeight, dayOfRendering, isDragged)
+        ? this.calculateEventHeight(
+            event.startDate,
+            event.endDate,
+            dayHeight,
+            dayOfRendering,
+            isDragged,
+          )
         : undefined;
 
       return {
@@ -348,8 +354,8 @@ export class EventStyleManager {
       return '0px';
     }
 
-    const s_time = startDate.getTime();
-    const e_time = endDate.getTime();
+    const s_time = startDate?.getTime();
+    const e_time = endDate?.getTime();
     if (s_time >= e_time) {
       return '0px';
     }

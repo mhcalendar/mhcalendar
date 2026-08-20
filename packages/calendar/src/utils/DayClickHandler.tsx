@@ -37,7 +37,8 @@ export class DayClickHandler {
     ) {
       const viewType = storeState.viewType;
       const isTimeView =
-        viewType && [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType);
+        viewType &&
+        (viewType === IMHCalendarViewType.DAY || viewType === IMHCalendarViewType.WEEK);
 
       let newEvent: IMHCalendarEvent;
 

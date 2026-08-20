@@ -7,11 +7,11 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from "./types";
 import { DragDropState } from "./utils/DragDropHandler";
-import { IMHCalendarViewType } from "./store/mh-calendar-store.types";
+import { MHCalendarViewType } from "./store/mh-calendar-store.types";
 import { IMHCalendarPopoverAlignment, IMHCalendarPopoverAnchorRect } from "./utils/PopoverPositionUtils";
 export { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from "./types";
 export { DragDropState } from "./utils/DragDropHandler";
-export { IMHCalendarViewType } from "./store/mh-calendar-store.types";
+export { MHCalendarViewType } from "./store/mh-calendar-store.types";
 export { IMHCalendarPopoverAlignment, IMHCalendarPopoverAnchorRect } from "./utils/PopoverPositionUtils";
 export namespace Components {
     interface MhCalendar {
@@ -46,7 +46,7 @@ export namespace Components {
         "calendarDayElementHeight"?: number;
         "day"?: Date;
         "dragDropState": DragDropState;
-        "viewType"?: IMHCalendarViewType;
+        "viewType"?: MHCalendarViewType;
     }
     interface MhCalendarDayMonthViewEvents {
         "calendarDayElementHeight"?: number;
@@ -423,7 +423,7 @@ declare namespace LocalJSX {
         "calendarDayElementHeight"?: number;
         "day"?: Date;
         "dragDropState": DragDropState;
-        "viewType"?: IMHCalendarViewType;
+        "viewType"?: MHCalendarViewType;
     }
     interface MhCalendarDayMonthViewEvents {
         "calendarDayElementHeight"?: number;
@@ -544,7 +544,7 @@ declare namespace LocalJSX {
     }
     interface MhCalendarDayDraggedEventPreviewAttributes {
         "calendarDayElementHeight": number;
-        "viewType": IMHCalendarViewType;
+        "viewType": MHCalendarViewType;
     }
     interface MhCalendarDayMonthViewEventsAttributes {
         "maxVisibleEventsInMonthView": number;

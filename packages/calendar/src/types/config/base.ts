@@ -1,4 +1,4 @@
-import { IMHCalendarViewType } from '../enums';
+import { MHCalendarViewType } from '../enums';
 import { CssStyles } from './cssStyles';
 import { IMHCalendarDayClickPayload, IMHCalendarEvent } from './event';
 import { ConfigCSSProperites } from './properties';
@@ -43,11 +43,12 @@ export interface IMHCalendarLabels {
   noEvents: string;
 
   /**
-   * Overrides for the view switcher's view names.
-   * Keys not provided fall back to the title-cased IMHCalendarViewType value (e.g. 'Month').
+   * Overrides for the view switcher's view names, keyed by view type (built-in or
+   * registered via `registerView`).
+   * Keys not provided fall back to the title-cased view type value (e.g. 'Month').
    * @example { WEEK: 'Semaine', MONTH: 'Mois' }
    */
-  views: Partial<Record<IMHCalendarViewType, string>>;
+  views: Partial<Record<string, string>>;
 
   /**
    * Fallback title used for an event with no title (e.g. in agenda view).
@@ -178,7 +179,7 @@ export interface ICalendarBaseConfig {
   // base config
   theme: MHCalendarTheme | undefined;
   style: Partial<IMHCalendarConfigBaseStyle> | undefined;
-  viewType: IMHCalendarViewType | undefined;
+  viewType: MHCalendarViewType | undefined;
   fixedHeight: string | undefined;
   virtualScrollHeight: string | undefined;
   startDate: Date | string | undefined;

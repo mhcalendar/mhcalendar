@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { storeState } from '../store/mh-calendar-store';
-import { IMHCalendarViewType } from '../types/enums';
+import { MHCalendarViewType } from '../types/enums';
 import { DateUtils } from './DateUtils';
 
 export class LabelUtils {
@@ -12,7 +12,7 @@ export class LabelUtils {
     return storeState.labels?.moreEvents?.(hiddenCount) ?? `+${hiddenCount} more`;
   }
 
-  static viewName(viewType: IMHCalendarViewType): string {
+  static viewName(viewType: MHCalendarViewType): string {
     return (
       storeState.labels?.views?.[viewType] ?? viewType.charAt(0) + viewType.slice(1).toLowerCase()
     );

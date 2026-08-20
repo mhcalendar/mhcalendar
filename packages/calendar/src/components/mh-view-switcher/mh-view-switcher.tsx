@@ -1,7 +1,8 @@
 import { Component, h, State } from '@stencil/core';
 import { store, storeState } from '../../store/mh-calendar-store';
-import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
+import { MHCalendarViewType } from '../../store/mh-calendar-store.types';
 import { LabelUtils } from '../../utils/LabelUtils';
+import { getRegisteredViewTypes } from '../../registry/mh-calendar-view-registry';
 
 @Component({
   tag: 'mh-view-switcher',
@@ -27,13 +28,13 @@ export class MhViewSwitcher {
     this.isCompact = e.matches;
   };
 
-  private onViewChange = (viewType: IMHCalendarViewType) => {
+  private onViewChange = (viewType: MHCalendarViewType) => {
     store.changeView(viewType);
   };
 
   render() {
     const currentView = storeState.viewType;
-    const viewTypes = Object.values(IMHCalendarViewType) as IMHCalendarViewType[];
+    const viewTypes = getRegisteredViewTypes();
     const filteredViewTypes = storeState.availableViews
       ? viewTypes.filter((viewType) => storeState.availableViews?.includes(viewType))
       : viewTypes;
@@ -44,7 +45,7 @@ export class MhViewSwitcher {
           <select
             class="mhViewSwitcher__select"
             onChange={(e) =>
-              this.onViewChange((e.target as HTMLSelectElement).value as IMHCalendarViewType)
+              this.onViewChange((e.target as HTMLSelectElement).value as MHCalendarViewType)
             }
           >
             {filteredViewTypes.map((viewType) => (

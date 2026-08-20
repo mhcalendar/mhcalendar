@@ -1,4 +1,4 @@
-import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
+import { IMHCalendarViewType, MHCalendarViewType } from '../store/mh-calendar-store.types';
 import { EventStyleManager } from './EventStyleManager';
 import { DateUtils } from './DateUtils';
 import { storeState } from '../store/mh-calendar-store';
@@ -32,11 +32,12 @@ export class EventRenderer {
   static getEventHolderStyle(
     eventTopPosition: number,
     positionStyle: any,
-    viewType: IMHCalendarViewType | undefined,
+    viewType: MHCalendarViewType | undefined,
   ): any {
     if (!viewType) return;
 
-    const isTimeView = [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType);
+    const isTimeView =
+      viewType === IMHCalendarViewType.DAY || viewType === IMHCalendarViewType.WEEK;
 
     if (isTimeView) {
       return {
@@ -67,11 +68,12 @@ export class EventRenderer {
     isDraggedOverBlocked: boolean,
     day: Date | undefined,
     calendarDayElementHeight: number | undefined,
-    viewType: IMHCalendarViewType | undefined,
+    viewType: MHCalendarViewType | undefined,
   ): any {
     if (!viewType) return;
 
-    const isTimeView = [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType);
+    const isTimeView =
+      viewType === IMHCalendarViewType.DAY || viewType === IMHCalendarViewType.WEEK;
 
     let baseStyle: any;
 

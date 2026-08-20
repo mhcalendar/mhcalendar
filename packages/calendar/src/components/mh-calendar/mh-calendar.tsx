@@ -2,8 +2,8 @@ import { Component, Element, Method, Prop, Watch, h } from '@stencil/core';
 import { IMHCalendarEvent, IMHCalendarFullOptions, UserApi } from '../../types';
 import { DEFAULT_WEEK_VIEW_CONFIG } from '../../const/default-config';
 import { store, storeState } from '../../store/mh-calendar-store';
-import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
 import { createUserAPI } from '../../store/mh-calendar-store.user-api';
+import { getRegisteredView } from '../../registry/mh-calendar-view-registry';
 
 @Component({
   tag: 'mh-calendar',
@@ -46,20 +46,9 @@ export class MHCalendar {
   }
 
   private getCorrectViewType() {
-    switch (storeState.viewType) {
-      case IMHCalendarViewType.DAY:
-        return <mh-calendar-multi-view />;
-      case IMHCalendarViewType.WEEK:
-        return <mh-calendar-multi-view />;
-      case IMHCalendarViewType.MONTH:
-        return <mh-calendar-month />;
-      case IMHCalendarViewType.AGENDA:
-        return <mh-calendar-agenda-view />;
-      case IMHCalendarViewType.RESOURCE:
-        return <mh-calendar-resource-view />;
-      default:
-        return <mh-calendar-multi-view />;
-    }
+    const definition = getRegisteredView(storeState.viewType);
+    if (!definition) return <mh-calendar-multi-view />;
+    return h(definition.tagName, {});
   }
 
   render() {

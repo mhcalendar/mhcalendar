@@ -11,6 +11,7 @@ import {
   IEventResizePayload,
   IMHCalendarState,
   IMHCalendarViewType,
+  MHCalendarViewType,
 } from './mh-calendar-store.types';
 import { MHCalendarStoreUtils } from './mh-calendar-store.utils';
 import { IMHCalendarEvent } from '../types';
@@ -108,7 +109,7 @@ export class MHCalendarActions extends MHCalendarStoreUtils {
 
   protected _changeView(
     state: IMHCalendarState,
-    payload: { viewType: IMHCalendarViewType },
+    payload: { viewType: MHCalendarViewType },
   ): IMHCalendarState {
     const newCalendarDateRange = this.updateDateRangeForViewType(
       payload.viewType,

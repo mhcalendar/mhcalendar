@@ -6,7 +6,7 @@ import {
   DATE_FORMAT_YYYY_MM_DD,
 } from '../components/mh-calendar-day/mh-calendar-day.const';
 import { BusinessHoursConfig } from '../types';
-import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
+import { IMHCalendarViewType, MHCalendarViewType } from '../store/mh-calendar-store.types';
 import { DateUtils } from './DateUtils';
 import { store } from '../store/mh-calendar-store';
 
@@ -99,7 +99,7 @@ export class BusinessHoursUtils {
   static getNonBusinessHoursStyles(
     day: Date,
     calendarDayElementHeight: number,
-    viewType: IMHCalendarViewType | undefined,
+    viewType: MHCalendarViewType | undefined,
     businessHours: { start: number; end: number } | null,
     showTimeFrom: number | undefined,
     showTimeTo: number | undefined,
@@ -109,7 +109,8 @@ export class BusinessHoursUtils {
       return [];
     }
 
-    const isTimeView = [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType);
+    const isTimeView =
+      viewType === IMHCalendarViewType.DAY || viewType === IMHCalendarViewType.WEEK;
 
     if (!isTimeView) return [];
 

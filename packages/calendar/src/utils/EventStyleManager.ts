@@ -4,7 +4,7 @@ import {
   MINUTES_IN_HOUR,
 } from '../components/mh-calendar-day/mh-calendar-day.const';
 import { store, storeState } from '../store/mh-calendar-store';
-import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
+import { IMHCalendarViewType, MHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarEvent } from '../types';
 import { EventUtils } from './EventUtils';
 
@@ -22,7 +22,7 @@ export class EventStyleManager {
    */
   static getEventStyle(
     event: IMHCalendarEvent,
-    viewType: IMHCalendarViewType,
+    viewType: MHCalendarViewType,
     isDragged: boolean,
     dayHeight?: number,
     dayOfRendering?: Date,
@@ -44,7 +44,10 @@ export class EventStyleManager {
 
     // When dragged in a time-slot view, ensure full opacity for the preview (original item fades
     // separately) and let it fill the precisely-sized holder positioned by EventRenderer.
-    if (isDragged && !event.allDay && [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType)) {
+    const isTimeView =
+      viewType === IMHCalendarViewType.DAY || viewType === IMHCalendarViewType.WEEK;
+
+    if (isDragged && !event.allDay && isTimeView) {
       return {
         height: '100%',
         width: '100%',
@@ -69,8 +72,7 @@ export class EventStyleManager {
       };
     }
 
-    const shouldEventHaveCustomHeight =
-      [IMHCalendarViewType.WEEK, IMHCalendarViewType.DAY].includes(viewType) && !event.allDay;
+    const shouldEventHaveCustomHeight = isTimeView && !event.allDay;
 
     if (shouldEventHaveCustomHeight) {
       const height = dayHeight

@@ -1,5 +1,15 @@
 # vanilla-ts
 
+## 0.0.3
+
+### Patch Changes
+
+- dd8ff4c: Fix resource view update
+- dd8ff4c: Resource view fixes
+- Updated dependencies [dd8ff4c]
+- Updated dependencies [dd8ff4c]
+  - @mhcalendar/calendar@0.3.3
+
 ## 0.0.2
 
 ### Patch Changes

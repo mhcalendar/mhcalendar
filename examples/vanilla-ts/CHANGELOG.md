@@ -1,5 +1,13 @@
 # vanilla-ts
 
+## 0.0.2
+
+### Patch Changes
+
+- 54f8840: Fix resource view update
+- Updated dependencies [54f8840]
+  - @mhcalendar/calendar@0.3.2
+
 ## 0.0.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @mhcalendar/calendar
 
+## 0.3.2
+
+### Patch Changes
+
+- 54f8840: Fix resource view update
+
 ## 0.3.1
 
 ### Patch Changes

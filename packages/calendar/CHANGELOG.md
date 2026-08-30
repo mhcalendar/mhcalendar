@@ -1,5 +1,12 @@
 # @mhcalendar/calendar
 
+## 0.3.3
+
+### Patch Changes
+
+- dd8ff4c: Fix resource view update
+- dd8ff4c: Resource view fixes
+
 ## 0.3.2
 
 ### Patch Changes

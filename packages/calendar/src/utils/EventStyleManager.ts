@@ -4,7 +4,7 @@ import {
   MINUTES_IN_HOUR,
 } from '../components/mh-calendar-day/mh-calendar-day.const';
 import { store, storeState } from '../store/mh-calendar-store';
-import { IMHCalendarViewType } from '../store/mh-calendar-store.types';
+import { IMHCalendarViewType, MHCalendarViewType } from '../store/mh-calendar-store.types';
 import { IMHCalendarEvent } from '../types';
 import { EventUtils } from './EventUtils';
 
@@ -22,16 +22,32 @@ export class EventStyleManager {
    */
   static getEventStyle(
     event: IMHCalendarEvent,
-    viewType: IMHCalendarViewType,
+    viewType: MHCalendarViewType,
     isDragged: boolean,
     dayHeight?: number,
     dayOfRendering?: Date,
   ): any {
     const eventColor = this.getEventColor(event);
 
+    // RESOURCE view has no fixed time axis — each event fills its host, and the host tags
+    // equally divide the cell's height via flex (see mh-calendar-resource-view.css).
+    if (viewType === IMHCalendarViewType.RESOURCE) {
+      return {
+        height: '100%',
+        width: '100%',
+        opacity: '1',
+        padding: '3px',
+        fontSize: '10px',
+        backgroundColor: eventColor,
+      };
+    }
+
     // When dragged in a time-slot view, ensure full opacity for the preview (original item fades
     // separately) and let it fill the precisely-sized holder positioned by EventRenderer.
-    if (isDragged && !event.allDay && [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(viewType)) {
+    const isTimeView =
+      viewType === IMHCalendarViewType.DAY || viewType === IMHCalendarViewType.WEEK;
+
+    if (isDragged && !event.allDay && isTimeView) {
       return {
         height: '100%',
         width: '100%',
@@ -56,12 +72,17 @@ export class EventStyleManager {
       };
     }
 
-    const shouldEventHaveCustomHeight =
-      [IMHCalendarViewType.WEEK, IMHCalendarViewType.DAY].includes(viewType) && !event.allDay;
+    const shouldEventHaveCustomHeight = isTimeView && !event.allDay;
 
     if (shouldEventHaveCustomHeight) {
       const height = dayHeight
-        ? this.calculateEventHeight(event.startDate, event.endDate, dayHeight, dayOfRendering, isDragged)
+        ? this.calculateEventHeight(
+            event.startDate,
+            event.endDate,
+            dayHeight,
+            dayOfRendering,
+            isDragged,
+          )
         : undefined;
 
       return {
@@ -333,8 +354,8 @@ export class EventStyleManager {
       return '0px';
     }
 
-    const s_time = startDate.getTime();
-    const e_time = endDate.getTime();
+    const s_time = startDate?.getTime();
+    const e_time = endDate?.getTime();
     if (s_time >= e_time) {
       return '0px';
     }

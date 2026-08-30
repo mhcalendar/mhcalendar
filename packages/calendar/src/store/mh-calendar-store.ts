@@ -6,6 +6,7 @@ import {
   IEventResizePayload,
   IMHCalendarState,
   IMHCalendarViewType,
+  MHCalendarViewType,
 } from './mh-calendar-store.types';
 import dayjs from 'dayjs';
 import { DaysGenerator } from '../utils/DaysGenerator';
@@ -132,7 +133,7 @@ export class MHCalendarStore extends MHCalendarActions {
     this._setConfig(this.state, payload);
   }
 
-  changeView(viewType: IMHCalendarViewType): void {
+  changeView(viewType: MHCalendarViewType): void {
     this._changeView(this.state, { viewType });
   }
 

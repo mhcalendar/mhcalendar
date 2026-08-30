@@ -9,5 +9,8 @@ export * from './types/enums';
 
 // Public types needed to consume mh-calendar
 export type { IMHCalendarFullOptions, UserApi } from './components.js';
-export type { IMHCalendarEvent, IMHCalendarViewType } from './components.js';
+export type { IMHCalendarEvent } from './components.js';
 export type { IMHCalendarDayClickPayload } from './types/index.js';
+
+export { registerView } from './registry/mh-calendar-view-registry';
+export type { IMHCalendarViewDefinition } from './registry/mh-calendar-view-registry';

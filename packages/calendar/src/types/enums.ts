@@ -10,3 +10,9 @@ export enum IMHCalendarViewType {
   AGENDA = 'AGENDA',
   RESOURCE = 'RESOURCE',
 }
+
+/**
+ * A view type known at build time, or any custom string registered via `registerView`
+ * (e.g. from a premium views package).
+ */
+export type MHCalendarViewType = IMHCalendarViewType | (string & {});

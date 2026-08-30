@@ -1,4 +1,29 @@
 import { ICalendarMultiViewConfig } from './multiview';
+import { IMHCalendarEvent } from './event';
+
+export interface IMHCalendarResourceExtraColumn {
+  /**
+   * Unique identifier for this column (used as the render key).
+   */
+  id: string;
+
+  /**
+   * Header text shown for this column in RESOURCE view.
+   */
+  title: string;
+
+  /**
+   * Fixed width (px) of this column.
+   * @default 160
+   */
+  width?: number;
+
+  /**
+   * Returns the HTML markup to render in this column's cell for a given resource.
+   * `events` are all events for that resource within the currently visible date range.
+   */
+  render: (resource: IMHCalendarResource, events: IMHCalendarEvent[]) => string;
+}
 
 export interface IMHCalendarResource {
   id: string;
@@ -9,6 +34,12 @@ export interface IMHCalendarResource {
    * resource more vertical space than the rest).
    */
   rowHeight?: number;
+
+  /**
+   * URL of an image shown as a circular avatar to the left of the resource's title in the
+   * label column of RESOURCE view.
+   */
+  image?: string;
 }
 
 export interface ICalendarWeekConfig extends ICalendarMultiViewConfig {
@@ -30,6 +61,29 @@ export interface ICalendarWeekConfig extends ICalendarMultiViewConfig {
    * @default 64
    */
   resourceRowHeight: number;
+
+  /**
+   * Fixed width (px) of each day column in RESOURCE view. When set, day columns no longer
+   * stretch to fill the available width — if `resourceDays * resourceColumnWidth` exceeds
+   * the container width, the view scrolls horizontally instead of shrinking the columns.
+   * If omitted, columns stretch evenly to fill the available width and no horizontal
+   * scroll occurs.
+   * @default undefined
+   */
+  resourceColumnWidth: number | undefined;
+
+  /**
+   * Fixed width (px) of the resource label column in RESOURCE view.
+   * @default 160
+   */
+  resourceLabelColumnWidth: number;
+
+  /**
+   * Extra columns appended after the day columns in RESOURCE view (e.g. a "Summary" column
+   * with a value computed per resource).
+   * @default undefined
+   */
+  resourceExtraColumns: IMHCalendarResourceExtraColumn[] | undefined;
 }
 
 /**

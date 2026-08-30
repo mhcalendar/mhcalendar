@@ -120,7 +120,8 @@ export class MHCalendarEvent {
     if (!this.event || !storeState.viewType) return;
 
     if (
-      [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(storeState.viewType) &&
+      (storeState.viewType === IMHCalendarViewType.DAY ||
+        storeState.viewType === IMHCalendarViewType.WEEK) &&
       !this.event.allDay
     ) {
       return <mh-calendar-event-full event={this.event} resizePreviewEndDate={this.resizePreviewEndDate} />;

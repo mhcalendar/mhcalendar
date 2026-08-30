@@ -3,7 +3,7 @@ import { IMHCalendarDateRange, IMHCalendarEvent } from '../types';
 import { ICalendarWeekConfig } from '../types/config/week';
 import { EventBuilderMapByDate } from '../utils/EventManager';
 
-export { IMHCalendarViewType } from '../types/enums';
+export { IMHCalendarViewType, MHCalendarViewType } from '../types/enums';
 
 export interface IModalState {
   isOpen: boolean;

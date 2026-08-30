@@ -1,3 +1,5 @@
+import './define-registry-views.js';
+
 export * from './components/components.js';
 
 export type {

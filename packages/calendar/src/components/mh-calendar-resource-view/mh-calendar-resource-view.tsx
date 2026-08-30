@@ -5,8 +5,8 @@ import { IMHCalendarResource } from '../../types';
 import { IMHCalendarEvent } from '../../types';
 import { DateUtils } from '../../utils/DateUtils';
 import { DaysGenerator } from '../../utils/DaysGenerator';
+import { DayClickHandler } from '../../utils/DayClickHandler';
 import { EventManager } from '../../utils/EventManager';
-import { VIEW_HEIGHT } from '../../const/default-theme';
 import { IMHCalendarPopoverAnchorRect } from '../../utils/PopoverPositionUtils';
 import { LabelUtils } from '../../utils/LabelUtils';
 import { ResourceRowHeightUtils } from '../../utils/ResourceRowHeightUtils';
@@ -106,6 +106,14 @@ export class MHCalendarResourceView {
     return this.eventMap.get(this.getCellKey(resourceId, date)) ?? [];
   }
 
+  private getEventsForResource(resourceId: string): IMHCalendarEvent[] {
+    const eventsById = new Map<string, IMHCalendarEvent>();
+    this.dates.forEach((date) => {
+      this.getEventsForCell(resourceId, date).forEach((event) => eventsById.set(event.id, event));
+    });
+    return Array.from(eventsById.values());
+  }
+
   // Drag & Drop on cells
 
   private onDragOver = (resourceId: string, date: Date, e: DragEvent) => {
@@ -161,10 +169,14 @@ export class MHCalendarResourceView {
     EventManager.handleEventDateChange(previewEvent.startDate, previewEvent.endDate, previewEvent);
   };
 
-  private onCellClick = (date: Date, resourceId: string) => {
-    if (typeof storeState.onDayClick === 'function') {
-      storeState.onDayClick({ date, resourceId });
-    }
+  private onCellClick = (event: MouseEvent, date: Date, resourceId: string) => {
+    DayClickHandler.handleDayClick(
+      event,
+      event.currentTarget as HTMLElement,
+      date,
+      false,
+      resourceId,
+    );
   };
 
   private onMoreClick = (date: Date, resourceId: string, e: CustomEvent<MouseEvent>) => {
@@ -182,8 +194,7 @@ export class MHCalendarResourceView {
   };
 
   render() {
-    const containerHeight = storeState.fixedHeight ?? VIEW_HEIGHT;
-
+    const containerHeight = storeState.fixedHeight ?? '100%';
     if (this.resources.length === 0) {
       return (
         <div
@@ -196,18 +207,21 @@ export class MHCalendarResourceView {
     }
 
     const colCount = this.dates.length;
+    const columnWidth = storeState.resourceColumnWidth;
+    const extraColumns = storeState.resourceExtraColumns ?? [];
 
+    const dayColTemplate = columnWidth ? `${columnWidth}px` : '1fr';
+    const extraColsTemplate = extraColumns.map((col) => `${col.width ?? 160}px`).join(' ');
+    const gridTemplateColumns = [
+      `${storeState.resourceLabelColumnWidth}px`,
+      `repeat(${colCount}, ${dayColTemplate})`,
+      extraColsTemplate,
+    ]
+      .filter(Boolean)
+      .join(' ');
     return (
-      <div
-        class="mhCalendarResource"
-        style={
-          {
-            height: containerHeight,
-            '--resource-cols': `${colCount}`,
-          } as any
-        }
-      >
-        <div class="mhCalendarResource__grid">
+      <div class="mhCalendarResource" style={{ height: containerHeight }}>
+        <div class="mhCalendarResource__grid" style={{ gridTemplateColumns }}>
           {/* Header row */}
           <div class="mhCalendarResource__headerRow">
             <div class="mhCalendarResource__cornerCell" />
@@ -230,6 +244,11 @@ export class MHCalendarResourceView {
                 </div>
               );
             })}
+            {extraColumns.map((col) => (
+              <div key={col.id} class="mhCalendarResource__extraHeaderCell">
+                {col.title}
+              </div>
+            ))}
           </div>
 
           {/* Resource rows */}
@@ -243,7 +262,12 @@ export class MHCalendarResourceView {
                 class="mhCalendarResource__row"
                 style={{ '--resource-row-height': `${rowHeight}px` } as any}
               >
-                <div class="mhCalendarResource__resourceLabel">{resource.title}</div>
+                <div class="mhCalendarResource__resourceLabel">
+                  {resource.image && (
+                    <img class="mhCalendarResource__resourceImage" src={resource.image} alt="" />
+                  )}
+                  <span class="mhCalendarResource__resourceTitle">{resource.title}</span>
+                </div>
                 {this.dates.map((date) => {
                   const events = this.getEventsForCell(resource.id, date);
                   const dateKey = DateUtils.convertDateToString(date);
@@ -280,8 +304,8 @@ export class MHCalendarResourceView {
                       onDragOver={(e: DragEvent) => this.onDragOver(resource.id, date, e)}
                       onDragLeave={this.onDragLeave}
                       onDrop={(e: DragEvent) => this.onDrop(resource.id, date, e)}
-                      onClick={() => {
-                        if (events.length === 0) this.onCellClick(date, resource.id);
+                      onClick={(e: MouseEvent) => {
+                        if (events.length === 0) this.onCellClick(e, date, resource.id);
                       }}
                     >
                       {previewEvent && <mh-calendar-event event={previewEvent} isDragged={true} />}
@@ -298,6 +322,13 @@ export class MHCalendarResourceView {
                     </div>
                   );
                 })}
+                {extraColumns.map((col) => (
+                  <div
+                    key={col.id}
+                    class="mhCalendarResource__extraCell"
+                    innerHTML={col.render(resource, this.getEventsForResource(resource.id))}
+                  />
+                ))}
               </div>
             );
           })}

@@ -18,7 +18,6 @@
 
 .mhCalendarResource__grid {
   display: grid;
-  grid-template-columns: 160px repeat(var(--resource-cols, 7), 1fr);
   min-width: 100%;
 }
 
@@ -29,6 +28,7 @@
 
 .mhCalendarResource__cornerCell {
   position: sticky;
+  top: 0;
   left: 0;
   z-index: 3;
   background: var(--mainBackgroundColor);
@@ -92,6 +92,42 @@
   pointer-events: none;
 }
 
+.mhCalendarResource__extraHeaderCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  border-bottom: 2px solid var(--bordersColor);
+  border-right: 1px solid var(--bordersColor);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fontColor);
+  background: var(--mainBackgroundColor);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.mhCalendarResource__extraHeaderCell:last-child {
+  border-right: none;
+}
+
+.mhCalendarResource__extraCell {
+  border-bottom: 1px solid var(--bordersColor);
+  border-right: 1px solid var(--bordersColor);
+  padding: 4px 8px;
+  height: var(--resource-row-height, 64px);
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: var(--fontColor);
+  overflow: hidden;
+}
+
+.mhCalendarResource__extraCell:last-child {
+  border-right: none;
+}
+
 /* Resource rows */
 .mhCalendarResource__row {
   display: contents;
@@ -103,6 +139,7 @@
   z-index: 1;
   display: flex;
   align-items: center;
+  gap: 8px;
   padding: 0 12px;
   background: var(--mainBackgroundColor);
   border-bottom: 1px solid var(--bordersColor);
@@ -111,6 +148,18 @@
   font-weight: 500;
   color: var(--fontColor);
   height: var(--resource-row-height, 64px);
+}
+
+.mhCalendarResource__resourceImage {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.mhCalendarResource__resourceTitle {
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -145,7 +194,11 @@
 }
 
 /* Event inside cell */
+.mhCalendarResource__cell mh-calendar-event {
+  flex: 1;
+  min-height: 0;
+}
+
 .mhCalendarResource__cell .mhCalendarEvent {
   width: 100%;
 }
-

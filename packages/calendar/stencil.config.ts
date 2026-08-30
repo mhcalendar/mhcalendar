@@ -3,6 +3,7 @@ import { reactOutputTarget } from '@stencil/react-output-target';
 
 export const config: Config = {
   namespace: 'mhcalendar',
+  buildDist: true,
   outputTargets: [
     {
       type: 'dist',

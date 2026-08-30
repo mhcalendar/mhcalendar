@@ -2,7 +2,7 @@ import { Component, Element, Listen, Prop, State, h, Watch } from '@stencil/core
 import dayjs from 'dayjs';
 import { DayUtils } from './mh-calendar-day.utils';
 import { IMHCalendarEvent } from '../../types';
-import { IMHCalendarViewType } from '../../store/mh-calendar-store.types';
+import { IMHCalendarViewType, MHCalendarViewType } from '../../store/mh-calendar-store.types';
 import { store, storeState } from '../../store/mh-calendar-store';
 import { EventManager } from '../../utils/EventManager';
 import { DateUtils } from '../../utils/DateUtils';
@@ -44,7 +44,7 @@ export class MHCalendarDay {
   private resizeTimerId?: number;
 
   private groupedEventsRafId: number | null = null;
-  private lastRenderedViewType?: IMHCalendarViewType;
+  private lastRenderedViewType?: MHCalendarViewType;
 
   private processDragPosition = (clientY: number): void => {
     const newState = this.dragDropHandler.processDragPosition(clientY, this.dragDropState);
@@ -287,9 +287,9 @@ export class MHCalendarDay {
 
     const dayOfMonth = dayjs(this.day).format('DD');
     const style = DayUtils.getDayStyles(this.day);
-    const isTimeView = [IMHCalendarViewType.DAY, IMHCalendarViewType.WEEK].includes(
-      storeState.viewType,
-    );
+    const isTimeView =
+      storeState.viewType === IMHCalendarViewType.DAY ||
+      storeState.viewType === IMHCalendarViewType.WEEK;
 
     return (
       <div

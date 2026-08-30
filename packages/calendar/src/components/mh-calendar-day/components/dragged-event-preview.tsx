@@ -2,7 +2,7 @@ import { Component, Prop, h } from '@stencil/core';
 import { DragDropState } from '../../../utils/DragDropHandler';
 import { EventRenderer } from '../../../utils/EventRenderer';
 import { store, storeState } from '../../../store/mh-calendar-store';
-import { IMHCalendarViewType } from '../../../store/mh-calendar-store.types';
+import { MHCalendarViewType } from '../../../store/mh-calendar-store.types';
 
 @Component({
   tag: 'mh-calendar-day-dragged-event-preview',
@@ -12,7 +12,7 @@ export class DraggedEventPreview {
   @Prop() dragDropState!: DragDropState;
   @Prop() day?: Date;
   @Prop() calendarDayElementHeight?: number;
-  @Prop() viewType?: IMHCalendarViewType;
+  @Prop() viewType?: MHCalendarViewType;
 
   render() {
     if (!this.dragDropState.isDraggedOver || !storeState.draggedEvent) {

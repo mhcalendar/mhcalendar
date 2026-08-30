@@ -1,6 +1,6 @@
 import { DEFAULT_THEME } from '../const/default-theme';
 import { ICalendarDateRange, IMHCalendarEvent, IMHCalendarConfigBaseStyle } from '../types';
-import { IMHCalendarViewType } from './mh-calendar-store.types';
+import { IMHCalendarViewType, MHCalendarViewType } from './mh-calendar-store.types';
 
 type StylesWithoutProperties = Omit<IMHCalendarConfigBaseStyle, 'properties'>;
 
@@ -33,7 +33,7 @@ export class MHCalendarStoreUtils {
   }
 
   protected updateDateRangeForViewType(
-    viewType: IMHCalendarViewType,
+    viewType: MHCalendarViewType,
     fromDate: Date,
     resourceDays: number = 7,
   ): ICalendarDateRange {
@@ -61,7 +61,7 @@ export class MHCalendarStoreUtils {
   }
 
   protected shiftCalendar(
-    by: IMHCalendarViewType,
+    by: MHCalendarViewType,
     fromDate: Date,
     amount: number = 1,
     resourceDays: number = 7,
